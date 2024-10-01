@@ -1,0 +1,41 @@
+{
+    "usuarios": [
+        {
+            "id": 1,
+            "nombre": "Admin",
+            "email": "admin@example.com",
+            "password": "1234",
+            "rol": "admin"
+        },
+        {
+            "id": 2,
+            "nombre": "Operador",
+            "email": "operador@example.com",
+            "password": "1234",
+            "rol": "operador"
+        },
+        {
+            "id": 3,
+            "nombre": "Medico",
+            "email": "medico@example.com",
+            "password": "1234",
+            "rol": "medico"
+        },
+        {
+            "id": 4,
+            "nombre": "Paciente",
+            "email": "paciente@example.com",
+            "password": "1234",
+            "rol": "paciente"
+        }
+    ],
+    "turnos": [
+        {
+            "id": 1,
+            "medicoId": 3,
+            "pacienteId": 4,
+            "fecha": "2023-10-02T10:00:00",
+            "estado": "pendiente"
+        }
+    ]
+}
