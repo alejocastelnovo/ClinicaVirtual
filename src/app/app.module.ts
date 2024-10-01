@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { RouterModule, Routes } from '@angular/router';
 
 
 // Angular Material 
@@ -26,6 +27,13 @@ import { MatCardModule } from '@angular/material/card';
 import { LoginComponent } from './components/login/login.component';
 
 
+const routes: Routes = [
+  { path: '', redirectTo: '/login', pathMatch: 'full' },
+  { path: 'login', component: LoginComponent },
+];
+
+
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -45,7 +53,10 @@ import { LoginComponent } from './components/login/login.component';
     MatButtonModule,
     MatDividerModule,
     MatCardModule,
+    RouterModule.forRoot(routes),
+
   ],
+  exports: [RouterModule],
   providers: [],
   bootstrap: [AppComponent]
 })
