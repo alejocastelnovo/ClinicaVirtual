@@ -2,19 +2,43 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
+/* Componentes vistas */
 import { LoginComponent } from './components/login/login.component';
+
+/* Angular Material */
+import { MatCardModule } from '@angular/material/card';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';  // Para usar íconos de Angular Material
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';  // Necesario para animaciones
+
+/* Forms */
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+
+/* HTTP Client para llamadas HTTP */
+import { HttpClientModule } from '@angular/common/http';  // Necesario para trabajar con servicios HTTP
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginComponent
+    LoginComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    BrowserAnimationsModule,  // Necesario para Angular Material
+    MatCardModule,  // Tarjetas de Angular Material
+    MatFormFieldModule,  // Formularios y campos de texto
+    MatInputModule,  // Inputs de Material
+    MatButtonModule,  // Botones estilizados de Material
+    MatIconModule,  // Íconos si los usas en el proyecto
+    FormsModule,  // Para formularios con ngModel
+    ReactiveFormsModule,  // Para formularios reactivos si decides usarlos
+    HttpClientModule,  // Para las peticiones HTTP (ej: login)
   ],
   providers: [],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
-
