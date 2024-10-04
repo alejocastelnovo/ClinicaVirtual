@@ -1,0 +1,28 @@
+.clinic-footer {
+    background-color: #004d99;
+    color: white;
+    padding: 2rem;
+    text-align: center;
+    font-family: 'Roboto', sans-serif;
+    margin-top: auto;
+  
+    .footer-content {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+  
+    .social-icons a {
+      color: white;
+      margin: 0 0.5rem;
+      text-decoration: none;
+    }
+  
+    .social-icons a:hover {
+      text-decoration: underline;
+    }
+  
+    p {
+      margin: 0.5rem 0;
+    }
+  }
+  

@@ -1,4 +1,4 @@
-.login-container {
+.registro-container {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -53,16 +53,6 @@ mat-form-field {
     color: #00796b;
 }
 
-.button-container {
-    display: flex;
-    justify-content: space-between;
-    gap: 15px;
-}
-
-.button-container button {
-    flex: 1;
-}
-
 button {
     width: 100%;
     padding: 15px;
@@ -84,9 +74,12 @@ mat-card-content {
     flex-direction: column;
 }
 
-mat-error {
-    color: #d32f2f;
-    margin-top: -5px;
-    margin-bottom: 15px;
-    font-size: 14px;
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+}
+
+.button-container button {
+    flex: 1;
 }
