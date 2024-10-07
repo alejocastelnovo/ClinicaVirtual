@@ -38,17 +38,27 @@ export class HomeComponent {
   navigateToLogin() {
     this.router.navigate(['/login']);
   }
-
+  
   login() {
-    this.authService.login(this.username, this.password).subscribe(
-      (response) => {
-        console.log('Inicio de sesión exitoso', response);
-        this.dialog.closeAll();
-      },
-      (error) => {
-        console.error('Error en el inicio de sesión', error);
-        // Aquí puedes manejar el error, por ejemplo, mostrando un mensaje al usuario
-      }
-    );
+    const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
+  
+    // Verificar si el usuario existe
+    const usuario = usuarios.find((u: any) => u.email === this.username && u.password === this.password);
+  
+    if (usuario) {
+      // Guardar los datos del usuario actual en localStorage
+      localStorage.setItem('userName', `${usuario.nombre} ${usuario.apellido}`);
+      localStorage.setItem('userType', 'Paciente');  // Puedes modificar esto según el tipo de usuario
+  
+      this.closeLogin();
+      this.router.navigate(['/dashboard']);  // Redirigir a la pantalla principal
+    } else {
+      alert('Usuario no encontrado. Por favor, regístrese.');
+    }
+  }
+  
+  
+  closeLogin() {
+    // Implementa la lógica para cerrar el login aquí
   }
 }

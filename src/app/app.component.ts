@@ -6,5 +6,9 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  title = 'app-consultorio';
+  footerVisible = false;
+
+  onFooterVisibilityChange(visible: boolean) {
+    this.footerVisible = visible;
+  }
 }

@@ -12,7 +12,12 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
-import { MatIconModule } from '@angular/material/icon';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatIconModule } from '@angular/material/icon'; 
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatSelectModule } from '@angular/material/select';
+import { MatOptionModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /* Forms */
@@ -23,7 +28,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RegistroComponent } from './components/registro/registro.component';
-import { HomeComponent } from './components/home/home.component';  // Necesario para trabajar con servicios HTTP
+import { HomeComponent } from './components/home/home.component';
+import { DashboardComponent } from './components/dashboard/dashboard.component';  // Necesario para trabajar con servicios HTTP
+
+import { MatSnackBarModule } from '@angular/material/snack-bar';
 
 @NgModule({
   declarations: [
@@ -33,11 +41,14 @@ import { HomeComponent } from './components/home/home.component';  // Necesario 
     FooterComponent,
     RegistroComponent,
     HomeComponent,
+    DashboardComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MatDialogModule,
+    MatProgressSpinnerModule,
+    MatTooltipModule,
     BrowserAnimationsModule,  // Necesario para Angular Material
     MatCardModule,  // Tarjetas de Angular Material
     MatFormFieldModule,  // Formularios y campos de texto
@@ -47,6 +58,10 @@ import { HomeComponent } from './components/home/home.component';  // Necesario 
     FormsModule,  // Para formularios con ngModel
     ReactiveFormsModule,  // Para formularios reactivos si decides usarlos
     HttpClientModule,  // Para las peticiones HTTP (ej: login)
+    MatSnackBarModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatRadioModule
   ],
   providers: [],
   bootstrap: [AppComponent]

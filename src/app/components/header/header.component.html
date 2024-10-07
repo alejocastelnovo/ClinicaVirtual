@@ -1,6 +1,17 @@
 <header class="clinic-header">
-    <div class="logo">
-      <h1>Clínica Virtual</h1>
+  <div class="logo">
+    <h1><a [routerLink]="['/']">Clínica Virtual</a></h1>
+  </div>
+
+  <div class="user-info" *ngIf="isLoggedIn()">
+    <div class="user-image-container">
+      <img [src]="userImagePath" alt="Icono de usuario" class="user-icon">
+      <div class="user-type-tooltip">
+        <span class="user-type-badge">{{ userTypeShort }}</span>
+        <span class="user-type-full">{{ userType }}</span>
+      </div>
     </div>
-  </header>
-  
+    <span class="user-name">{{ userName }}</span>
+    <span class="logout" (click)="logout()">Cerrar sesión</span>
+  </div>
+</header> 

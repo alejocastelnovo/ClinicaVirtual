@@ -1,35 +1,39 @@
 <div class="registro-container">
     <mat-card>
         <mat-card-header>
-            <mat-card-title>Registro</mat-card-title>
+            <mat-card-title>Registro de Usuario</mat-card-title>
         </mat-card-header>
         
         <mat-card-content>
             <form (ngSubmit)="onSubmit()">
-                <mat-form-field appearance="fill">
-                    <mat-label>Nombre</mat-label>
-                    <input matInput [(ngModel)]="nombre" name="nombre" required>
+                <mat-form-field appearance="outline">
+                    <input matInput [(ngModel)]="nombre" name="nombre" placeholder="Nombre" required>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Apellido</mat-label>
-                    <input matInput [(ngModel)]="apellido" name="apellido" required>
+                <mat-form-field appearance="outline">
+                    <input matInput [(ngModel)]="apellido" name="apellido" placeholder="Apellido" required>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Email</mat-label>
-                    <input matInput [(ngModel)]="email" name="email" type="email" required>
+                <mat-form-field appearance="outline">
+                    <input matInput [(ngModel)]="email" name="email" type="email" placeholder="Email" required>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Teléfono de Contacto</mat-label>
-                    <input matInput [(ngModel)]="telefono" name="telefono" type="tel" required>
+                <mat-form-field appearance="outline">
+                    <input matInput [(ngModel)]="password" name="password" type="password" placeholder="Contraseña" required>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput [(ngModel)]="password" name="password" type="password" required>
+                <mat-form-field appearance="outline">
+                    <input matInput [(ngModel)]="telefono" name="telefono" type="tel" placeholder="Teléfono" required>
                 </mat-form-field>
+
+                <div class="tipo-usuario-field">
+                    <label>Tipo de Usuario</label>
+                    <mat-radio-group [(ngModel)]="tipoUsuario" name="tipoUsuario" required>
+                        <mat-radio-button *ngFor="let tipo of tiposUsuario" [value]="tipo.value">
+                            {{tipo.viewValue}}
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
 
                 <div class="button-container">
                     <button mat-raised-button color="primary" type="submit">Registrarse</button>

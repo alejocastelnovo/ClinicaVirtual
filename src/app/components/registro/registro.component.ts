@@ -1,65 +1,57 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-registro',
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
 })
-export class RegistroComponent implements OnInit {
-  registroForm: FormGroup;
-  telefono: string = '';
-  direccion: string = '';
-  fechaNacimiento: string = '';
-  sexo: string = '';
-  tipoDocumento: string = '';
-  numeroDocumento: string = '';
+export class RegistroComponent {
   nombre: string = '';
   apellido: string = '';
   email: string = '';
   password: string = '';
+  telefono: string = ''; // Añadimos la propiedad telefono
+  tipoUsuario: string = 'cliente'; // Valor por defecto
+  hidePassword = true; // Añadimos la propiedad hidePassword
 
-  constructor(private fb: FormBuilder, private router: Router) {
-    this.registroForm = this.fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      telefono: ['', Validators.required],
-      direccion: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
-      sexo: ['', Validators.required],
-      tipoDocumento: ['', Validators.required],
-      numeroDocumento: ['', Validators.required]
-    });
-  }
-
-  ngOnInit() {
-    this.registroForm = this.fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      telefono: ['', Validators.required],
-      direccion: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required],
-      sexo: ['', Validators.required],
-      tipoDocumento: ['', Validators.required],
-      numeroDocumento: ['', Validators.required]
-    });
-  }
+  constructor(
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private authService: AuthService
+  ) {}
 
   onSubmit() {
-    if (this.registroForm.valid) {
-      console.log(this.registroForm.value);
-      // Aquí puedes agregar la lógica para enviar los datos al servidor
+    const nuevoUsuario = {
+      nombre: this.nombre,
+      apellido: this.apellido,
+      email: this.email,
+      password: this.password,
+      telefono: this.telefono,
+      userType: this.tipoUsuario // Añadimos el tipo de usuario
+    };
+
+    if (this.authService.registrarUsuario(nuevoUsuario)) {
+      this.snackBar.open('Registro exitoso. Por favor, inicie sesión.', 'Cerrar', {
+        duration: 5000,
+      });
+      this.router.navigate(['/login']);
     } else {
-      console.log('Formulario inválido');
+      this.snackBar.open('Error al registrar usuario. Intente nuevamente.', 'Cerrar', {
+        duration: 5000,
+      });
     }
   }
 
-  onCancel(): void {
-    this.router.navigate(['/home']);
+  onCancel() {
+    // Implementamos el método onCancel
+    this.router.navigate(['/login']); // O a donde quieras que vaya al cancelar
   }
+
+  tiposUsuario = [
+    {value: 'cliente', viewValue: 'Cliente'},
+    {value: 'empleado', viewValue: 'Empleado'}
+  ];
 }
