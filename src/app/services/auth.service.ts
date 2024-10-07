@@ -1,42 +1,52 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Observable, of, BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private usuariosUrl = 'assets/backend.json';  // URL al archivo JSON simulado
-  private usuarioLogueado: any = null;
+  private usuarios: any[] = [
+    { id: 1, nombre: 'Lautaro', apellido: 'Cortez', email: 'Lautycortez725@gmail.com', password: '1234', telefono: '3425458005', userType: 'admin' },
+    { id: 2, nombre: 'Alejo', apellido: 'Castelnovo', email: 'castelnovo12@gmail.com', password: '123', telefono: '0987654321', userType: 'admin' }
+  ];
 
-  constructor(private http: HttpClient) {}
+  private usuarioLogueado: any = null;
+  private usuarioLogueadoSubject = new BehaviorSubject<any>(null);
+
+  constructor() {}
 
   login(email: string, password: string): Observable<boolean> {
-    return this.http.get<any>(this.usuariosUrl).pipe(
-      map(data => {
-        const usuario = data.usuarios.find((u: any) => u.email === email && u.password === password);
-        if (usuario) {
-          this.usuarioLogueado = usuario;
-          localStorage.setItem('usuario', JSON.stringify(usuario));  // Simulación de sesión
-          return true;
-        }
-        return false;
-      })
-    );
+    const usuario = this.usuarios.find(u => u.email === email && u.password === password);
+    if (usuario) {
+      this.usuarioLogueado = { ...usuario };
+      this.usuarioLogueadoSubject.next(this.usuarioLogueado);
+      console.log('Usuario autenticado:', this.usuarioLogueado);
+      return of(true);
+    }
+    console.log('Autenticación fallida para:', email);
+    return of(false);
   }
 
   logout(): void {
     this.usuarioLogueado = null;
-    localStorage.removeItem('usuario');  // Simulación de cierre de sesión
+    this.usuarioLogueadoSubject.next(null);
   }
 
-  esUsuarioAdministrador(): boolean {
-    const usuario = JSON.parse(localStorage.getItem('usuario')!);
-    return usuario && usuario.rol === 'admin';
+  registrarUsuario(usuario: any): boolean {
+    usuario.id = this.usuarios.length + 1;
+    this.usuarios.push(usuario);
+    return true;
   }
 
   getUsuarioLogueado() {
     return this.usuarioLogueado;
+  }
+
+  getUsuarioLogueadoObservable(): Observable<any> {
+    return this.usuarioLogueadoSubject.asObservable();
+  }
+
+  esUsuarioAdministrador(): boolean {
+    return this.usuarioLogueado && this.usuarioLogueado.userType === 'admin';
   }
 }

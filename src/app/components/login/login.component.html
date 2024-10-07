@@ -1,4 +1,3 @@
-
 <div class="login-container">
     <mat-card>
         <mat-card-header>
@@ -7,21 +6,26 @@
         
         <mat-card-content>
             <form (ngSubmit)="onSubmit()">
-                <mat-form-field appearance="fill">
-                    <mat-label>Email</mat-label>
-                    <input matInput [(ngModel)]="email" name="email" required>
+                
+                <mat-form-field appearance="outline">
+                    <input matInput [(ngModel)]="email" name="email" placeholder="Email" required>
                 </mat-form-field>
 
-                <mat-form-field appearance="fill">
-                    <mat-label>Contraseña</mat-label>
-                    <input matInput [(ngModel)]="password" name="password" type="password" required>
+                <mat-form-field appearance="outline">
+                    <input matInput [(ngModel)]="password" name="password" type="password" placeholder="Contraseña" required>
                 </mat-form-field>
 
                 <div class="button-container">
-                    <button mat-raised-button color="primary" type="submit">Ingresar</button>
-                    <button mat-raised-button color="accent" type="button" (click)="onRegister()">Registrarse</button>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="loading">Ingresar</button>
+                    <button mat-raised-button color="accent" type="button" (click)="onRegister()" [disabled]="loading">Registrarse</button>
                 </div>
+
+                
             </form>
+            <div *ngIf="loading" class="loading-indicator">
+                <mat-spinner diameter="20"></mat-spinner>
+                <span>Verificando credenciales</span>
+            </div>
         </mat-card-content>
     </mat-card>
 </div>

@@ -1,41 +1,82 @@
-body {
+.body {
     background-color: #e0f7fa;
+    min-height: 20vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
 }
 
 .main-content {
     text-align: center;
-    margin: 3rem auto;
-    max-width: 800px;
-    font-size: 1.1rem;
-    line-height: 1.6;
-    
+    margin: 2rem auto;
+    max-width: 700px;
+    font-size: 1rem;
+    line-height: 1.5;
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
 }
 
 .main-content h2 {
-    margin-bottom: 1.5rem;
-    font-size: 2.2rem;
+    margin-bottom: 1rem;
+    font-size: 2rem;
     color: #333;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: 0.1s;
+    opacity: 0;
 }
 
 .main-content ul {
     list-style-type: none;
     padding: 0;
-    margin: 0 0 2.5rem 0;
+    margin: 0 0 2rem 0;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: 0.2s;
+    opacity: 0;
 }
 
 .main-content li {
-    margin-bottom: 0.75rem;
+    margin-bottom: 0.5rem;
 }
 
 .actions {
-    margin-top: 2.5rem;
+    margin-top: 2rem;
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: 0.3s;
+    opacity: 0;
 }
 
 .actions button {
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     margin: 0 1rem;
-    padding: 0.5rem 1rem;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
+}
+
+.actions button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.actions button[color="primary"] {
+    background-color: #00796b;
+    color: white;
+}
+
+.actions button[color="primary"]:hover {
+    background-color: #004d40;
+}
+
+.actions button[color="accent"] {
+    background-color: #00796b;
+    color: white;
+}
+
+.actions button[color="accent"]:hover {
+    background-color: #004d40;
 }
 
 .modal-actions {
@@ -44,14 +85,26 @@ body {
     padding: 1.5rem 0 0 0;
 }
 
+/* Animación de entrada */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
 @media (max-width: 768px) {
     .main-content {
-        max-width: 90%;
-        font-size: 1rem;
+        max-width: 95%;
+        font-size: 0.9rem;
     }
 
     .main-content h2 {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
     }
 
     .actions button {
