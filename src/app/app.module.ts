@@ -3,6 +3,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+
 /* Componentes vistas */
 import { LoginComponent } from './components/login/login.component';
 
@@ -30,8 +31,8 @@ import { FooterComponent } from './components/footer/footer.component';
 import { RegistroComponent } from './components/registro/registro.component';
 import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';  // Necesario para trabajar con servicios HTTP
-
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 @NgModule({
   declarations: [
@@ -61,7 +62,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSnackBarModule,
     MatSelectModule,
     MatOptionModule,
-    MatRadioModule
+    MatRadioModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent]
