@@ -13,8 +13,8 @@ export class RegistroComponent {
   apellido: string = '';
   email: string = '';
   password: string = '';
-  telefono: string = ''; // Añadimos la propiedad telefono
-  tipoUsuario: string = 'cliente'; // Valor por defecto
+  dni: string = ''; // Añadimos la propiedad telefono
+  tipoUsuario: string = 'Paciente'; // Valor por defecto
   hidePassword = true; // Añadimos la propiedad hidePassword
 
   constructor(
@@ -29,8 +29,8 @@ export class RegistroComponent {
       apellido: this.apellido,
       email: this.email,
       password: this.password,
-      telefono: this.telefono,
-      userType: this.tipoUsuario // Añadimos el tipo de usuario
+      dni: this.dni,
+      userType: this.tipoUsuario
     };
 
     if (this.authService.registrarUsuario(nuevoUsuario)) {
@@ -51,7 +51,8 @@ export class RegistroComponent {
   }
 
   tiposUsuario = [
-    {value: 'cliente', viewValue: 'Cliente'},
-    {value: 'empleado', viewValue: 'Empleado'}
+    {value: 'paciente', viewValue: 'Paciente'},
+    {value: 'operador', viewValue: 'Operador'},
+    {value: 'medico', viewValue: 'Medico'}
   ];
 }

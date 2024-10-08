@@ -45,11 +45,13 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   getUserTypeShort(userType: string | null): string {
     switch (userType) {
-      case 'admin':
+      case 'Administrador':
         return ' ';
-      case 'empleado':
+      case 'Operador':
         return ' ';
-      case 'cliente':
+      case 'Medico':
+        return ' ';
+      case 'Paciente':
         return ' ';
       default:
         return '?';

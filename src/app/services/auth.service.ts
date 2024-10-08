@@ -6,8 +6,8 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 })
 export class AuthService {
   private usuarios: any[] = [
-    { id: 1, nombre: 'Lautaro', apellido: 'Cortez', email: 'Lautycortez725@gmail.com', password: '1234', telefono: '3425458005', userType: 'admin' },
-    { id: 2, nombre: 'Alejo', apellido: 'Castelnovo', email: 'castelnovo12@gmail.com', password: '123', telefono: '0987654321', userType: 'admin' }
+    { id: 1, nombre: 'Lautaro', apellido: 'Cortez', email: 'Lautycortez725@gmail.com', password: '1234', dni: '3425458005', userType: 'Administrador' },
+    { id: 2, nombre: 'Alejo', apellido: 'Castelnovo', email: 'castelnovo12@gmail.com', password: '123', dni: '0987654321', userType: 'Administrador' }
   ];
 
   private usuarioLogueado: any = null;
@@ -47,6 +47,6 @@ export class AuthService {
   }
 
   esUsuarioAdministrador(): boolean {
-    return this.usuarioLogueado && this.usuarioLogueado.userType === 'admin';
+    return this.usuarioLogueado && this.usuarioLogueado.userType === 'Administrador';
   }
 }
