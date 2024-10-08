@@ -1,37 +1,49 @@
 .clinic-footer {
   background-color: #15928c;
   color: white;
-  padding: 1rem;
-  text-align: center;
+  padding: 15px 0;
   font-family: 'Roboto', sans-serif;
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
   z-index: 100;
-  transition: transform 0.3s ease-in-out;
-  transform: translateY(100%);
-}
-
-.clinic-footer.visible {
-  transform: translateY(0);
 }
 
 .footer-content {
-  max-width: 800px;
+  max-width: 1200px;
   margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-column {
+  flex: 1;
+  padding: 0 15px;
+}
+
+.footer-column2 {
+  padding: 0 15px;
+}
+
+.social-icons {
+  display: flex;
+  justify-content: flex-end;
 }
 
 .social-icons a {
   color: white;
-  margin: 0 0.5rem;
+  margin-left: 15px;
   text-decoration: none;
+  font-size: 15px;
+  transition: color 0.3s ease;
 }
 
 .social-icons a:hover {
-  text-decoration: underline;
+  color: #e0f7fa;
 }
 
 p {
-  margin: 0.25rem 0;
+  margin: 5px 0;
 }
