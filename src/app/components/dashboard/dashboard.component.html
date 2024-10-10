@@ -1,6 +1,51 @@
+<div class="dashboard-content">
+  <h2>Bienvenido/a, {{ userName }}</h2>
 
-<div class="main-content">
-  <h2>Haz click en alguna de las funciones principales para acceder</h2>
-  <!-- Aquí se añadirán las funcionalidades del usuario logueado -->
+  <div *ngIf="userType === 'Paciente'">
+    <mat-card>
+      <mat-card-content>
+        <h3>Opciones para Pacientes</h3>
+        <ul>
+          <li><a routerLink="/paciente/nuevo-turno">Solicitar Nuevo Turno</a></li>
+          <li><a routerLink="/paciente/mis-turnos">Ver Mis Turnos</a></li>
+          <li><a routerLink="/paciente/mis-datos">Mis Datos Personales</a></li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="userType === 'Operador'">
+    <mat-card>
+      <mat-card-content>
+        <h3>Opciones para Operador</h3>
+        <ul>
+          <!--          falta implementar sus funciones-->
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="userType === 'Medico'">
+    <mat-card>
+      <mat-card-content>
+        <h3>Opciones para Medico</h3>
+        <ul>
+          <li><a routerLink="/medico/turnos-programados">Turnos Programados</a></li>
+          <li><a routerLink="/medico/gestion-agenda">Gestion de Agenda</a></li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
+  <div *ngIf="userType === 'Administrador'">
+    <mat-card>
+      <mat-card-content>
+        <h3>Opciones para Administrador</h3>
+        <ul>
+          <!--          falta implementar sus funciones-->
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </div>
+
 </div>
-

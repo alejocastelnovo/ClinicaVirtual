@@ -1,0 +1,130 @@
+.mis-datos-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+    padding: 20px;
+}
+
+mat-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 40px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-title {
+    font-size: 28px;
+    color: #00796b;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+mat-form-field {
+    width: 100%;
+    margin-bottom: 25px;
+}
+
+.mat-mdc-text-field-wrapper {
+    background-color: #e0f7fa;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+.mat-mdc-form-field-flex {
+    padding: 0;
+}
+
+.mat-mdc-form-field-infix {
+    padding: 12px 15px;
+    border: none;
+}
+
+/* Eliminar líneas de borde */
+::ng-deep .mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
+::ng-deep .mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
+::ng-deep .mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
+    border-color: transparent !important;
+}
+
+/* Estilo para el placeholder */
+::ng-deep .mat-mdc-form-field-label {
+    color: #00796b;
+}
+
+/* Efecto de enfoque */
+.mat-focused .mat-mdc-text-field-wrapper {
+    box-shadow: 0 6px 12px rgba(0, 121, 107, 0.2);
+    background-color: #b2ebf2;
+}
+
+.mat-focused .mat-mdc-form-field-label {
+    color: #00796b;
+}
+
+mat-card-content {
+    display: flex;
+    flex-direction: column;
+}
+
+.button-container {
+    display: flex;
+    justify-content: space-between;
+    gap: 15px;
+    margin-top: 30px;
+}
+
+button {
+    flex: 1;
+    padding: 12px;
+    font-size: 16px;
+    border: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #00796b;
+    color: white;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background-color: #004d40;
+}
+
+button:disabled {
+    background-color: #b2dfdb;
+    color: #004d40;
+    cursor: not-allowed;
+}
+
+/* Animación de entrada */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+mat-form-field {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+mat-form-field:nth-child(1) { animation-delay: 0.1s; }
+mat-form-field:nth-child(2) { animation-delay: 0.2s; }
+mat-form-field:nth-child(3) { animation-delay: 0.3s; }
+
+button {
+    animation: fadeInUp 0.5s ease forwards;
+    animation-delay: 0.4s;
+    opacity: 0;
+}

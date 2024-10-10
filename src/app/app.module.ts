@@ -18,6 +18,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { MatOptionModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -32,6 +34,11 @@ import { RegistroComponent } from './components/registro/registro.component';
 import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';  // Necesario para trabajar con servicios HTTP
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { NuevoTurnoComponent } from './components/paciente/nuevo-turno/nuevo-turno.component';
+import { MisTurnosComponent } from './components/paciente/mis-turnos/mis-turnos.component';
+import { MisDatosComponent } from './components/paciente/mis-datos/mis-datos.component';
+import { TurnosProgramadosComponent } from './components/medico/turnos-programados/turnos-programados.component';
+import { GestionAgendaComponent } from './components/medico/gestion-agenda/gestion-agenda.component';
 
 
 @NgModule({
@@ -43,6 +50,11 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     RegistroComponent,
     HomeComponent,
     DashboardComponent,
+    NuevoTurnoComponent,
+    MisTurnosComponent,
+    MisDatosComponent,
+    TurnosProgramadosComponent,
+    GestionAgendaComponent,
   ],
   imports: [
     BrowserModule,
@@ -63,6 +75,8 @@ import { MatSnackBarModule } from '@angular/material/snack-bar';
     MatSelectModule,
     MatOptionModule,
     MatRadioModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
 
   ],
   providers: [],
