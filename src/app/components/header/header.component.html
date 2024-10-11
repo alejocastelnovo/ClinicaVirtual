@@ -1,6 +1,12 @@
-<header class="clinic-header">
+<header class="header">
   <div class="logo">
-    <h1><a [routerLink]="['/']">Clínica Virtual</a></h1>
+    <img src="/assets/images/medico2.jpg" alt="Logo Clínica" class="logo-img">
+    <a routerLink="/" class="logo-text">Clinica virtual</a>
+  </div>
+
+  <div class="auth-buttons" *ngIf="!isLoggedIn()">
+    <button class="btn-login" routerLink="/login">Iniciar sesión</button>
+    <button class="btn-register" routerLink="/registro">Registrarse</button>
   </div>
 
   <div class="user-info" *ngIf="isLoggedIn()">

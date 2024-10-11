@@ -115,7 +115,7 @@
     }
 }
 
-.landing-page {
+.home {
     font-family: 'Roboto', sans-serif;
     color: #333;
     line-height: 1.6;
@@ -271,6 +271,7 @@
     left: 0;
     right: 0;
     z-index: 1000;
+    height: 75px;
 }
 
 .logo {
