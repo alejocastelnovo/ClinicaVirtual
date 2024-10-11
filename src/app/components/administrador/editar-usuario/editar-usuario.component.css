@@ -52,7 +52,6 @@ mat-form-field {
   border-color: transparent !important;
 }
 
-/* Estilo para el placeholder */
 ::ng-deep .mat-mdc-form-field-label {
   color: #9e9e9e;
 }
