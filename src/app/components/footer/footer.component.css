@@ -6,6 +6,7 @@
   transition: transform 0.3s ease-in-out;
   transform: translateY(0);
   position: fixed;
+  bottom: 0;
   bottom: -100%; 
   left: 0;
   width: 100%;

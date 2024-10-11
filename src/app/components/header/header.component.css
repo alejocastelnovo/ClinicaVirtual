@@ -11,6 +11,7 @@
   right: 0;
   z-index: 1000;
   height: 75px;
+
   box-sizing: border-box;
 }
 
@@ -174,4 +175,12 @@
   .user-image-container {
     margin-bottom: 0.5rem;
   }
+}
+
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
