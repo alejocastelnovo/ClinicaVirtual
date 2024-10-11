@@ -1,8 +1,10 @@
 .clinic-footer {
   background-color: #15928c;
   color: white;
-  padding: 15px 0;
+  padding: 1rem 2rem;
   font-family: 'Roboto', sans-serif;
+  transition: transform 0.3s ease-in-out;
+  transform: translateY(0);
   position: fixed;
   bottom: -100%; /* Oculta el footer por defecto */
   left: 0;
@@ -13,6 +15,9 @@
 
 .clinic-footer.visible {
   bottom: 0; /* Muestra el footer cuando tiene la clase 'visible' */
+=======
+  right: 0;
+  z-index: 999;
 }
 
 .footer-content {
@@ -29,24 +34,26 @@
 }
 
 .footer-column2 {
-  padding: 0 15px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .social-icons {
   display: flex;
-  justify-content: flex-end;
+  gap: 20px;
 }
 
 .social-icons a {
   color: white;
-  margin-left: 15px;
   text-decoration: none;
-  font-size: 15px;
-  transition: color 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 5px;
 }
 
 .social-icons a:hover {
-  color: #e0f7fa;
+  text-decoration: underline;
 }
 
 p {
