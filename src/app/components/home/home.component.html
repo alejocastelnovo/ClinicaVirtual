@@ -1,35 +1,54 @@
-<div class="main-content">
-  <h2>Bienvenido a la clínica virtual</h2>
-  <p>Inicia sesión para acceder a las funcionalidades principales:</p>
-  <ul>
-    <li>Como paciente registrado puedes solicitar turnos</li>
-    <li>Ver tus turnos agendados</li>
-    <li>Modificar tus datos personales</li>
-  </ul>
-  
-  <div class="actions">
-    <button mat-raised-button color="primary" (click)="navigateToLogin()">Iniciar Sesión</button>
-    <button mat-raised-button color="accent" (click)="navigateToRegister()">Registrarse</button>
-  </div>
+<div class="landing-page">
+  <header class="header">
+    <div class="logo">
+      <img src="/assets/images/medico2.jpg" alt="Logo Clínica" class="logo-img">
+      <span class="logo-text">Clinica virtual</span>
+    </div>
+
+    <div class="auth-buttons">
+      <button class="btn-login" routerLink="/login">Iniciar sesión</button>
+      <button class="btn-register" routerLink="/registro">Registrarse</button>
+    </div>
+  </header>
+
+  <section class="hero">
+    <h1>Bienvenido a la Clinica Virtual</h1>
+    <p class="subtitle">Tu consultorio privado de medicina</p>
+  </section>
+
+  <section class="features">
+    <mat-card class="feature">
+      <div class="icon-container">
+        <mat-icon>event</mat-icon>
+      </div>
+      <mat-card-title>Solicita turnos</mat-card-title>
+      <mat-card-content>
+        <p>Agenda tus citas médicas de forma rápida y sencilla</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="feature">
+      <div class="icon-container">
+        <mat-icon>videocam</mat-icon>
+      </div>
+      <mat-card-title>Consultas en línea</mat-card-title>
+      <mat-card-content>
+        <p>Accede a consultas virtuales con profesionales</p>
+      </mat-card-content>
+    </mat-card>
+
+    <mat-card class="feature">
+      <div class="icon-container">
+        <mat-icon>folder</mat-icon>
+      </div>
+      <mat-card-title>Historial médico</mat-card-title>
+      <mat-card-content>
+        <p>Accede a tu historial médico en cualquier momento</p>
+      </mat-card-content>
+    </mat-card>
+  </section>
+
+  <section class="parteabajo">
+    <h2>Comenza ya con tu atencion medica registrandote</h2>
+  </section>
 </div>
-
-<!-- Modal para Login -->
-<ng-template #loginDialog>
-  <h2 mat-dialog-title>Iniciar Sesión</h2>
-  <mat-dialog-content>
-    <mat-form-field class="full-width">
-      <mat-label>Usuario</mat-label>
-      <input matInput [(ngModel)]="username" placeholder="Ingrese su usuario">
-    </mat-form-field>
-
-    <mat-form-field class="full-width">
-      <mat-label>Contraseña</mat-label>
-      <input matInput [(ngModel)]="password" type="password" placeholder="Ingrese su contraseña">
-    </mat-form-field>
-  </mat-dialog-content>
-
-  <mat-dialog-actions align="end">
-    <button mat-button mat-dialog-close>Cancelar</button>
-    <button mat-raised-button color="primary" (click)="login()">Aceptar</button>
-  </mat-dialog-actions>
-</ng-template>
