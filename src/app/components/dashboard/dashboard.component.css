@@ -1,0 +1,185 @@
+.dashboard-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+    padding: 20px;
+}
+
+.dashboard-content {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px 0;
+}
+
+h2 {
+    font-size: 28px;
+    color: #00796b;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+h3 {
+    font-size: 22px;
+    color: #00796b;
+    margin-top: 20px;
+    margin-bottom: 15px;
+}
+
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 10px;
+}
+
+a {
+    color: #00796b;
+    text-decoration: none;
+    font-size: 18px;
+    transition: all 0.3s ease;
+}
+
+a:hover {
+    color: #004d40;
+    text-decoration: underline;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+.dashboard-content {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+li {
+    opacity: 0;
+    animation: fadeIn 0.5s ease-in-out forwards;
+}
+
+li:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+li:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+li:nth-child(3) {
+    animation-delay: 0.3s;
+}
+
+li:nth-child(4) {
+    animation-delay: 0.4s;
+}
+
+li:nth-child(5) {
+    animation-delay: 0.5s;
+}
+
+@media (max-width: 600px) {
+    .dashboard-content {
+        padding: 20px;
+    }
+
+    h2 {
+        font-size: 24px;
+    }
+
+    h3 {
+        font-size: 20px;
+    }
+
+    a {
+        font-size: 16px;
+    }
+}
+
+mat-card {
+    width: 100%;
+    max-width: 450px;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+    margin-bottom: 20px;
+}
+
+mat-card-content {
+    padding: 0;
+}
+
+mat-card ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+mat-card li {
+    margin-bottom: 15px;
+}
+
+mat-card a {
+    display: block;
+    padding: 12px 15px;
+    background-color: #e0f7fa;
+    color: #00796b;
+    text-decoration: none;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+mat-card a:hover {
+    background-color: #b2ebf2;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+mat-card {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+mat-card li {
+    animation: fadeInUp 0.5s ease forwards;
+    opacity: 0;
+}
+
+mat-card li:nth-child(1) {
+    animation-delay: 0.1s;
+}
+
+mat-card li:nth-child(2) {
+    animation-delay: 0.2s;
+}
+
+mat-card li:nth-child(3) {
+    animation-delay: 0.3s;
+}

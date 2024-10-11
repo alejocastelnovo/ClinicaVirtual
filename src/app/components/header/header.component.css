@@ -91,3 +91,18 @@
 .user-type-full {
   font-style: italic;
 }
+
+.home-link {
+  cursor: pointer;
+  margin-right: 15px;
+  color: #ffffff;
+  text-decoration: underline;
+}
+
+.home-link:hover {
+  color: #ffffff;
+  text-decoration: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  border-radius: 4px;
+  transition: all 0.3s ease;
+}

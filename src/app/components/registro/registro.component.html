@@ -26,14 +26,9 @@
                     <input matInput [(ngModel)]="dni" name="dni" type="dni" placeholder="DNI" required>
                 </mat-form-field>
 
-                <div class="tipo-usuario-field">
-                    <label>Tipo de Usuario</label>
-                    <mat-radio-group [(ngModel)]="tipoUsuario" name="tipoUsuario" required>
-                        <mat-radio-button *ngFor="let tipo of tiposUsuario" [value]="tipo.value">
-                            {{tipo.viewValue}}
-                        </mat-radio-button>
-                    </mat-radio-group>
-                </div>
+                <mat-form-field appearance="outline">
+                    <input matInput [(ngModel)]="fechaNacimiento" name="fechaNacimiento" type="date" placeholder="Fecha de Nacimiento" required>
+                </mat-form-field>
 
                 <div class="button-container">
                     <button mat-raised-button color="primary" type="submit">Registrarse</button>

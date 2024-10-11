@@ -1,10 +1,22 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-dashboard',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css']
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
+  userName: string | null = '';
+  userType: string | null = '';
 
+  constructor(private authService: AuthService) {}
+
+  ngOnInit() {
+    const usuarioLogueado = this.authService.getUsuarioLogueado();
+    if (usuarioLogueado) {
+      this.userName = `${usuarioLogueado.nombre} ${usuarioLogueado.apellido}`;
+      this.userType = usuarioLogueado.userType;
+    }
+  }
 }

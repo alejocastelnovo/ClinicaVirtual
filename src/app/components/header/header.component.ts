@@ -66,4 +66,23 @@ export class HeaderComponent implements OnInit, OnDestroy {
     this.authService.logout();
     this.router.navigate(['/']);
   }
+
+  navigateToHome() {
+    switch(this.userType) {
+      case 'Paciente':
+        this.router.navigate(['/dashboard']);
+        break;
+      case 'Medico':
+        this.router.navigate(['/dashboard']);
+        break;
+      case 'Administrador':
+        this.router.navigate(['/dashboard']);
+        break;
+      case 'Operador':
+        this.router.navigate(['/dashboard']);
+        break;
+      default:
+        this.router.navigate(['/']);
+    }
+  }
 }
