@@ -99,4 +99,13 @@ export class AuthService {
     return of(usuario);
   }
 
+  eliminarUsuario(id: number): Observable<boolean> {
+    const index = this.usuarios.findIndex(u => u.id === id);
+    if (index !== -1) {
+      this.usuarios.splice(index, 1);
+      return of(true);
+    }
+    return of(false);
+  }
+
 }

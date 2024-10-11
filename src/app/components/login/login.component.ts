@@ -24,7 +24,7 @@ export class LoginComponent {
     this.loading = true;
     console.log('Verificando credenciales...');
     
-    timer(3000).pipe(
+    timer(1000).pipe(
       switchMap(() => this.authService.login(this.email, this.password))
     ).subscribe(
       success => {
