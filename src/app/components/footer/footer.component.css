@@ -6,15 +6,15 @@
   transition: transform 0.3s ease-in-out;
   transform: translateY(0);
   position: fixed;
-  bottom: -100%; /* Oculta el footer por defecto */
+  bottom: -100%; 
   left: 0;
   width: 100%;
   z-index: 100;
-  transition: bottom 0.3s ease; /* Añade una transición suave */
+  transition: bottom 1s ease; /* hice mas suave la transicion del footer */
 }
 
 .clinic-footer.visible {
-  bottom: 0; /* Muestra el footer cuando tiene la clase 'visible' */
+  bottom: 0; 
   right: 0;
   z-index: 999;
 }
