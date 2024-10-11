@@ -7,23 +7,45 @@
     <mat-card-content>
       <form (ngSubmit)="onSubmit()">
         <mat-form-field appearance="outline">
-          <input matInput [(ngModel)]="usuario.nombre" name="nombre" placeholder="Nombre" required>
+          <mat-label>Nombre</mat-label>
+          <input matInput [(ngModel)]="usuario.nombre" name="nombre" required>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <input matInput [(ngModel)]="usuario.apellido" name="apellido" placeholder="Apellido" required>
+          <mat-label>Apellido</mat-label>
+          <input matInput [(ngModel)]="usuario.apellido" name="apellido" required>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <input matInput [(ngModel)]="usuario.email" name="email" type="email" placeholder="Email" required>
+          <mat-label>Email</mat-label>
+          <input matInput [(ngModel)]="usuario.email" name="email" type="email" required>
         </mat-form-field>
 
         <mat-form-field appearance="outline">
-          <mat-select [(ngModel)]="usuario.tipoUsuario" name="tipoUsuario" placeholder="Tipo de Usuario" required>
+          <mat-label>DNI</mat-label>
+          <input matInput [(ngModel)]="usuario.dni" name="dni" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Fecha de Nacimiento</mat-label>
+          <input matInput [matDatepicker]="picker" [(ngModel)]="usuario.fechaNacimiento" name="fechaNacimiento" required>
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Tipo de Usuario</mat-label>
+          <mat-select [(ngModel)]="usuario.userType" name="userType" required>
             <mat-option value="Operador">Operador</mat-option>
             <mat-option value="Médico">Médico</mat-option>
             <mat-option value="Administrador">Administrador</mat-option>
+            <mat-option value="Paciente">Paciente</mat-option>
           </mat-select>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Contraseña</mat-label>
+          <input matInput [(ngModel)]="usuario.password" name="password" type="password" required>
         </mat-form-field>
 
         <div class="button-container">

@@ -94,4 +94,9 @@ export class AuthService {
     return of(false);
   }
 
+  getUsuarioPorId(id: number): Observable<any> {
+    const usuario = this.usuarios.find(u => u.id === id);
+    return of(usuario);
+  }
+
 }
