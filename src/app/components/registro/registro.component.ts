@@ -14,8 +14,8 @@ export class RegistroComponent {
   email: string = '';
   password: string = '';
   dni: string = ''; // Añadimos la propiedad telefono
-  tipoUsuario: string = 'Paciente'; // Valor por defecto
   hidePassword = true; // Añadimos la propiedad hidePassword
+  fechaNacimiento: string = ''; // Añadimos la propiedad fechaNacimiento
 
   constructor(
     private router: Router,
@@ -24,35 +24,37 @@ export class RegistroComponent {
   ) {}
 
   onSubmit() {
-    const nuevoUsuario = {
-      nombre: this.nombre,
-      apellido: this.apellido,
-      email: this.email,
-      password: this.password,
-      dni: this.dni,
-      userType: this.tipoUsuario
-    };
+    const usuarioExiste = this.authService.verificarUsuarioExistente(this.email);
 
-    if (this.authService.registrarUsuario(nuevoUsuario)) {
-      this.snackBar.open('Registro exitoso. Por favor, inicie sesión.', 'Cerrar', {
+    if (usuarioExiste) {
+      this.snackBar.open('El correo electrónico ya está registrado.', 'Cerrar', {
         duration: 5000,
       });
-      this.router.navigate(['/login']);
     } else {
-      this.snackBar.open('Error al registrar usuario. Intente nuevamente.', 'Cerrar', {
-        duration: 5000,
-      });
+      const nuevoUsuario = {
+        nombre: this.nombre,
+        apellido: this.apellido,
+        email: this.email,
+        password: this.password,
+        dni: this.dni,
+        fechaNacimiento: this.fechaNacimiento,
+        tipoUsuario: 'Paciente'  // Asignamos automáticamente el rol de paciente
+      };
+
+      if (this.authService.registrarUsuario(nuevoUsuario)) {
+        this.snackBar.open('Registro exitoso. Por favor, inicie sesión.', 'Cerrar', {
+          duration: 5000,
+        });
+        this.router.navigate(['/login']);
+      } else {
+        this.snackBar.open('Error al registrar usuario. Intente nuevamente.', 'Cerrar', {
+          duration: 5000,
+        });
+      }
     }
   }
 
   onCancel() {
-    // Implementamos el método onCancel
-    this.router.navigate(['/login']); // O a donde quieras que vaya al cancelar
+    this.router.navigate(['/home']); 
   }
-
-  tiposUsuario = [
-    {value: 'paciente', viewValue: 'Paciente'},
-    {value: 'operador', viewValue: 'Operador'},
-    {value: 'medico', viewValue: 'Medico'}
-  ];
 }

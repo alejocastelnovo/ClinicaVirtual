@@ -1,0 +1,36 @@
+<div class="mis-datos-container">
+  <mat-card>
+    <mat-card-title>Mis Datos</mat-card-title>
+    <mat-card-content>
+      <form [formGroup]="usuarioForm" (ngSubmit)="guardarCambios()">
+        <mat-form-field appearance="outline">
+          <input matInput formControlName="nombre" readonly>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <input matInput formControlName="apellido" readonly>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <input matInput formControlName="dni" readonly>
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <input matInput formControlName="email">
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <input matInput type="password" formControlName="password">
+        </mat-form-field>
+        
+        <mat-form-field appearance="outline">
+          <input matInput type="date" formControlName="fechaNacimiento">
+        </mat-form-field>
+        
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit" [disabled]="!usuarioForm.valid">Guardar cambios</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

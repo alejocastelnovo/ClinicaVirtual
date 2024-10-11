@@ -1,0 +1,10 @@
+<h2>Mis Turnos</h2>
+<ul>
+  <li *ngFor="let turno of turnos" (click)="toggleExpandirTurno(turno)">
+    {{ formatearFecha(turno.fecha) }}
+    <div *ngIf="turno.expandido">
+      Especialista: {{ turno.especialista }}<br>
+      Especialidad: {{ turno.especialidad }}
+    </div>
+  </li>
+</ul>

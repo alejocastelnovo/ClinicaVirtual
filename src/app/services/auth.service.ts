@@ -6,8 +6,11 @@ import { Observable, of, BehaviorSubject } from 'rxjs';
 })
 export class AuthService {
   private usuarios: any[] = [
-    { id: 1, nombre: 'Lautaro', apellido: 'Cortez', email: 'Lautycortez725@gmail.com', password: '1234', dni: '3425458005', userType: 'Administrador' },
-    { id: 2, nombre: 'Alejo', apellido: 'Castelnovo', email: 'castelnovo12@gmail.com', password: '123', dni: '0987654321', userType: 'Administrador' }
+    { id: 1, nombre: 'Lautaro', apellido: 'Cortez', email: 'lautycortez725@gmail.com', password: '1234', dni: '3425458005', userType: 'Administrador', fechaNacimiento: '2003-12-23' },
+    { id: 2, nombre: 'Alejo', apellido: 'Castelnovo', email: 'castelnovo12@gmail.com', password: '123', dni: '0987654321', userType: 'Administrador', fechaNacimiento: '2001-2-12' },
+    { id: 3, nombre: 'Juan', apellido: 'Perez', email: 'juanperez@gmail.com', password: '123', dni: '1234567890', userType: 'Paciente', fechaNacimiento: '1990-05-15' },
+    { id: 4, nombre: 'Maria', apellido: 'Gomez', email: 'mariagomez@gmail.com', password: '123', dni: '0987654321', userType: 'Medico', fechaNacimiento: '1985-09-22' },
+    { id: 5, nombre: 'Carlos', apellido: 'Lopez', email: 'carloslopez@gmail.com', password: '123', dni: '1234567890', userType: 'Operador', fechaNacimiento: '1978-11-30' },
   ];
 
   private usuarioLogueado: any = null;
@@ -48,5 +51,26 @@ export class AuthService {
 
   esUsuarioAdministrador(): boolean {
     return this.usuarioLogueado && this.usuarioLogueado.userType === 'Administrador';
+  }
+
+  verificarUsuarioExistente(email: string): boolean {
+    // Buscar un usuario con el email proporcionado
+    const usuarioExistente = this.usuarios.find(u => u.email === email);
+    
+    // Retornar true si se encuentra un usuario, false en caso contrario
+    return !!usuarioExistente;
+  }
+
+  actualizarDatosUsuario(id: number, cambios: any): boolean {
+    const index = this.usuarios.findIndex(u => u.id === id);
+    if (index !== -1) {
+      this.usuarios[index] = { ...this.usuarios[index], ...cambios };
+      if (this.usuarioLogueado && this.usuarioLogueado.id === id) {
+        this.usuarioLogueado = { ...this.usuarioLogueado, ...cambios };
+        this.usuarioLogueadoSubject.next(this.usuarioLogueado);
+      }
+      return true;
+    }
+    return false;
   }
 }
