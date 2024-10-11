@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../services/auth.service';
 
 @Component({
   selector: 'app-editar-usuario',
@@ -12,24 +13,43 @@ export class EditarUsuarioComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private authService: AuthService
   ) { }
 
   ngOnInit() {
     this.id = +this.route.snapshot.paramMap.get('id')!;
-    // Aquí deberías cargar los datos del usuario usando el ID
-    // Por ejemplo: this.cargarUsuario(this.id);
+    this.cargarUsuario(this.id);
+  }
+
+  cargarUsuario(id: number) {
+    this.authService.getUsuarioPorId(id).subscribe(
+      usuario => {
+        this.usuario = usuario;
+      },
+      error => {
+        console.error('Error al cargar el usuario:', error);
+      }
+    );
   }
 
   onSubmit() {
-    // Aquí deberías implementar la lógica para guardar los cambios del usuario
-    console.log('Guardando usuario:', this.usuario);
-    // Después de guardar, redirige a la lista de usuarios
-    this.router.navigate(['/administrador/usuarios']);
+    this.authService.editarUsuario(this.id, this.usuario).subscribe(
+      success => {
+        if (success) {
+          console.log('Usuario actualizado con éxito');
+          this.router.navigate(['/administrador/gestion-usuarios']);
+        } else {
+          console.error('Error al actualizar el usuario');
+        }
+      },
+      error => {
+        console.error('Error al actualizar el usuario:', error);
+      }
+    );
   }
 
   onCancel() {
-    // Redirige a la lista de usuarios sin guardar cambios
-    this.router.navigate(['/administrador/usuarios']);
+    this.router.navigate(['/administrador/gestion-usuarios']);
   }
 }
