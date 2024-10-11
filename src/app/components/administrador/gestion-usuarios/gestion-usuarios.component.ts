@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -17,7 +18,11 @@ export class GestionUsuariosComponent implements OnInit {
 
   displayedColumns: string[] = ['nombre', 'apellido', 'email', 'userType', 'acciones'];
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private dialog: MatDialog
+  ) {}
 
   ngOnInit(): void {
     this.cargarUsuarios();
@@ -53,8 +58,25 @@ export class GestionUsuariosComponent implements OnInit {
     this.router.navigate(['/administrador/crear-usuario']);
   }
 
+  confirmarEliminarUsuario(usuario: any) {
+    const confirmacion = confirm(`¿Está seguro que desea eliminar al usuario ${usuario.nombre}?`);
+    if (confirmacion) {
+      this.eliminarUsuario(usuario.id);
+    }
+  }
+
   eliminarUsuario(id: number) {
-    // Implementa la lógica para eliminar el usuario
-    console.log('Eliminar usuario con ID:', id);
+    this.authService.eliminarUsuario(id).subscribe(
+      success => {
+        if (success) {
+          this.cargarUsuarios();
+        } else {
+          console.error('Error al eliminar usuario');
+        }
+      },
+      error => {
+        console.error('Error al eliminar usuario:', error);
+      }
+    );
   }
 }
