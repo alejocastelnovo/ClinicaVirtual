@@ -39,6 +39,7 @@ import { MisTurnosComponent } from './components/paciente/mis-turnos/mis-turnos.
 import { MisDatosComponent } from './components/paciente/mis-datos/mis-datos.component';
 import { TurnosProgramadosComponent } from './components/medico/turnos-programados/turnos-programados.component';
 import { GestionAgendaComponent } from './components/medico/gestion-agenda/gestion-agenda.component';
+import { GestionUsuariosComponent } from './components/administrador/gestion-usuarios/gestion-usuarios.component';
 
 
 @NgModule({
@@ -55,6 +56,7 @@ import { GestionAgendaComponent } from './components/medico/gestion-agenda/gesti
     MisDatosComponent,
     TurnosProgramadosComponent,
     GestionAgendaComponent,
+    GestionUsuariosComponent,
   ],
   imports: [
     BrowserModule,

@@ -50,6 +50,8 @@ body {
   margin: 0;
   padding: 0;
   min-height: 100vh;
+  margin-top: 60px; /* Debe coincidir con la altura del encabezado */
+  padding-top: 20px; /* Espacio adicional entre el encabezado y el contenido */
 }
 
 .main-content {

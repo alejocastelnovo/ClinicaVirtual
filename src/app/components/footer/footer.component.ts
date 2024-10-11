@@ -22,11 +22,23 @@ export class FooterComponent implements OnInit {
     const totalHeight = document.documentElement.scrollHeight;
 
     // Muestra el footer si el mouse está cerca del final de la página
-    const shouldBeVisible = (windowHeight + scrollY >= totalHeight - 50);
+    const shouldBeVisible = (windowHeight + scrollY >= totalHeight - 80);
     
     if (this.isVisible !== shouldBeVisible) {
       this.isVisible = shouldBeVisible;
       this.visibilityChange.emit(this.isVisible);
+      
+      // Añadir un pequeño retraso para la desaparición
+      if (!shouldBeVisible) {
+        setTimeout(() => {
+          if (!this.isVisible) {
+            const footer = document.querySelector('.clinic-footer') as HTMLElement;
+            if (footer) {
+              footer.style.bottom = '-100px';
+            }
+          }
+        }, 300); // 300ms de retraso, igual que la duración de la transición
+      }
     }
   }
 }
