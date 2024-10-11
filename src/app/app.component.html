@@ -1,8 +1,7 @@
-<app-header></app-header>
-
-<div class="main-content" [class.footer-visible]="footerVisible">
-<router-outlet></router-outlet>
-
+<div class="app-container">
+  <app-header></app-header>
+  <div class="main-content">
+    <router-outlet></router-outlet>
+    <app-footer></app-footer>
+  </div>
 </div>
-
-<app-footer (visibilityChange)="onFooterVisibilityChange($event)"></app-footer>

@@ -46,19 +46,43 @@
   font-style: italic;
 }
 
-body {
+body, html {
   margin: 0;
   padding: 0;
+  height: 100%;
+}
+
+.app-container {
+  display: flex;
+  flex-direction: column;
   min-height: 100vh;
+}
+
+app-header {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
 }
 
 .main-content {
-  min-height: 100vh;
-  padding-bottom: 100px; /* Ajusta este valor según la altura de tu footer */
-  box-sizing: border-box;
-  transition: padding-bottom 0.3s ease-in-out;
+  flex: 1;
+  padding-top: 64px; /* Ajusta este valor según la altura de tu navbar */
+  display: flex;
+  flex-direction: column;
 }
 
-.main-content.footer-visible {
-  padding-bottom: 200px; /* El doble de la altura del footer */
+router-outlet + * {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+app-footer {
+  position: sticky;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 999;
 }

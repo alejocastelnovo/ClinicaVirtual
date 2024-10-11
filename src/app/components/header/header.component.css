@@ -3,10 +3,11 @@
   color: white;
   padding: 1rem 2rem;
   font-family: 'Roboto', sans-serif;
-
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 64px; /* Ajusta este valor según tus necesidades */
+  box-sizing: border-box;
 }
 
 .logo h1 {
