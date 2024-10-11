@@ -5,7 +5,7 @@
         </mat-card-header>
 
         <mat-card-content>
-            <!-- Contenedor de filtros con diseño mejorado -->
+            <!-- Contenedor de filtros -->
             <div class="filter-container">
                 <mat-form-field appearance="outline">
                     <mat-label>Filtrar por nombre</mat-label>
@@ -31,7 +31,7 @@
                 </mat-form-field>
             </div>
 
-            <!-- Tabla con estilos mejorados -->
+            <!-- Tabla de usuarios -->
             <table mat-table [dataSource]="usuariosFiltrados" class="mat-elevation-z8 usuarios-table">
                 <ng-container matColumnDef="nombre">
                     <th mat-header-cell *matHeaderCellDef> Nombre </th>
@@ -43,7 +43,12 @@
                     <td mat-cell *matCellDef="let usuario"> {{usuario.apellido}} </td>
                 </ng-container>
 
-                <ng-container matColumnDef="tipoUsuario">
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef> Email </th>
+                    <td mat-cell *matCellDef="let usuario"> {{usuario.email}} </td>
+                </ng-container>
+
+                <ng-container matColumnDef="userType">
                     <th mat-header-cell *matHeaderCellDef> Tipo de Usuario </th>
                     <td mat-cell *matCellDef="let usuario"> {{usuario.userType}} </td>
                 </ng-container>
@@ -64,10 +69,7 @@
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             </table>
 
-            <!-- Paginador para la tabla -->
-            <mat-paginator [pageSizeOptions]="[5, 10, 20]" showFirstLastButtons></mat-paginator>
-
-            <!-- Botón para crear usuario con estilo mejorado -->
+            <!-- Botón para crear usuario -->
             <div class="button-container">
                 <button mat-raised-button color="primary" (click)="crearUsuario()">
                     <mat-icon>add</mat-icon>
