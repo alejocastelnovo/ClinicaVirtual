@@ -12,6 +12,7 @@ import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
+import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon'; 
@@ -20,6 +21,7 @@ import { MatRadioModule } from '@angular/material/radio';
 import { MatSelectModule } from '@angular/material/select';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
+import { MatTableModule } from '@angular/material/table';
 import { MatOptionModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -39,6 +41,9 @@ import { MisTurnosComponent } from './components/paciente/mis-turnos/mis-turnos.
 import { MisDatosComponent } from './components/paciente/mis-datos/mis-datos.component';
 import { TurnosProgramadosComponent } from './components/medico/turnos-programados/turnos-programados.component';
 import { GestionAgendaComponent } from './components/medico/gestion-agenda/gestion-agenda.component';
+import { GestionUsuariosComponent } from './components/administrador/gestion-usuarios/gestion-usuarios.component';
+import { CrearUsuarioComponent } from './components/administrador/crear-usuario/crear-usuario.component';
+import { EditarUsuarioComponent } from './components/administrador/editar-usuario/editar-usuario.component';
 
 
 @NgModule({
@@ -55,11 +60,15 @@ import { GestionAgendaComponent } from './components/medico/gestion-agenda/gesti
     MisDatosComponent,
     TurnosProgramadosComponent,
     GestionAgendaComponent,
+    GestionUsuariosComponent,
+    CrearUsuarioComponent,
+    EditarUsuarioComponent,
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MatDialogModule,
+    MatPaginatorModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
     BrowserAnimationsModule, 
@@ -75,6 +84,7 @@ import { GestionAgendaComponent } from './components/medico/gestion-agenda/gesti
     MatSelectModule,
     MatOptionModule,
     MatRadioModule,
+    MatTableModule,
     MatDatepickerModule,
     MatNativeDateModule,
 

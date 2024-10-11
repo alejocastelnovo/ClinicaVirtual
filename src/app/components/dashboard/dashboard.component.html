@@ -6,7 +6,6 @@
   <h2>Haz click en alguna de las funciones principales para acceder</h2>
 
   
-  <!--funcionalidades del usuario logueado -->
   
 </div>
   <div *ngIf="userType === 'Paciente'">
@@ -50,7 +49,7 @@
       <mat-card-content>
         <h3>Opciones para Administrador</h3>
         <ul>
-          <!--          falta implementar sus funciones-->
+          <li><a routerLink="/administrador/gestion-usuarios">Gestion de Usuarios</a></li>
         </ul>
       </mat-card-content>
     </mat-card>

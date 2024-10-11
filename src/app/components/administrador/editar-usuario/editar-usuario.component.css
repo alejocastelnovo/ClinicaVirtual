@@ -1,0 +1,71 @@
+.editar-usuario-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: calc(100vh - 120px);
+  background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+  padding: 20px;
+  box-sizing: border-box;
+}
+
+mat-card {
+  width: 100%;
+  max-width: 450px;
+  padding: 40px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-title {
+  font-size: 28px;
+  color: #00796b;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 25px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  margin-top: 30px;
+}
+
+button {
+  flex: 1;
+  padding: 12px;
+  font-size: 16px;
+  border: none;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+button[color="primary"] {
+  background-color: #00796b;
+  color: white;
+}
+
+button[color="primary"]:hover {
+  background-color: #004d40;
+}
+
+button[color="warn"] {
+  background-color: #f44336;
+  color: white;
+}
+
+button[color="warn"]:hover {
+  background-color: #d32f2f;
+}
+
