@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -16,7 +17,7 @@ export class AuthService {
   private usuarioLogueado: any = null;
   private usuarioLogueadoSubject = new BehaviorSubject<any>(null);
 
-  constructor() {}
+  constructor(private http: HttpClient) {}
 
   login(email: string, password: string): Observable<boolean> {
     const usuario = this.usuarios.find(u => u.email === email && u.password === password);
@@ -73,4 +74,24 @@ export class AuthService {
     }
     return false;
   }
+
+  getUsuarios(): Observable<any[]> {
+    return of(this.usuarios);
+  }
+
+  crearUsuario(usuario: any): Observable<boolean> {
+    usuario.id = this.usuarios.length + 1;
+    this.usuarios.push(usuario);
+    return of(true);
+  }
+
+  editarUsuario(id: number, usuarioEditado: any): Observable<boolean> {
+    const index = this.usuarios.findIndex(u => u.id === id);
+    if (index !== -1) {
+      this.usuarios[index] = { ...this.usuarios[index], ...usuarioEditado };
+      return of(true);
+    }
+    return of(false);
+  }
+
 }

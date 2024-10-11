@@ -1,0 +1,36 @@
+<div class="editar-usuario-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>Editar Usuario</mat-card-title>
+    </mat-card-header>
+    
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()">
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="usuario.nombre" name="nombre" placeholder="Nombre" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="usuario.apellido" name="apellido" placeholder="Apellido" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="usuario.email" name="email" type="email" placeholder="Email" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-select [(ngModel)]="usuario.tipoUsuario" name="tipoUsuario" placeholder="Tipo de Usuario" required>
+            <mat-option value="Operador">Operador</mat-option>
+            <mat-option value="Médico">Médico</mat-option>
+            <mat-option value="Administrador">Administrador</mat-option>
+          </mat-select>
+        </mat-form-field>
+
+        <div class="button-container">
+          <button mat-raised-button color="primary" type="submit">Guardar</button>
+          <button mat-raised-button color="warn" type="button" (click)="onCancel()">Cancelar</button>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+</div>

@@ -11,6 +11,13 @@ import { NuevoTurnoComponent } from './components/paciente/nuevo-turno/nuevo-tur
 import { MisTurnosComponent } from './components/paciente/mis-turnos/mis-turnos.component';
 import { MisDatosComponent } from './components/paciente/mis-datos/mis-datos.component';
 
+/* Componentes de Medico */
+import { GestionAgendaComponent } from './components/medico/gestion-agenda/gestion-agenda.component';
+import { TurnosProgramadosComponent } from './components/medico/turnos-programados/turnos-programados.component';
+
+/* Componentes de Administrador */
+import { GestionUsuariosComponent } from './components/administrador/gestion-usuarios/gestion-usuarios.component';
+
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' }, 
   { path: 'home', component: HomeComponent },
@@ -20,6 +27,9 @@ const routes: Routes = [
   { path: 'paciente/nuevo-turno', component: NuevoTurnoComponent },
   { path: 'paciente/mis-turnos', component: MisTurnosComponent },
   { path: 'paciente/mis-datos', component: MisDatosComponent }, 
+  { path: 'administrador/gestion-usuarios', component: GestionUsuariosComponent },
+  { path: 'medico/gestion-agenda', component: GestionAgendaComponent },
+  { path: 'medico/turnos-programados', component: TurnosProgramadosComponent },
 ];
 
 @NgModule({
