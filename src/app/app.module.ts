@@ -71,14 +71,14 @@ import { EditarUsuarioComponent } from './components/administrador/editar-usuari
     MatPaginatorModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
-    BrowserAnimationsModule,  // Necesario para Angular Material
-    MatCardModule,  // Tarjetas de Angular Material
-    MatFormFieldModule,  // Formularios y campos de texto
-    MatInputModule,  // Inputs de Material
-    MatButtonModule,  // Botones estilizados de Material
-    MatIconModule,  // Íconos si los usas en el proyecto
-    FormsModule,  // Para formularios con ngModel
-    ReactiveFormsModule,  // Para formularios reactivos si decides usarlos
+    BrowserAnimationsModule, 
+    MatCardModule,  
+    MatFormFieldModule,  
+    MatInputModule,  
+    MatButtonModule,  
+    MatIconModule,  
+    FormsModule,  
+    ReactiveFormsModule,  
     HttpClientModule,  // Para las peticiones HTTP (ej: login)
     MatSnackBarModule,
     MatSelectModule,
