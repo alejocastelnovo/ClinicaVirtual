@@ -15,7 +15,7 @@ export class GestionUsuariosComponent implements OnInit {
   filtroApellido: string = '';
   filtroTipo: string = '';
 
-  displayedColumns: string[] = ['nombre', 'apellido', 'userType', 'acciones'];
+  displayedColumns: string[] = ['nombre', 'apellido', 'email', 'userType', 'acciones'];
 
   constructor(private authService: AuthService, private router: Router) {}
 
@@ -45,8 +45,8 @@ export class GestionUsuariosComponent implements OnInit {
     });
   }
 
-  editarUsuario(usuario: any) {
-    this.router.navigate(['/administrador/editar-usuario', usuario.id]);
+  editarUsuario(id: number) {
+    this.router.navigate(['/administrador/editar-usuario', id]);
   }
 
   crearUsuario() {
