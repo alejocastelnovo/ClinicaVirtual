@@ -1,6 +1,14 @@
 <div class="dashboard-content">
   <h2>Bienvenido/a, {{ userName }}</h2>
 
+
+<div class="main-content">
+  <h2>Haz click en alguna de las funciones principales para acceder</h2>
+
+  
+  <!--funcionalidades del usuario logueado -->
+  
+</div>
   <div *ngIf="userType === 'Paciente'">
     <mat-card>
       <mat-card-content>
@@ -13,7 +21,7 @@
       </mat-card-content>
     </mat-card>
   </div>
-
+  
   <div *ngIf="userType === 'Operador'">
     <mat-card>
       <mat-card-content>

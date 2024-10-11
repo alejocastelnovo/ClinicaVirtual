@@ -5,16 +5,15 @@
     align-items: center;
     min-height: 100vh;
     background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
-    padding: 20px;
-    position: relative;
-    z-index: 1;
+    padding: 20px 20px 100px 20px;
+    box-sizing: border-box;
 }
 
-/* Estilos de la tarjeta */
+/* Estilos del register */
 mat-card {
     width: 100%;
-    max-width: 450px;
-    padding: 40px;
+    max-width: 400px; /* Reducido de 450px a 400px */
+    padding: 30px; /* Reducido de 40px a 30px */
     background-color: #ffffff;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -23,13 +22,13 @@ mat-card {
 mat-card-header {
     display: flex;
     justify-content: center;
-    margin-bottom: 30px;
+    margin-bottom: 20px; /* Reducido de 30px a 20px */
 }
 
 mat-card-title {
-    font-size: 28px;
+    font-size: 24px; /* Reducido de 28px a 24px */
     color: #00796b;
-    margin-bottom: 30px;
+    margin-bottom: 20px; /* Reducido de 30px a 20px */
     text-align: center;
 }
 
@@ -41,7 +40,7 @@ mat-card-content {
 /* Estilos de los campos de formulario */
 mat-form-field {
     width: 100%;
-    margin-bottom: 25px;
+    margin-bottom: 20px; /* Reducido de 25px a 20px */
 }
 
 .mat-mdc-text-field-wrapper {
@@ -106,7 +105,7 @@ mat-form-field:nth-child(5) { animation-delay: 0.5s; }
 
 /* Estilos para el grupo de radio buttons */
 .tipo-usuario-field {
-    margin-bottom: 25px;
+    margin-bottom: 20px; 
     animation: fadeInUp 0.5s ease forwards;
     animation-delay: 0.6s;
     opacity: 0;
@@ -138,8 +137,8 @@ mat-radio-button:hover {
 .button-container {
     display: flex;
     justify-content: space-between;
-    gap: 15px;
-    margin-top: 30px;
+    gap: 10px; /* Reducido de 15px a 10px */
+    margin-top: 20px; /* Reducido de 30px a 20px */
     animation: fadeInUp 0.5s ease forwards;
     animation-delay: 0.7s;
     opacity: 0;
@@ -147,8 +146,8 @@ mat-radio-button:hover {
 
 button {
     flex: 1;
-    padding: 12px;
-    font-size: 16px;
+    padding: 10px; /* Reducido de 12px a 10px */
+    font-size: 14px; /* Reducido de 16px a 14px */
     border: none;
     border-radius: 8px;
     transition: all 0.3s ease;

@@ -1,27 +1,25 @@
-import { Component, HostListener, Output, EventEmitter } from '@angular/core';
-
+import { Component, OnInit, HostListener } from '@angular/core';
 
 @Component({
   selector: 'app-footer',
   templateUrl: './footer.component.html',
   styleUrls: ['./footer.component.css']
 })
-export class FooterComponent {
+export class FooterComponent implements OnInit {
   isVisible = false;
-  @Output() visibilityChange = new EventEmitter<boolean>();
 
-  @HostListener('window:scroll', [])
-  onWindowScroll() {
+  ngOnInit() {
+    this.checkScroll();
+  }
+
+  @HostListener('window:scroll', ['$event'])
+  checkScroll() {
     const windowHeight = window.innerHeight;
     const documentHeight = document.documentElement.scrollHeight;
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
 
-    const shouldBeVisible = (windowHeight + scrollTop >= documentHeight - 50);
-
-    if (this.isVisible !== shouldBeVisible) {
-      this.isVisible = shouldBeVisible;
-      this.visibilityChange.emit(this.isVisible);
-    }
+    // Muestra el footer cuando estamos cerca del final de la página
+    this.isVisible = (windowHeight + scrollTop) >= (documentHeight - 50);
   }
 }
 
