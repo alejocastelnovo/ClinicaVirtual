@@ -15,7 +15,6 @@
 
 .clinic-footer.visible {
   bottom: 0; /* Muestra el footer cuando tiene la clase 'visible' */
-=======
   right: 0;
   z-index: 999;
 }
