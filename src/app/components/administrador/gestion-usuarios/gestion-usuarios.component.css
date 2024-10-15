@@ -146,7 +146,7 @@ mat-card {
 
 .filter-container,
 table,
-.button-container {
+.button-container {     
     animation: fadeIn 0.5s ease-out;
     animation-fill-mode: both;
 }

@@ -5,14 +5,14 @@
         </mat-card-header>
         
         <mat-card-content>
-            <form (ngSubmit)="onSubmit()">
+            <form [formGroup]="loginForm" (ngSubmit)="login()">
                 
                 <mat-form-field appearance="outline">
-                    <input matInput [(ngModel)]="email" name="email" placeholder="Email" required>
+                    <input matInput [(ngModel)]="email" name="email" placeholder="Email" required formControlName="usuario">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <input matInput [(ngModel)]="password" name="password" type="password" placeholder="Contraseña" required>
+                    <input matInput [(ngModel)]="password" name="password" type="password" placeholder="Contraseña" formControlName="contrasenia" required>
                 </mat-form-field>
 
                 <div class="button-container">
