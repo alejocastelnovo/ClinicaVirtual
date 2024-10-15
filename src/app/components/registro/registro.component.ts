@@ -23,7 +23,7 @@ export class RegistroComponent {
     private authService: AuthService
   ) {}
 
-  onSubmit() {
+  /*o nSubmit() {
     const usuarioExiste = this.authService.verificarUsuarioExistente(this.email);
 
     if (usuarioExiste) {
@@ -52,7 +52,7 @@ export class RegistroComponent {
         });
       }
     }
-  }
+  } */
 
   onCancel() {
     this.router.navigate(['/home']); 

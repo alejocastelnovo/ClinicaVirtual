@@ -20,6 +20,20 @@
       </mat-card-content>
     </mat-card>
   </div>
+
+  </div>
+  <div *ngIf="userType === '?'">
+    <mat-card>
+      <mat-card-content>
+        <h3>Opciones para Pacientes</h3>
+        <ul>
+          <li><a routerLink="/paciente/nuevo-turno">Solicitar Nuevo Turno</a></li>
+          <li><a routerLink="/paciente/mis-turnos">Ver Mis Turnos</a></li>
+          <li><a routerLink="/paciente/mis-datos">Mis Datos Personales</a></li>
+        </ul>
+      </mat-card-content>
+    </mat-card>
+  </div>
   
   <div *ngIf="userType === 'Operador'">
     <mat-card>
@@ -54,5 +68,3 @@
       </mat-card-content>
     </mat-card>
   </div>
-
-</div>

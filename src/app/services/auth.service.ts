@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,22 +13,17 @@ export class AuthService {
     { id: 4, nombre: 'Maria', apellido: 'Gomez', email: 'mariagomez@gmail.com', password: '123', dni: '0987654321', userType: 'Medico', fechaNacimiento: '1985-09-22' },
     { id: 5, nombre: 'Carlos', apellido: 'Lopez', email: 'carloslopez@gmail.com', password: '123', dni: '1234567890', userType: 'Operador', fechaNacimiento: '1978-11-30' },
   ];
-
+  UrlApi = 'http://localhost:4000/api';
   private usuarioLogueado: any = null;
   private usuarioLogueadoSubject = new BehaviorSubject<any>(null);
 
   constructor(private http: HttpClient) {}
 
-  login(email: string, password: string): Observable<boolean> {
-    const usuario = this.usuarios.find(u => u.email === email && u.password === password);
-    if (usuario) {
-      this.usuarioLogueado = { ...usuario };
-      this.usuarioLogueadoSubject.next(this.usuarioLogueado);
-      console.log('Usuario autenticado:', this.usuarioLogueado);
-      return of(true);
-    }
-    console.log('Autenticación fallida para:', email);
-    return of(false);
+  login(body: any) {
+    const headers = new HttpHeaders({ "Content-Type": "application/json" });
+    
+  
+    return this.http.post(`${this.UrlApi}/login`, body, {headers})
   }
 
   logout(): void {

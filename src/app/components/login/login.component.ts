@@ -3,6 +3,7 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { timer } from 'rxjs';
 import { switchMap } from 'rxjs/operators';
+import { FormControl, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-login',
@@ -14,35 +15,41 @@ export class LoginComponent {
   email: string = '';
   password: string = '';
   loading: boolean = false;
+  loginForm: FormGroup;
 
   constructor(
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+    this.loginForm = new FormGroup({
+      usuario: new FormControl('', [Validators.required, Validators.email]),
+      contrasenia: new FormControl('', [Validators.required])
+    });
 
-  onSubmit() {
-    this.loading = true;
-    console.log('Verificando credenciales...');
-    
-    timer(1000).pipe(
-      switchMap(() => this.authService.login(this.email, this.password))
-    ).subscribe(
-      success => {
-        this.loading = false;
-        if (success) {
-          console.log('Login exitoso');
+  }
+
+
+
+  login() {
+
+
+    let body = {
+      usuario: this.loginForm.controls['usuario'].value,
+      password: this.loginForm.controls['contrasenia'].value
+    }
+
+    console.log(JSON.stringify(body));
+
+    this.authService.login(JSON.stringify(body)).subscribe( (data: any) => {
+      
+      if (data.codigo == 200) {
+        console.log(data.mensaje);
+        console.log(data);
           this.router.navigate(['/dashboard']);
-        } else {
-          console.log('Usuario no encontrado. Por favor, regístrese.');
-          alert('Usuario no encontrado. Por favor, regístrese.');
-        }
-      },
-      error => {
-        this.loading = false;
-        console.error('Error durante el login:', error);
-        alert('Ocurrió un error durante el inicio de sesión. Por favor, intente nuevamente.');
+      } else {
+        console.log(data.mensaje);
       }
-    );
+    })
   }
 
   onRegister() {
