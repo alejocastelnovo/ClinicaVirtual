@@ -8,16 +8,21 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 })
 export class AuthService {
   private usuarios: any[] = [
-    ];
+  ];
   UrlApi = 'http://localhost:4000/api';
   private usuarioLogueado: any = null;
   private usuarioLogueadoSubject = new BehaviorSubject<any>(null);
 
-  constructor(private http: HttpClient) {}
+
+  constructor(private http: HttpClient) {
+    const usuarioInicial = JSON.parse(localStorage.getItem('usuarioLogueado') || 'null');
+    this.usuarioLogueadoSubject = new BehaviorSubject<any>(usuarioInicial);
+    this.usuarioLogueado = this.usuarioLogueadoSubject.asObservable();
+  }
 
   login(body: any) {
     const headers = new HttpHeaders({ "Content-Type": "application/json" });
-    return this.http.post(`${this.UrlApi}/login`, body, {headers}).pipe(
+    return this.http.post(`${this.UrlApi}/login`, body, { headers }).pipe(
       tap((response: any) => {
         if (response && response.payload) {
           this.usuarioLogueado = response.payload;
@@ -32,10 +37,6 @@ export class AuthService {
   logout(): void {
     this.usuarioLogueado = null;
     this.usuarioLogueadoSubject.next(null);
-  }
-
-  registrarUsuario(usuario: any): Observable<any> {
-    return this.http.post(`${this.UrlApi}/usuarios`, usuario);
   }
 
   getUsuarios(): Observable<any[]> {
@@ -59,15 +60,6 @@ export class AuthService {
   }
 
   // Método para obtener el usuario logueado
-  getUsuarioLogueado(): any {
-    return JSON.parse(localStorage.getItem('currentUser') || '{}');
-  }
-
-  // Método para obtener el Observable del usuario logueado
-  getUsuarioLogueadoObservable(): Observable<any> {
-    return this.usuarioLogueadoSubject.asObservable();
-  }
-
   // Método para actualizar los datos del usuario
   actualizarDatosUsuario(id: number, cambios: any): Observable<any> {
     return this.http.put(`${this.UrlApi}/usuarios/${id}`, cambios).pipe(
@@ -77,5 +69,28 @@ export class AuthService {
       })
     );
   }
+
+  // Método para registrar usuario
+  // Método para registrar usuario
+  registrarUsuario(usuario: any): Observable<any> {
+    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
+    return this.http.post(`${this.UrlApi}/registro`, usuario, { headers });
+  }
+
+
+
+  public getUsuarioLogueado(): any {
+    return this.usuarioLogueadoSubject.value;
+  }
+
+  public getUsuarioLogueadoObservable(): Observable<any> {
+    return this.usuarioLogueado;
+  }
+
+  public setUsuarioLogueado(user: any): void {
+    localStorage.setItem('usuarioLogueado', JSON.stringify(user));
+    this.usuarioLogueadoSubject.next(user);
+  }
+
 
 }

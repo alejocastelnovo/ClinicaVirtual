@@ -3,35 +3,35 @@
         <mat-card-header>
             <mat-card-title>Registro de Usuario</mat-card-title>
         </mat-card-header>
-        
+
         <mat-card-content>
-            <form>
+            <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
                 <mat-form-field appearance="outline">
-                    <input matInput [(ngModel)]="nombre" name="nombre" placeholder="Nombre" required>
+                    <input matInput formControlName="nombre" placeholder="Nombre" required>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <input matInput [(ngModel)]="apellido" name="apellido" placeholder="Apellido" required>
+                    <input matInput formControlName="apellido" placeholder="Apellido" required>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <input matInput [(ngModel)]="email" name="email" type="email" placeholder="Email" required>
+                    <input matInput formControlName="email" type="email" placeholder="Email" required>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <input matInput [(ngModel)]="password" name="password" type="password" placeholder="Contraseña" required>
+                    <input matInput formControlName="password" type="password" placeholder="Contraseña" required>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <input matInput [(ngModel)]="dni" name="dni" type="dni" placeholder="DNI" required>
+                    <input matInput formControlName="dni" type="text" placeholder="DNI" required>
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <input matInput [(ngModel)]="fechaNacimiento" name="fechaNacimiento" type="date" placeholder="Fecha de Nacimiento" required>
+                    <input matInput formControlName="fechaNacimiento" type="date" placeholder="Fecha de Nacimiento" required>
                 </mat-form-field>
 
                 <div class="button-container">
-                    <button mat-raised-button color="primary" type="submit">Registrarse</button>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">Registrarse</button>
                     <button mat-raised-button color="accent" type="button" (click)="onCancel()">Cancelar</button>
                 </div>
             </form>

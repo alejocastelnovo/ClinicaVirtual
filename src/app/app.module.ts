@@ -40,9 +40,9 @@ import { MisTurnosComponent } from './components/paciente/mis-turnos/mis-turnos.
 import { MisDatosComponent } from './components/paciente/mis-datos/mis-datos.component';
 import { TurnosProgramadosComponent } from './components/medico/turnos-programados/turnos-programados.component';
 import { GestionAgendaComponent } from './components/medico/gestion-agenda/gestion-agenda.component';
-import { GestionUsuariosComponent } from './components/administrador/gestion-usuarios/gestion-usuarios.component';
-import { EditarUsuarioComponent } from './components/administrador/editar-usuario/editar-usuario.component';
 import { CrearUsuarioComponent } from './components/administrador/crear-usuario/crear-usuario.component';
+
+
 
 @NgModule({
   declarations: [
@@ -58,8 +58,6 @@ import { CrearUsuarioComponent } from './components/administrador/crear-usuario/
     MisDatosComponent,
     TurnosProgramadosComponent,
     GestionAgendaComponent,
-    GestionUsuariosComponent,
-    EditarUsuarioComponent,
     CrearUsuarioComponent,
   ],
   imports: [
