@@ -25,14 +25,9 @@ export class LoginComponent {
       usuario: new FormControl('', [Validators.required, Validators.email]),
       contrasenia: new FormControl('', [Validators.required])
     });
-
   }
 
-
-
   login() {
-
-
     let body = {
       usuario: this.loginForm.controls['usuario'].value,
       password: this.loginForm.controls['contrasenia'].value

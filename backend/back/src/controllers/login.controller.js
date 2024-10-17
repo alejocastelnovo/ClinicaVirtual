@@ -7,6 +7,7 @@ const login = async (req, res) => {
             usuario,
             password
         } = req.body
+        
         // const cuerpo = {
         //     usuario,
         //     password
