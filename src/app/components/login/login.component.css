@@ -23,7 +23,8 @@ mat-card-title {
     font-size: 28px;
     color: #00796b;
     margin-bottom: 30px;
-    text-align: center;
+    align-items: center;
+    margin-left: 85px ;
 }
 
 mat-form-field {

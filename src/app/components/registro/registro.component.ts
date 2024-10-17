@@ -2,7 +2,8 @@ import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { AppModule } from 'src/app/app.module';
-
+import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register',
@@ -11,8 +12,9 @@ import { AppModule } from 'src/app/app.module';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
+  
 
-  constructor(private fb: FormBuilder, private authService: AuthService) {
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,) {
     
     this.registerForm = this.fb.group({
       nombre: ['', Validators.required],
@@ -41,5 +43,6 @@ export class RegisterComponent {
   // Método para manejar la cancelación
   onCancel(): void {
     this.registerForm.reset();
+    this.router.navigate(['/home']);
   }
 }

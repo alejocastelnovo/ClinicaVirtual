@@ -2,10 +2,14 @@ import { Injectable } from '@angular/core';
 import { Observable, of, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { catchError } from 'rxjs/operators';
+import { throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
+
+
 export class AuthService {
   private usuarios: any[] = [
     ];
@@ -20,16 +24,24 @@ export class AuthService {
     this.usuarioLogueado = this.usuarioLogueadoSubject.asObservable();
   }
 
-  login(body: any) {
-    const headers = new HttpHeaders({ "Content-Type": "application/json" });
-    return this.http.post(`${this.UrlApi}/login`, body, {headers}).pipe(
-      tap((response: any) => {
+// Método login con manejo de errores
+login(body: any) {
+
+  
+  const headers = new HttpHeaders({ "Content-Type": "application/json" });
+  return this.http.post(`${this.UrlApi}/login`, body, { headers }).pipe(
+    tap((response: any) => {
+      if (response && response.usuario) {
         this.usuarioLogueado = response.usuario;
         this.usuarioLogueadoSubject.next(this.usuarioLogueado);
-      })
-    );
-  }
-
+      }
+    }),
+    catchError(error => {
+      console.error('Error en el login:', error);  // Loguea el error en la consola
+      return throwError(() => error); // Lanza el error para que también sea manejado por el componente si es necesario
+    })
+  );
+}
 
   // Método para actualizar los datos del usuario
   actualizarDatosUsuario(id: number, cambios: any): Observable<any> {
@@ -53,9 +65,7 @@ export class AuthService {
     localStorage.removeItem('authToken');  // elimina el token guardado
     console.log('Sesión cerrada');
   }
-
-
-
+  
   public getUsuarioLogueado(): any {
     return this.usuarioLogueadoSubject.value;
   }

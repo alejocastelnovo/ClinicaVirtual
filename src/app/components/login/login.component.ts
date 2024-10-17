@@ -16,6 +16,7 @@ export class LoginComponent {
   password: string = '';
   loading: boolean = false;
   loginForm: FormGroup;
+  mensajeError: string | null = null;
 
   constructor(
     private router: Router,
@@ -31,22 +32,27 @@ export class LoginComponent {
     let body = {
       usuario: this.loginForm.controls['usuario'].value,
       password: this.loginForm.controls['contrasenia'].value
-    }
-
+    };
+  
     console.log(JSON.stringify(body));
-
-    this.authService.login(JSON.stringify(body)).subscribe( (data: any) => {
-      
-      if (data.codigo == 200) {
-        console.log(data.mensaje);
-        console.log(data);
+  
+    this.authService.login(JSON.stringify(body)).subscribe({
+      next: (data: any) => {
+        if (data.codigo == 200) {
+          console.log(data.mensaje);
+          console.log(data);
           this.router.navigate(['/dashboard']);
-      } else {
-        console.log(data.mensaje);
+        } else {
+          console.log(data.mensaje);
+          this.mensajeError = data.mensaje; // Actualiza el mensaje de error
+        }
+      },
+      error: (error) => {
+        console.error('Error en el login:', error);
+        this.mensajeError = 'Error al iniciar sesión. Por favor, verifica tus credenciales.'; // Mensaje de error genérico
       }
-    })
+    });
   }
-
   onRegister() {
     console.log('Función de registro llamada');
     this.router.navigate(['/registro']);
