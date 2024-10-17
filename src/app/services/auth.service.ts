@@ -19,11 +19,15 @@ export class AuthService {
     const headers = new HttpHeaders({ "Content-Type": "application/json" });
     return this.http.post(`${this.UrlApi}/login`, body, {headers}).pipe(
       tap((response: any) => {
-        this.usuarioLogueado = response.usuario;
-        this.usuarioLogueadoSubject.next(this.usuarioLogueado);
+        if (response && response.payload) {
+          this.usuarioLogueado = response.payload;
+          localStorage.setItem('currentUser', JSON.stringify(this.usuarioLogueado));
+          this.usuarioLogueadoSubject.next(this.usuarioLogueado);
+        }
       })
     );
   }
+
 
   logout(): void {
     this.usuarioLogueado = null;
@@ -56,7 +60,7 @@ export class AuthService {
 
   // Método para obtener el usuario logueado
   getUsuarioLogueado(): any {
-    return this.usuarioLogueado;
+    return JSON.parse(localStorage.getItem('currentUser') || '{}');
   }
 
   // Método para obtener el Observable del usuario logueado

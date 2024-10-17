@@ -23,36 +23,32 @@ export class RegistroComponent {
     private authService: AuthService
   ) {}
 
-  /*o nSubmit() {
-    const usuarioExiste = this.authService.verificarUsuarioExistente(this.email);
-
-    if (usuarioExiste) {
-      this.snackBar.open('El correo electrónico ya está registrado.', 'Cerrar', {
-        duration: 5000,
-      });
-    } else {
-      const nuevoUsuario = {
+  onSubmit() {
+    const nuevoUsuario = {
         nombre: this.nombre,
         apellido: this.apellido,
         email: this.email,
         password: this.password,
         dni: this.dni,
-        fechaNacimiento: this.fechaNacimiento,
-        tipoUsuario: 'Paciente'  // Asignamos automáticamente el rol de paciente
-      };
+        fecha_nacimiento: this.fechaNacimiento,
+        rol: 'Paciente',  // Asignamos automáticamente el rol de paciente
+        telefono: ''  // Añadimos un campo vacío para el teléfono
+    };
 
-      if (this.authService.registrarUsuario(nuevoUsuario)) {
-        this.snackBar.open('Registro exitoso. Por favor, inicie sesión.', 'Cerrar', {
-          duration: 5000,
-        });
-        this.router.navigate(['/login']);
-      } else {
-        this.snackBar.open('Error al registrar usuario. Intente nuevamente.', 'Cerrar', {
-          duration: 5000,
-        });
-      }
-    }
-  } */
+    this.authService.registrarUsuario(nuevoUsuario).subscribe(
+        (response) => {
+            this.snackBar.open('Registro exitoso. Por favor, inicie sesión.', 'Cerrar', {
+                duration: 5000,
+            });
+            this.router.navigate(['/login']);
+        },
+        (error) => {
+            this.snackBar.open('Error al registrar usuario. Intente nuevamente.', 'Cerrar', {
+                duration: 5000,
+            });
+        }
+    );
+}
 
   onCancel() {
     this.router.navigate(['/home']); 
