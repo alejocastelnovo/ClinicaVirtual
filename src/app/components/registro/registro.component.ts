@@ -1,60 +1,45 @@
 import { Component } from '@angular/core';
-import { Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { AuthService } from '../../services/auth.service';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
+import { AppModule } from 'src/app/app.module';
+
 
 @Component({
-  selector: 'app-registro',
+  selector: 'app-register',
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
 })
-export class RegistroComponent {
-  nombre: string = '';
-  apellido: string = '';
-  email: string = '';
-  password: string = '';
-  dni: string = ''; // Añadimos la propiedad telefono
-  hidePassword = true; // Añadimos la propiedad hidePassword
-  fechaNacimiento: string = ''; // Añadimos la propiedad fechaNacimiento
+export class RegisterComponent {
+  registerForm: FormGroup;
 
-  constructor(
-    private router: Router,
-    private snackBar: MatSnackBar,
-    private authService: AuthService
-  ) {}
+  constructor(private fb: FormBuilder, private authService: AuthService) {
+    
+    this.registerForm = this.fb.group({
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      password: ['', Validators.required],
+      dni: ['', Validators.required],
+      fechaNacimiento: ['', Validators.required]
+    });
+  }
 
-  /*o nSubmit() {
-    const usuarioExiste = this.authService.verificarUsuarioExistente(this.email);
-
-    if (usuarioExiste) {
-      this.snackBar.open('El correo electrónico ya está registrado.', 'Cerrar', {
-        duration: 5000,
-      });
-    } else {
-      const nuevoUsuario = {
-        nombre: this.nombre,
-        apellido: this.apellido,
-        email: this.email,
-        password: this.password,
-        dni: this.dni,
-        fechaNacimiento: this.fechaNacimiento,
-        tipoUsuario: 'Paciente'  // Asignamos automáticamente el rol de paciente
-      };
-
-      if (this.authService.registrarUsuario(nuevoUsuario)) {
-        this.snackBar.open('Registro exitoso. Por favor, inicie sesión.', 'Cerrar', {
-          duration: 5000,
-        });
-        this.router.navigate(['/login']);
-      } else {
-        this.snackBar.open('Error al registrar usuario. Intente nuevamente.', 'Cerrar', {
-          duration: 5000,
-        });
-      }
+  // Método para manejar el envío del formulario
+  onSubmit(): void {
+    if (this.registerForm.valid) {
+      this.authService.registrarUsuario(this.registerForm.value).subscribe(
+        response => {
+          console.log('Usuario registrado con éxito', response);
+        },
+        error => {
+          console.error('Error al registrar usuario', error);
+        }
+      );
     }
-  } */
+  }
 
-  onCancel() {
-    this.router.navigate(['/home']); 
+  // Método para manejar la cancelación
+  onCancel(): void {
+    this.registerForm.reset();
   }
 }

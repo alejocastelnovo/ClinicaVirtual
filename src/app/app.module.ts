@@ -31,7 +31,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
-import { RegistroComponent } from './components/registro/registro.component';
+import { RegisterComponent } from './components/registro/registro.component';
 import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';  // Necesario para trabajar con servicios HTTP
 import { MatSnackBarModule } from '@angular/material/snack-bar';
@@ -40,9 +40,9 @@ import { MisTurnosComponent } from './components/paciente/mis-turnos/mis-turnos.
 import { MisDatosComponent } from './components/paciente/mis-datos/mis-datos.component';
 import { TurnosProgramadosComponent } from './components/medico/turnos-programados/turnos-programados.component';
 import { GestionAgendaComponent } from './components/medico/gestion-agenda/gestion-agenda.component';
-import { GestionUsuariosComponent } from './components/administrador/gestion-usuarios/gestion-usuarios.component';
-import { EditarUsuarioComponent } from './components/administrador/editar-usuario/editar-usuario.component';
 import { CrearUsuarioComponent } from './components/administrador/crear-usuario/crear-usuario.component';
+
+
 
 @NgModule({
   declarations: [
@@ -50,7 +50,7 @@ import { CrearUsuarioComponent } from './components/administrador/crear-usuario/
     LoginComponent,
     HeaderComponent,
     FooterComponent,
-    RegistroComponent,
+    RegisterComponent,
     HomeComponent,
     DashboardComponent,
     NuevoTurnoComponent,
@@ -58,8 +58,6 @@ import { CrearUsuarioComponent } from './components/administrador/crear-usuario/
     MisDatosComponent,
     TurnosProgramadosComponent,
     GestionAgendaComponent,
-    GestionUsuariosComponent,
-    EditarUsuarioComponent,
     CrearUsuarioComponent,
   ],
   imports: [
