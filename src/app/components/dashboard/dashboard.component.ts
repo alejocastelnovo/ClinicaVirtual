@@ -13,6 +13,12 @@ export class DashboardComponent implements OnInit {
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
-
+    const usuarioLogueado = this.authService.getUsuarioLogueado();
+    console.log('Usuario logueado:', usuarioLogueado);
+    if (usuarioLogueado) {
+      this.userName = `${usuarioLogueado.nombre} ${usuarioLogueado.apellido}`;
+      this.userType = usuarioLogueado.rol;
+      console.log('Rol del usuario:', this.userType);
+    }
   }
 }

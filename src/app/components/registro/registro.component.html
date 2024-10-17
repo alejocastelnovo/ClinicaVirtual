@@ -27,12 +27,11 @@
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <input matInput formControlName="fechaNacimiento" type="date" placeholder="Fecha de Nacimiento"
-                        required>
+                    <input matInput formControlName="fechaNacimiento" type="date" placeholder="Fecha de Nacimiento" required>
                 </mat-form-field>
 
                 <div class="button-container">
-                    <button mat-raised-button color="primary" type="submit" (click)="onSubmit()">Registrarse</button>
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">Registrarse</button>
                     <button mat-raised-button color="accent" type="button" (click)="onCancel()">Cancelar</button>
                 </div>
             </form>

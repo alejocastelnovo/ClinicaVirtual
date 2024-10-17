@@ -33,7 +33,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   updateUserInfo(user: any) {
     if (user && user.nombre && user.apellido) {
       this.userName = `${user.nombre} ${user.apellido}`;
-      this.userType = user.userType || null;
+      this.userType = user.rol || null;
       this.userTypeShort = this.getUserTypeShort(this.userType);
     } else {
       this.userName = null;

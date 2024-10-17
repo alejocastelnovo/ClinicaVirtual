@@ -2,69 +2,65 @@
   <h2>Bienvenido/a, {{ userName }}</h2>
 
 
-<div class="main-content">
-  <h2>Haz click en alguna de las funciones principales para acceder</h2>
-
-  
-  
-</div>
-  <div *ngIf="userType === 'Paciente'">
-    <mat-card>
-      <mat-card-content>
-        <h3>Opciones para Pacientes</h3>
-        <ul>
-          <li><a routerLink="/paciente/nuevo-turno">Solicitar Nuevo Turno</a></li>
-          <li><a routerLink="/paciente/mis-turnos">Ver Mis Turnos</a></li>
-          <li><a routerLink="/paciente/mis-datos">Mis Datos Personales</a></li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
+  <div class="main-content">
+    <h2>Haz click en alguna de las funciones principales para acceder</h2>
   </div>
 
-  </div>
-  <div *ngIf="userType === '?'">
-    <mat-card>
-      <mat-card-content>
-        <h3>Opciones para Pacientes</h3>
-        <ul>
-          <li><a routerLink="/paciente/nuevo-turno">Solicitar Nuevo Turno</a></li>
-          <li><a routerLink="/paciente/mis-turnos">Ver Mis Turnos</a></li>
-          <li><a routerLink="/paciente/mis-datos">Mis Datos Personales</a></li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  
-  <div *ngIf="userType === 'Operador'">
-    <mat-card>
-      <mat-card-content>
-        <h3>Opciones para Operador</h3>
-        <ul>
+  <div [ngSwitch]="userType">
+    <div *ngSwitchCase="'Paciente'">
+      <mat-card>
+        <mat-card-content>
+          <h3>Opciones para Pacientes</h3>
+          <ul>
+            <li><a routerLink="/paciente/nuevo-turno">Solicitar Nuevo Turno</a></li>
+            <li><a routerLink="/paciente/mis-turnos">Ver Mis Turnos</a></li>
+            <li><a routerLink="/paciente/mis-datos">Mis Datos Personales</a></li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div *ngSwitchCase="'Operador'">
+      <mat-card>
+        <mat-card-content>
+          <h3>Opciones para Operador</h3>
+          <ul>
           <!--          falta implementar sus funciones-->
-        </ul>
-      </mat-card-content>
-    </mat-card>
-  </div>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
-  <div *ngIf="userType === 'Medico'">
-    <mat-card>
-      <mat-card-content>
-        <h3>Opciones para Medico</h3>
-        <ul>
-          <li><a routerLink="/medico/turnos-programados">Turnos Programados</a></li>
-          <li><a routerLink="/medico/gestion-agenda">Gestion de Agenda</a></li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
-  </div>
+    <div *ngSwitchCase="'Medico'">
+      <mat-card>
+        <mat-card-content>
+          <h3>Opciones para Médico</h3>
+          <ul>
+            <li><a routerLink="/medico/turnos-programados">Turnos Programados</a></li>
+            <li><a routerLink="/medico/gestion-agenda">Gestión de Agenda</a></li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+    </div>
 
-  <div *ngIf="userType === 'Administrador'">
-    <mat-card>
-      <mat-card-content>
-        <h3>Opciones para Administrador</h3>
-        <ul>
-          <li><a routerLink="/administrador/gestion-usuarios">Gestion de Usuarios</a></li>
-        </ul>
-      </mat-card-content>
-    </mat-card>
+    <div *ngSwitchCase="'Administrador'">
+      <mat-card>
+        <mat-card-content>
+          <h3>Opciones para Administrador</h3>
+          <ul>
+            <li><a routerLink="/administrador/gestion-usuarios">Gestión de Usuarios</a></li>
+          </ul>
+        </mat-card-content>
+      </mat-card>
+    </div>
+
+    <div *ngSwitchDefault>
+      <mat-card>
+        <mat-card-content>
+          <h3>Rol no reconocido</h3>
+          <p>No se han encontrado opciones para tu rol de usuario.</p>
+        </mat-card-content>
+      </mat-card>
+    </div>
   </div>
+</div>
