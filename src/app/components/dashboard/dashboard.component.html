@@ -7,7 +7,7 @@
   </div>
 
   <div [ngSwitch]="userType">
-    <div *ngSwitchCase="'Paciente'">
+    <div *ngSwitchCase="'paciente'">
       <mat-card>
         <mat-card-content>
           <h3>Opciones para Pacientes</h3>
@@ -20,7 +20,7 @@
       </mat-card>
     </div>
 
-    <div *ngSwitchCase="'Operador'">
+    <div *ngSwitchCase="'operador'">
       <mat-card>
         <mat-card-content>
           <h3>Opciones para Operador</h3>
@@ -31,7 +31,7 @@
       </mat-card>
     </div>
 
-    <div *ngSwitchCase="'Medico'">
+    <div *ngSwitchCase="'medico'">
       <mat-card>
         <mat-card-content>
           <h3>Opciones para Médico</h3>
@@ -43,7 +43,7 @@
       </mat-card>
     </div>
 
-    <div *ngSwitchCase="'Administrador'">
+    <div *ngSwitchCase="'administrador'">
       <mat-card>
         <mat-card-content>
           <h3>Opciones para Administrador</h3>

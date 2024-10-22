@@ -28,19 +28,12 @@ export class RegisterComponent {
 
   // Método para manejar el envío del formulario
   onSubmit(): void {
-    if (this.registerForm.valid) {
-      this.authService.registrarUsuario(this.registerForm.value).subscribe(
-        response => {
-          console.log('Usuario registrado con éxito', response);
-        },
-        error => {
-          console.error('Error al registrar usuario', error);
-        }
-      );
-    }
+    
+    
+  
+  
   }
 
-  // Método para manejar la cancelación
   onCancel(): void {
     this.registerForm.reset();
     this.router.navigate(['/home']);

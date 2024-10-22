@@ -36,25 +36,26 @@ export class LoginComponent {
   
     console.log(JSON.stringify(body));
   
-    this.authService.login(JSON.stringify(body)).subscribe({
-      next: (data: any) => {
+    this.authService.login(JSON.stringify(body)).subscribe((data : any) => {
         if (data.codigo == 200) {
-          console.log(data.mensaje);
           console.log(data);
-          this.router.navigate(['/dashboard']);
+          
+          localStorage.setItem('token', data.jwt);
+          localStorage.setItem('usuario', data.payload[0].nombre + ' ' + data.payload[0].apellido);
+          localStorage.setItem('id', data.payload[0].id)
+          localStorage.setItem('rol', data.payload[0].rol);
+          
+          setTimeout(() => {
+            
+            this.router.navigate(['/dashboard']);
+          }, 1000);
         } else {
           console.log(data.mensaje);
           this.mensajeError = data.mensaje; // Actualiza el mensaje de error
         }
-      },
-      error: (error) => {
-        console.error('Error en el login:', error);
-        this.mensajeError = 'Error al iniciar sesión. Por favor, verifica tus credenciales.'; // Mensaje de error genérico
       }
-    });
-  }
+    );}
   onRegister() {
-    console.log('Función de registro llamada');
     this.router.navigate(['/registro']);
   }
 }
