@@ -15,6 +15,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userTypeShort: string | null = null;
   private userSubscription: Subscription = new Subscription();
   userImagePath: string = 'assets/images/usuario.png';
+  logueado: boolean = false;
 
   constructor(private router: Router, private authService: AuthService) {}
 
