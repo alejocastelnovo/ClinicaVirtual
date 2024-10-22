@@ -38,7 +38,7 @@ login(body: any) {
     }),
     catchError(error => {
       console.error('Error en el login:', error);  // Loguea el error en la consola
-      return throwError(() => error); // Lanza el error para que también sea manejado por el componente si es necesario
+      return throwError(() => error); 
     })
   );
 }
@@ -53,8 +53,7 @@ login(body: any) {
     );
   }
   
-  // Método para registrar usuario
-  // Método para registrar usuario
+  
   registrarUsuario(usuario: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(`${this.UrlApi}/registro`, usuario, { headers });
