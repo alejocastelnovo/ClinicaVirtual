@@ -115,16 +115,6 @@ mat-card-content {
     flex-direction: column;
 }
 
-.loading-indicator {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin-top: 20px;
-}
-
-.loading-indicator span {
-    margin-left: 10px;
-}
 
 /* Animación de entrada */
 @keyframes fadeInUp {
@@ -145,3 +135,5 @@ mat-form-field {
 
 mat-form-field:nth-child(1) { animation-delay: 0.1s; }
 mat-form-field:nth-child(2) { animation-delay: 0.2s; }
+
+

@@ -3,29 +3,26 @@
         <mat-card-header>
             <mat-card-title>Iniciar Sesión</mat-card-title>
         </mat-card-header>
-        
+
         <mat-card-content>
             <form [formGroup]="loginForm" (ngSubmit)="login()">
-                
+
                 <mat-form-field appearance="outline">
-                    <input matInput [(ngModel)]="email" name="email" placeholder="DNI" required formControlName="usuario">
+                    <input matInput [(ngModel)]="email" name="email" placeholder="DNI" required
+                        formControlName="usuario">
                 </mat-form-field>
 
                 <mat-form-field appearance="outline">
-                    <input matInput [(ngModel)]="password" name="password" type="password" placeholder="Contraseña" formControlName="contrasenia" required>
+                    <input matInput [(ngModel)]="password" name="password" type="password" placeholder="Contraseña"
+                        formControlName="contrasenia" required>
                 </mat-form-field>
 
                 <div class="button-container">
                     <button mat-raised-button color="primary" type="submit" [disabled]="loading">Ingresar</button>
-                    <button mat-raised-button color="accent" type="button" (click)="onRegister()" [disabled]="loading">Registrarse</button>
+                    <button mat-raised-button color="accent" type="button" (click)="onRegister()"
+                        [disabled]="loading">Registrarse</button>
                 </div>
-
-            
             </form>
-            <div *ngIf="loading" class="loading-indicator">
-                <mat-spinner diameter="20"></mat-spinner>
-                <span>Verificando credenciales</span>
-            </div>
         </mat-card-content>
     </mat-card>
 </div>

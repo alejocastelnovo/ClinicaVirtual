@@ -12,6 +12,7 @@
   z-index: 1000;
   height: 75px;
   box-sizing: border-box;
+  margin-bottom: 20px;
 }
 
 .logo {

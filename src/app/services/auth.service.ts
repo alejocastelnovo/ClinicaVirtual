@@ -12,7 +12,7 @@ import { throwError } from 'rxjs';
 
 export class AuthService {
   private usuarios: any[] = [
-    ];
+  ];
   UrlApi = 'http://localhost:4000/api';
   private usuarioLogueado: any = null;
   private usuarioLogueadoSubject = new BehaviorSubject<any>(null);
@@ -24,25 +24,44 @@ export class AuthService {
     this.usuarioLogueado = this.usuarioLogueadoSubject.asObservable();
   }
 
-// Método login con manejo de errores
-login(body: any) {
+
+
+
+
+  // Método login con manejo de errores
+  login(body: any) {
+
+
+    const headers = new HttpHeaders({ "Content-Type": "application/json" });
+    return this.http.post(`${this.UrlApi}/login`, body, { headers }).pipe(
+      tap((response: any) => {
+        if (response && response.usuario) {
+          this.usuarioLogueado = response.usuario;
+          this.usuarioLogueadoSubject.next(this.usuarioLogueado);
+
+          /* Para que guarde el usuario y esconder los botones */
+          localStorage.setItem('isLoggedIn', 'true');
+        }
+      }),
+      catchError(error => {
+        console.error('Error en el login:', error);
+        return throwError(() => error);
+      })
+    );
+  }
+
+  // Método para crear un usuario
+  crearUsuario(userData: any): Observable<any> {
+    const headers = new HttpHeaders({ "Content-Type": "application/json" });
+    return this.http.post(`${this.UrlApi}/usuarios`, userData, { headers }).pipe(
+      catchError(error => {
+        console.error('Error al crear el usuario:', error);
+        return throwError(() => error);
+      })
+    );
+  }
 
   
-  const headers = new HttpHeaders({ "Content-Type": "application/json" });
-  return this.http.post(`${this.UrlApi}/login`, body, { headers }).pipe(
-    tap((response: any) => {
-      if (response && response.usuario) {
-        this.usuarioLogueado = response.usuario;
-        this.usuarioLogueadoSubject.next(this.usuarioLogueado);
-      }
-    }),
-    catchError(error => {
-      console.error('Error en el login:', error);  // Loguea el error en la consola
-      return throwError(() => error); 
-    })
-  );
-}
-
   // Método para actualizar los datos del usuario
   actualizarDatosUsuario(id: number, cambios: any): Observable<any> {
     return this.http.put(`${this.UrlApi}/usuarios/${id}`, cambios).pipe(
@@ -52,8 +71,8 @@ login(body: any) {
       })
     );
   }
-  
-  
+
+
   registrarUsuario(usuario: any): Observable<any> {
     const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
     return this.http.post(`${this.UrlApi}/registro`, usuario, { headers });
@@ -62,9 +81,10 @@ login(body: any) {
   // Método para cerrar sesión (logout)
   logout(): void {
     localStorage.removeItem('authToken');  // elimina el token guardado
+    localStorage.removeItem('isLoggedIn');
     console.log('Sesión cerrada');
   }
-  
+
   public getUsuarioLogueado(): any {
     return this.usuarioLogueadoSubject.value;
   }

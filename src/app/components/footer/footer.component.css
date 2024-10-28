@@ -11,6 +11,7 @@
   width: 100%;
   z-index: 100;
   transition: bottom 0.3s ease;
+  margin-top: 100px;
 }
 
 .clinic-footer.visible {
@@ -21,20 +22,17 @@
   max-width: 1200px;
   margin: 0 auto;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
   align-items: center;
 }
 
 .footer-column {
   flex: 1;
   padding: 0 15px;
+  text-align: center;
 }
 
-.footer-column2 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+
 
 .social-icons {
   display: flex;
@@ -56,3 +54,10 @@
 p {
   margin: 5px 0;
 }
+
+@media (min-width: 768px) {
+  .footer-content {
+    flex-direction: row;
+  }
+}
+

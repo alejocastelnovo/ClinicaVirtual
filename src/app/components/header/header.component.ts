@@ -60,13 +60,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   isLoggedIn(): boolean {
+
     return !!this.userName;
   }
 
   logout() {
     this.authService.logout();
-    this.router.navigate(['/']);
+    this.router.navigate(['/login']);
   }
+
+
 
   navigateToHome() {
     switch(this.userType) {

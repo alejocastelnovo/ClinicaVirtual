@@ -33,28 +33,27 @@ export class LoginComponent {
       usuario: this.loginForm.controls['usuario'].value,
       password: this.loginForm.controls['contrasenia'].value
     };
-  
     console.log(JSON.stringify(body));
-  
-    this.authService.login(JSON.stringify(body)).subscribe((data : any) => {
-        if (data.codigo == 200) {
-          console.log(data);
-          
-          localStorage.setItem('token', data.jwt);
-          localStorage.setItem('usuario', data.payload[0].nombre + ' ' + data.payload[0].apellido);
-          localStorage.setItem('id', data.payload[0].id)
-          localStorage.setItem('rol', data.payload[0].rol);
-          
-          setTimeout(() => {
-            
-            this.router.navigate(['/dashboard']);
-          }, 1000);
-        } else {
-          console.log(data.mensaje);
-          this.mensajeError = data.mensaje; // Actualiza el mensaje de error
-        }
+    this.authService.login(JSON.stringify(body)).subscribe((data: any) => {
+      if (data.codigo == 200) {
+        console.log(data);
+
+        localStorage.setItem('token', data.jwt);
+        localStorage.setItem('usuario', data.payload[0].nombre + ' ' + data.payload[0].apellido);
+        localStorage.setItem('id', data.payload[0].id)
+        localStorage.setItem('rol', data.payload[0].rol);
+
+        setTimeout(() => {
+          this.router.navigate(['/dashboard']);
+        }, 1000);
+      } else {
+        console.log(data.mensaje);
+        this.mensajeError = data.mensaje; // Actualiza el mensaje de error
       }
-    );}
+    }
+    );
+  }
+
   onRegister() {
     this.router.navigate(['/registro']);
   }

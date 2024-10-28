@@ -1,8 +1,6 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
-import { AppModule } from 'src/app/app.module';
-import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 
 @Component({
@@ -12,10 +10,11 @@ import { Router } from '@angular/router';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  
 
-  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router,) {
-    
+    mensajeError: string | null = null;
+
+
+  constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
     this.registerForm = this.fb.group({
       nombre: ['', Validators.required],
       apellido: ['', Validators.required],
@@ -26,12 +25,34 @@ export class RegisterComponent {
     });
   }
 
-  // Método para manejar el envío del formulario
+  // metodo para el envio del formulario
   onSubmit(): void {
-    
-    
-  
-  
+    if (this.registerForm.valid) {
+      const userData = {
+        dni: this.registerForm.value.dni,
+        apellido: this.registerForm.value.apellido,
+        nombre: this.registerForm.value.nombre,
+        fecha_nacimiento: this.registerForm.value.fechaNacimiento,
+        password: this.registerForm.value.password,
+        email: this.registerForm.value.email,
+        rol: 'paciente', // rol por defecto
+        telefono: this.registerForm.value.telefono, 
+      };
+
+      this.authService.crearUsuario(userData).subscribe(
+        response => {
+          if (response.codigo === 200) {
+            this.router.navigate(['/dashboard']);
+          } else {
+            // Manejar el error de registro
+            console.error(response.mensaje);
+          }
+        },
+        error => {
+          console.error('Error al crear el usuario:', error);
+        }
+      );
+    }
   }
 
   onCancel(): void {

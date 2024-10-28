@@ -1,3 +1,5 @@
+/* Principales */
+
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
@@ -23,18 +25,21 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatOptionModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
 
 /* Forms */
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 /* HTTP Client para llamadas HTTP */
 import { HttpClientModule } from '@angular/common/http';
+
+/* Componentes */
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RegisterComponent } from './components/registro/registro.component';
 import { HomeComponent } from './components/home/home.component';
 import { DashboardComponent } from './components/dashboard/dashboard.component';  // Necesario para trabajar con servicios HTTP
-import { MatSnackBarModule } from '@angular/material/snack-bar';
 import { NuevoTurnoComponent } from './components/paciente/nuevo-turno/nuevo-turno.component';
 import { MisTurnosComponent } from './components/paciente/mis-turnos/mis-turnos.component';
 import { MisDatosComponent } from './components/paciente/mis-datos/mis-datos.component';
