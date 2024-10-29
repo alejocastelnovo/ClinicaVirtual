@@ -17,6 +17,8 @@ export class FooterComponent implements OnInit {
 
   @HostListener('window:scroll', ['$event'])
   @HostListener('window:resize', ['$event'])
+
+  
   checkScroll() {
     this.checkVisibility();
   }
