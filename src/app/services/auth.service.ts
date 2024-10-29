@@ -47,6 +47,7 @@ export class AuthService {
     );
   }
 
+
   // Método para crear un usuario
   crearUsuario(userData: any): Observable<any> {
     const headers = new HttpHeaders({ "Content-Type": "application/json"
@@ -70,12 +71,6 @@ export class AuthService {
     );
   }
 
-
-  registrarUsuario(usuario: any): Observable<any> {
-    const headers = new HttpHeaders({ 'Content-Type': 'application/json' });
-    return this.http.post(`${this.UrlApi}/registro`, usuario, { headers });
-  }
-
   // Método para cerrar sesión (logout)
   logout(): void {
     localStorage.removeItem('authToken');  // elimina el token guardado
@@ -84,12 +79,7 @@ export class AuthService {
   }
 
   public getUsuarioLogueado(): any {
-    return this.usuarioLogueadoSubject.value;
-  }
-
-  public getUsuarioLogueadoObservable(): Observable<any> {
-    return this.usuarioLogueado;
-  }
+    const usuarioInicial = JSON.parse(localStorage.getItem('usuarioLogueado') || 'null'); }
 
   public setUsuarioLogueado(user: any): void {
     localStorage.setItem('usuarioLogueado', JSON.stringify(user));
