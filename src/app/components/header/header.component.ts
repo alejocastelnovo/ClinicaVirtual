@@ -22,11 +22,21 @@ export class HeaderComponent implements OnInit, OnDestroy {
   ngOnInit() {
     const usuarioLogueado = this.authService.getUsuarioLogueado();
     this.updateUserInfo(usuarioLogueado);
+    this.mostrarInformacionLocalStorage();
   }
 
   ngOnDestroy() {
     if (this.userSubscription) {
       this.userSubscription.unsubscribe();
+    }
+  }
+
+  mostrarInformacionLocalStorage() {
+    const infoLocalStorage = localStorage.getItem('usuario'); // Cambia 'usuario' por la clave que uses
+    if (infoLocalStorage) {
+      console.log('Información en Local Storage:', JSON.parse(infoLocalStorage));
+    } else {
+      console.log('No hay información en Local Storage.');
     }
   }
 
