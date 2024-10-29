@@ -12,6 +12,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
 
     mensajeError: string | null = null;
+    token = localStorage.getItem('jwt')
 
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
@@ -21,28 +22,31 @@ export class RegisterComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       dni: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required]
+      fechaNacimiento: ['', Validators.required],
+      telefono: ['', Validators.required],
     });
   }
 
   // metodo para el envio del formulario
   onSubmit(): void {
-    if (this.registerForm.valid) {
-      const userData = {
+/*     if (this.registerForm.valid) {
+ */     const userData = {
         dni: this.registerForm.value.dni,
         apellido: this.registerForm.value.apellido,
         nombre: this.registerForm.value.nombre,
         fecha_nacimiento: this.registerForm.value.fechaNacimiento,
         password: this.registerForm.value.password,
         email: this.registerForm.value.email,
-        rol: 'paciente', // rol por defecto
+        rol: 'paciente', //  para que haya un rol default
         telefono: this.registerForm.value.telefono, 
       };
 
       this.authService.crearUsuario(userData).subscribe(
         response => {
-          if (response.codigo === 200) {
-            this.router.navigate(['/dashboard']);
+
+          console.log(response);
+
+          if (response.codigo === 200) {  this.router.navigate(['/login']);
           } else {
             // Manejar el error de registro
             console.error(response.mensaje);
@@ -52,11 +56,11 @@ export class RegisterComponent {
           console.error('Error al crear el usuario:', error);
         }
       );
-    }
+/*     } */
   }
 
   onCancel(): void {
     this.registerForm.reset();
-    this.router.navigate(['/home']);
+    this.router.navigate(['/login']);
   }
 }

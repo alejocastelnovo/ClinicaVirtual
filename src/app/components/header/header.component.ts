@@ -20,9 +20,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
-    this.userSubscription = this.authService.getUsuarioLogueadoObservable().subscribe(user => {
-      this.updateUserInfo(user);
-    });
+    const usuarioLogueado = this.authService.getUsuarioLogueado();
+    this.updateUserInfo(usuarioLogueado);
   }
 
   ngOnDestroy() {
@@ -59,9 +58,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  isLoggedIn(): boolean {
-
-    return !!this.userName;
+  isLoggedIn(): any {
+    return this.userName;
   }
 
   logout() {
