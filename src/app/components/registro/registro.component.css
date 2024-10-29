@@ -12,8 +12,8 @@
 /* Estilos del register */
 mat-card {
     width: 100%;
-    max-width: 400px; /* Reducido de 450px a 400px */
-    padding: 30px; /* Reducido de 40px a 30px */
+    max-width: 400px; 
+    padding: 30px; 
     background-color: #ffffff;
     border-radius: 15px;
     box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
@@ -22,13 +22,13 @@ mat-card {
 mat-card-header {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px; /* Reducido de 30px a 20px */
+    margin-bottom: 20px; 
 }
 
 mat-card-title {
-    font-size: 24px; /* Reducido de 28px a 24px */
+    font-size: 24px; 
     color: #00796b;
-    margin-bottom: 20px; /* Reducido de 30px a 20px */
+    margin-bottom: 20px; 
     text-align: center;
 }
 
@@ -37,10 +37,13 @@ mat-card-content {
     flex-direction: column;
 }
 
-/* Estilos de los campos de formulario */
+/* campos de formu */
 mat-form-field {
     width: 100%;
-    margin-bottom: 20px; /* Reducido de 25px a 20px */
+    margin-bottom: 20px; 
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    padding-top: 5px;
 }
 
 .mat-mdc-text-field-wrapper {
