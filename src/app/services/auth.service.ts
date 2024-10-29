@@ -25,9 +25,6 @@ export class AuthService {
   }
 
 
-
-
-
   // Método login con manejo de errores
   login(body: any) {
 
@@ -52,8 +49,9 @@ export class AuthService {
 
   // Método para crear un usuario
   crearUsuario(userData: any): Observable<any> {
-    const headers = new HttpHeaders({ "Content-Type": "application/json" });
-    return this.http.post(`${this.UrlApi}/usuarios`, userData, { headers }).pipe(
+    const headers = new HttpHeaders({ "Content-Type": "application/json"
+    });
+    return this.http.post(`${this.UrlApi}/crearUsuario`, userData, { headers }).pipe(
       catchError(error => {
         console.error('Error al crear el usuario:', error);
         return throwError(() => error);

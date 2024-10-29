@@ -47,6 +47,7 @@ export class LoginComponent {
           this.router.navigate(['/dashboard']);
         }, 1000);
       } else {
+        alert('Usuario o contraseña incorrectos.');
         console.log(data.mensaje);
         this.mensajeError = data.mensaje; // Actualiza el mensaje de error
       }

@@ -12,6 +12,7 @@ export class RegisterComponent {
   registerForm: FormGroup;
 
     mensajeError: string | null = null;
+      token = localStorage.getItem('jwt')
 
 
   constructor(private fb: FormBuilder, private authService: AuthService, private router: Router) {
@@ -21,14 +22,15 @@ export class RegisterComponent {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
       dni: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required]
+      fechaNacimiento: ['', Validators.required],
+      telefono: ['', Validators.required],
     });
   }
 
   // metodo para el envio del formulario
   onSubmit(): void {
-    if (this.registerForm.valid) {
-      const userData = {
+/*     if (this.registerForm.valid) {
+ */      const userData = {
         dni: this.registerForm.value.dni,
         apellido: this.registerForm.value.apellido,
         nombre: this.registerForm.value.nombre,
@@ -41,8 +43,10 @@ export class RegisterComponent {
 
       this.authService.crearUsuario(userData).subscribe(
         response => {
-          if (response.codigo === 200) {
-            this.router.navigate(['/dashboard']);
+
+          console.log(response);
+
+          if (response.codigo === 200) {            this.router.navigate(['/dashboard']);
           } else {
             // Manejar el error de registro
             console.error(response.mensaje);
@@ -52,7 +56,7 @@ export class RegisterComponent {
           console.error('Error al crear el usuario:', error);
         }
       );
-    }
+/*     } */
   }
 
   onCancel(): void {
