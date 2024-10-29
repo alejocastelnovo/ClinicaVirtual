@@ -21,7 +21,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const usuarioLogueado = this.authService.getUsuarioLogueado();
-    this.updateUserInfo(usuarioLogueado);
+   /*  this.updateUserInfo(usuarioLogueado); */
   }
 
   ngOnDestroy() {
@@ -30,18 +30,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  updateUserInfo(user: any) {
+
+  /* updateUserInfo(user: any) {
     if (user && user.nombre && user.apellido) {
       this.userName = `${user.nombre} ${user.apellido}`;
       this.userType = user.rol || null;
       this.userTypeShort = this.getUserTypeShort(this.userType);
     } else {
-      this.userName = null;
+      this.userName = localStorage.getItem(user);
       this.userType = null;
       this.userTypeShort = null;
     }
     console.log('Usuario:', this.userName, 'Tipo:', this.userType);
-  }
+  } */
 
   getUserTypeShort(userType: string | null): string {
     switch (userType) {
