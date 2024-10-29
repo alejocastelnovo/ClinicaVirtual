@@ -21,8 +21,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
   ngOnInit() {
     const usuarioLogueado = this.authService.getUsuarioLogueado();
-    this.updateUserInfo(usuarioLogueado);
-    this.mostrarInformacionLocalStorage();
+   /*  this.updateUserInfo(usuarioLogueado); */
   }
 
   ngOnDestroy() {
@@ -31,27 +30,19 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-  mostrarInformacionLocalStorage() {
-    const infoLocalStorage = localStorage.getItem('usuario'); // Cambia 'usuario' por la clave que uses
-    if (infoLocalStorage) {
-      console.log('Información en Local Storage:', JSON.parse(infoLocalStorage));
-    } else {
-      console.log('No hay información en Local Storage.');
-    }
-  }
 
-  updateUserInfo(user: any) {
+  /* updateUserInfo(user: any) {
     if (user && user.nombre && user.apellido) {
       this.userName = `${user.nombre} ${user.apellido}`;
       this.userType = user.rol || null;
       this.userTypeShort = this.getUserTypeShort(this.userType);
     } else {
-      this.userName = null;
+      this.userName = localStorage.getItem(user);
       this.userType = null;
       this.userTypeShort = null;
     }
     console.log('Usuario:', this.userName, 'Tipo:', this.userType);
-  }
+  } */
 
   getUserTypeShort(userType: string | null): string {
     switch (userType) {
