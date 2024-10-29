@@ -14,6 +14,10 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit() {
     const usuarioLogueado = this.authService.getUsuarioLogueado();
-    console.log('Usuario logueado:', usuarioLogueado);
+    if (usuarioLogueado) {
+      console.log('Bienvenido,', usuarioLogueado.nombre);
+    } else {
+      console.log('No hay usuario logueado.');
+    }
   }
 }

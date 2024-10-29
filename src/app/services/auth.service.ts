@@ -79,7 +79,14 @@ export class AuthService {
   }
 
   public getUsuarioLogueado(): any {
-    const usuarioInicial = JSON.parse(localStorage.getItem('usuarioLogueado') || 'null'); }
+    // Obtener el usuario del local storage
+    const usuarioInicial = JSON.parse(localStorage.getItem('usuarioLogueado') || 'null');
+    return usuarioInicial;  
+  }
+
+/*   public getUsuarioLogueadoObservable(): Observable<any> {
+    return this.usuarioLogueado;
+  } */
 
   public setUsuarioLogueado(user: any): void {
     localStorage.setItem('usuarioLogueado', JSON.stringify(user));
