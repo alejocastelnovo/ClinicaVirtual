@@ -3,71 +3,97 @@
     <mat-card-header>
       <mat-card-title>Solicitar Nuevo Turno</mat-card-title>
     </mat-card-header>
-    
+
     <mat-card-content>
-      <form (ngSubmit)="onSubmit()" #turnoForm="ngForm" *ngIf="!mostrarConfirmacion">
+      <form [formGroup]="turnoForm" (ngSubmit)="onSubmit()">
+        <!-- Cobertura -->
         <mat-form-field appearance="fill">
           <mat-label>Cobertura</mat-label>
-          <mat-select [(ngModel)]="cobertura" name="cobertura" required (selectionChange)="habilitarSiguienteCampo('especialidad')">
-            <mat-option value="OSDE">OSDE</mat-option>
-            <mat-option value="Swiss Medical">Swiss Medical</mat-option>
-            <!-- Otras coberturas -->
+          <mat-select formControlName="cobertura">
+            <mat-option *ngFor="let cob of coberturas" [value]="cob.id">
+              {{cob.nombre}}
+            </mat-option>
           </mat-select>
+          <mat-error *ngIf="turnoForm.get('cobertura')?.hasError('required')">
+            Seleccione una cobertura
+          </mat-error>
         </mat-form-field>
 
+        <!-- Especialidad -->
         <mat-form-field appearance="fill">
           <mat-label>Especialidad</mat-label>
-          <mat-select [(ngModel)]="especialidad" name="especialidad" required [disabled]="!cobertura" (selectionChange)="habilitarSiguienteCampo('profesional')">
-            <mat-option value="Cardiología">Cardiología</mat-option>
-            <mat-option value="Dermatología">Dermatología</mat-option>
-            <!-- Otras especialidades -->
+          <mat-select formControlName="especialidad" (selectionChange)="onEspecialidadChange()">
+            <mat-option *ngFor="let esp of especialidades" [value]="esp.id">
+              {{esp.descripcion}}
+            </mat-option>
           </mat-select>
+          <mat-error *ngIf="turnoForm.get('especialidad')?.hasError('required')">
+            Seleccione una especialidad
+          </mat-error>
         </mat-form-field>
 
+        <!-- Profesional -->
         <mat-form-field appearance="fill">
           <mat-label>Profesional</mat-label>
-          <mat-select [(ngModel)]="profesional" name="profesional" required [disabled]="!especialidad" (selectionChange)="habilitarSiguienteCampo('fecha')">
-            <mat-option *ngFor="let prof of profesionales" [value]="prof">{{prof.nombre}} {{prof.apellido}}</mat-option>
+          <mat-select formControlName="profesional" (selectionChange)="onMedicoChange()">
+            <mat-option *ngFor="let med of medicos" [value]="med.id_medico">
+              {{med.nombre}} {{med.apellido}}
+            </mat-option>
           </mat-select>
+          <mat-error *ngIf="turnoForm.get('profesional')?.hasError('required')">
+            Seleccione un profesional
+          </mat-error>
         </mat-form-field>
 
+        <!-- Fecha -->
         <mat-form-field appearance="fill">
           <mat-label>Fecha</mat-label>
-          <input matInput [(ngModel)]="fecha" name="fecha" [matDatepicker]="picker" required [disabled]="!profesional" (dateChange)="cargarHorariosDisponibles()">
+          <input matInput [matDatepicker]="picker" formControlName="fecha">
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
+          <mat-error *ngIf="turnoForm.get('fecha')?.hasError('required')">
+            Seleccione una fecha
+          </mat-error>
         </mat-form-field>
 
+        <!-- Hora -->
         <mat-form-field appearance="fill">
           <mat-label>Hora</mat-label>
-          <mat-select [(ngModel)]="hora" name="hora" required [disabled]="!fecha">
-            <mat-option *ngFor="let horario of horariosDisponibles" [value]="horario">{{horario}}</mat-option>
+          <mat-select formControlName="hora">
+            <mat-option *ngFor="let hora of horariosDisponibles" [value]="hora">
+              {{hora}}
+            </mat-option>
           </mat-select>
+          <mat-error *ngIf="turnoForm.get('hora')?.hasError('required')">
+            Seleccione un horario
+          </mat-error>
         </mat-form-field>
 
+        <!-- Notas -->
         <mat-form-field appearance="fill">
           <mat-label>Notas</mat-label>
-          <textarea matInput [(ngModel)]="notas" name="notas" required></textarea>
+          <textarea matInput formControlName="nota" rows="4"
+                    placeholder="Describa el motivo de su consulta"></textarea>
+          <mat-error *ngIf="turnoForm.get('nota')?.hasError('required')">
+            Ingrese una nota
+          </mat-error>
+          <mat-error *ngIf="turnoForm.get('nota')?.hasError('minlength')">
+            La nota debe tener al menos 10 caracteres
+          </mat-error>
         </mat-form-field>
 
         <div class="button-container">
-          <button mat-raised-button color="warn" type="button" (click)="cancelar()">Cancelar</button>
-          <button mat-raised-button color="primary" type="submit" [disabled]="!turnoForm.form.valid">Aceptar</button>
+          <button mat-button type="button" routerLink="/dashboard">Cancelar</button>
+          <button mat-raised-button color="primary" type="submit"
+                  [disabled]="!turnoForm.valid || loading">
+            {{loading ? 'Guardando...' : 'Confirmar Turno'}}
+          </button>
         </div>
       </form>
-
-      <div *ngIf="mostrarConfirmacion">
-        <h2>Confirmar Turno</h2>
-        <p>¿Está seguro que desea confirmar el siguiente turno?</p>
-        <p>Especialista: {{profesional.nombre}} {{profesional.apellido}}</p>
-        <p>Fecha: {{fecha | date:'dd/MM/yyyy'}}</p>
-        <p>Hora: {{hora}}</p>
-
-        <div class="button-container">
-          <button mat-raised-button color="warn" (click)="cancelarConfirmacion()">Cancelar</button>
-          <button mat-raised-button color="primary" (click)="confirmarTurno()">Confirmar</button>
-        </div>
-      </div>
     </mat-card-content>
   </mat-card>
+
+  <div class="loading-overlay" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
 </div>

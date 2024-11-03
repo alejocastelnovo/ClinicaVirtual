@@ -1,3 +1,15 @@
+<!-- 
+CONTRASEÑAS DE LOS USUARIOS: 1234
+
+ROLES Y SUS DNI PARA INICIAR SESION; (numero del 1 al 4 para hacerlo mas facil): 
+operador; 1
+paciente;2
+medico;3
+admin;4 
+
+-->
+
+
 <div class="login-container">
     <mat-card>
         <mat-card-header>
@@ -18,7 +30,7 @@
                 </mat-form-field>
 
                 <div class="button-container">
-                    <button mat-raised-button color="primary" type="submit" [disabled]="loading">Ingresar</button>
+                    <button mat-raised-button color="primary"type="button" (click)="login()">Ingresar</button>
                     <button mat-raised-button color="accent" type="button" (click)="onRegister()" [disabled]="loading">Registrarse</button>
                 </div>
             </form>

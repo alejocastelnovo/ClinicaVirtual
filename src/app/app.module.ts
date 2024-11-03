@@ -6,8 +6,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
 
-/* Componentes vistas */
-import { LoginComponent } from './components/login/login.component';
+
 
 /* Angular Material */
 import { MatCardModule } from '@angular/material/card';
@@ -35,11 +34,12 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
 
 /* Componentes */
+import { LoginComponent } from './components/login/login.component';
 import { HeaderComponent } from './components/header/header.component';
 import { FooterComponent } from './components/footer/footer.component';
 import { RegisterComponent } from './components/registro/registro.component';
 import { HomeComponent } from './components/home/home.component';
-import { DashboardComponent } from './components/dashboard/dashboard.component';  // Necesario para trabajar con servicios HTTP
+import { DashboardComponent } from './components/dashboard/dashboard.component';
 import { NuevoTurnoComponent } from './components/paciente/nuevo-turno/nuevo-turno.component';
 import { MisTurnosComponent } from './components/paciente/mis-turnos/mis-turnos.component';
 import { MisDatosComponent } from './components/paciente/mis-datos/mis-datos.component';
