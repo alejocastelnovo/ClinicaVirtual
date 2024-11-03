@@ -1,58 +1,72 @@
 import { Component } from '@angular/core';
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { timer } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-
 export class LoginComponent {
-  email: string = '';
-  password: string = '';
-  loading: boolean = false;
-  loginForm: FormGroup;
-  mensajeError: string | null = null;
+  loginForm: FormGroup = this.fb.group({
+    usuario: ['', [Validators.required]],
+    password: ['', [Validators.required]]
+  });
+
+  loading = false;
 
   constructor(
+    private fb: FormBuilder,
+    private authService: AuthService,
     private router: Router,
-    private authService: AuthService
+    private snackBar: MatSnackBar
   ) {
-    this.loginForm = new FormGroup({
-      usuario: new FormControl('', [Validators.required, Validators.email]),
-      contrasenia: new FormControl('', [Validators.required])
-    });
+    // Si ya está logueado, redirigir al dashboard
+    if (this.authService.isLoggedIn()) {
+      this.router.navigate(['/dashboard']);
+    }
   }
 
-  login() {
-    let body = {
-      usuario: this.loginForm.controls['usuario'].value,
-      password: this.loginForm.controls['contrasenia'].value
-    };
-    console.log(JSON.stringify(body));
-    this.authService.login(JSON.stringify(body)).subscribe((data: any) => {
-      if (data.codigo == 200) {
-        console.log(data);
+  onSubmit() {
+    if (this.loginForm.valid) {
+      this.loading = true;
+      const { usuario, password } = this.loginForm.value;
 
-        localStorage.setItem('token', data.jwt);
-        localStorage.setItem('usuario', data.payload[0].nombre + ' ' + data.payload[0].apellido);
-        localStorage.setItem('id', data.payload[0].id)
-        localStorage.setItem('rol', data.payload[0].rol);
-
-        setTimeout(() => {
-          this.router.navigate(['/dashboard']);
-        }, 1000);
-      } else {
-        alert('Usuario o contraseña incorrectos.');
-        console.log(data.mensaje);
-        this.mensajeError = data.mensaje; // Actualiza el mensaje de error
-      }
+      this.authService.login(usuario, password).subscribe({
+        next: (response) => {
+          if (response.codigo === 200) {
+            // El token y usuario se guardan en el AuthService
+            this.snackBar.open('Inicio de sesión exitoso', 'Cerrar', {
+              duration: 3000,
+              panelClass: ['success-snackbar']
+            });
+            
+            // Redirigir al dashboard general
+            this.router.navigate(['/dashboard']);
+          } else {
+            this.mostrarError(response.mensaje || 'Error en el inicio de sesión');
+          }
+        },
+        error: (error) => {
+          console.error('Error en login:', error);
+          this.mostrarError('Error en el inicio de sesión. Por favor, intente nuevamente.');
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
+    } else {
+      this.mostrarError('Por favor, complete todos los campos');
     }
-    );
+  }
+
+  private mostrarError(mensaje: string) {
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
   }
 
   onRegister() {

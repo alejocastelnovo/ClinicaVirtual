@@ -46,7 +46,13 @@ import { MisDatosComponent } from './components/paciente/mis-datos/mis-datos.com
 import { TurnosProgramadosComponent } from './components/medico/turnos-programados/turnos-programados.component';
 import { GestionAgendaComponent } from './components/medico/gestion-agenda/gestion-agenda.component';
 import { CrearUsuarioComponent } from './components/administrador/crear-usuario/crear-usuario.component';
+import { NavComponent } from './components/nav/nav.component';
 
+/* Servicios */
+import { AuthService } from './services/auth.service';
+import { TurnoService } from './services/turno.service';
+import { AgendaService } from './services/agenda.service';
+import { EspecialidadService } from './services/especialidad.service';
 
 
 @NgModule({
@@ -64,6 +70,7 @@ import { CrearUsuarioComponent } from './components/administrador/crear-usuario/
     TurnosProgramadosComponent,
     GestionAgendaComponent,
     CrearUsuarioComponent,
+    NavComponent,
   ],
   imports: [
     BrowserModule,
@@ -89,7 +96,12 @@ import { CrearUsuarioComponent } from './components/administrador/crear-usuario/
     MatTableModule,
 
   ],
-  providers: [],
+  providers: [
+    AuthService,
+    TurnoService,
+    AgendaService,
+    EspecialidadService
+  ],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

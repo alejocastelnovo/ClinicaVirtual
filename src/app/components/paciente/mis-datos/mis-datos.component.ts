@@ -8,6 +8,9 @@ import { Router } from '@angular/router';
   styleUrls: ['./mis-datos.component.css']
 })
 export class MisDatosComponent implements OnInit {
+guardarCambios() {
+throw new Error('Method not implemented.');
+}
   usuarioForm: FormGroup;
   usuario: any;
 
@@ -27,7 +30,7 @@ export class MisDatosComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.usuario = this.authService.getUsuarioLogueado();
+    this.usuario = this.authService.getCurrentUser();
     if (this.usuario) {
       this.usuarioForm.patchValue({
         nombre: this.usuario.nombre,
@@ -40,7 +43,7 @@ export class MisDatosComponent implements OnInit {
     }
   }
 
-  guardarCambios() {
+/*   guardarCambios() {
     if (this.usuarioForm.valid) {
       const cambios = this.usuarioForm.value;
       if (this.authService.actualizarDatosUsuario(this.usuario.id, cambios)) {
@@ -50,5 +53,5 @@ export class MisDatosComponent implements OnInit {
         alert('Error al guardar los cambios');
       }
     }
-  }
+  } */
 }

@@ -5,6 +5,8 @@ import { Router } from '@angular/router';
 import { TurnoService } from '../../../services/turno.service';
 import { EspecialidadService } from '../../../services/especialidad.service';
 import { AgendaService } from '../../../services/agenda.service';
+import { AuthService } from '../../../services/auth.service';
+import { finalize } from 'rxjs/operators';
 
 @Component({
   selector: 'app-nuevo-turno',
@@ -12,7 +14,15 @@ import { AgendaService } from '../../../services/agenda.service';
   styleUrls: ['./nuevo-turno.component.css']
 })
 export class NuevoTurnoComponent implements OnInit {
-  turnoForm: FormGroup = this.fb.group({});
+  turnoForm: FormGroup = this.fb.group({
+    cobertura: ['', Validators.required],
+    especialidad: ['', Validators.required],
+    profesional: ['', Validators.required],
+    fecha: ['', Validators.required],
+    hora: ['', Validators.required],
+    nota: ['', [Validators.required, Validators.minLength(10)]]
+  });
+
   coberturas: any[] = [];
   especialidades: any[] = [];
   medicos: any[] = [];
@@ -25,55 +35,70 @@ export class NuevoTurnoComponent implements OnInit {
     private turnoService: TurnoService,
     private especialidadService: EspecialidadService,
     private agendaService: AgendaService,
+    private authService: AuthService,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {
-    this.initForm();
-  }
-
-  private initForm() {
-    this.turnoForm = this.fb.group({
-      cobertura: ['', Validators.required],
-      especialidad: ['', Validators.required],
-      profesional: ['', Validators.required],
-      fecha: ['', Validators.required],
-      hora: ['', Validators.required],
-      nota: ['', [Validators.required, Validators.minLength(10)]]
-    });
-  }
+  ) {}
 
   ngOnInit() {
+    if (!this.authService.isLoggedIn()) {
+      this.router.navigate(['/login']);
+      return;
+    }
     this.cargarDatosIniciales();
   }
 
   cargarDatosIniciales() {
     this.loading = true;
-    this.especialidadService.obtenerCoberturas().subscribe({
-      next: (response) => {
-        if (response.codigo === 200) {
-          this.coberturas = response.payload;
-        }
-      },
-      error: (error) => this.mostrarError('Error al cargar coberturas'),
-      complete: () => this.loading = false
-    });
 
-    this.especialidadService.obtenerEspecialidades().subscribe({
-      next: (response) => {
-        if (response.codigo === 200) {
-          this.especialidades = response.payload;
+    this.especialidadService.obtenerEspecialidades()
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: (response) => {
+          console.log('Respuesta especialidades:', response);
+          if (response.codigo === 200) {
+            this.especialidades = response.payload;
+          } else {
+            this.mostrarError(response.mensaje || 'Error al cargar especialidades');
+          }
+        },
+        error: (error) => {
+          console.error('Error al cargar especialidades:', error);
+          if (error.status === 401) {
+            this.router.navigate(['/login']);
+          } else {
+            this.mostrarError('Error al cargar especialidades. Por favor, intente nuevamente.');
+          }
         }
-      },
-      error: (error) => this.mostrarError('Error al cargar especialidades'),
-      complete: () => this.loading = false
-    });
+      });
+
+    this.especialidadService.obtenerCoberturas()
+      .pipe(finalize(() => this.loading = false))
+      .subscribe({
+        next: (response) => {
+          console.log('Respuesta coberturas:', response);
+          if (response.codigo === 200) {
+            this.coberturas = response.payload;
+          } else {
+            this.mostrarError(response.mensaje || 'Error al cargar coberturas');
+          }
+        },
+        error: (error) => {
+          console.error('Error al cargar coberturas:', error);
+          if (error.status === 401) {
+            this.router.navigate(['/login']);
+          } else {
+            this.mostrarError('Error al cargar coberturas. Por favor, intente nuevamente.');
+          }
+        }
+      });
   }
 
   onEspecialidadChange() {
     const especialidadId = this.turnoForm.get('especialidad')?.value;
     if (especialidadId) {
       this.loading = true;
-      this.especialidadService.obtenerMedicosPorEspecialidad(especialidadId).subscribe({
+      this.especialidadService.obtenerMedicoPorEspecialidad(especialidadId).subscribe({
         next: (response) => {
           if (response.codigo === 200) {
             this.medicos = response.payload;

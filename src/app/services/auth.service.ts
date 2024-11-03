@@ -1,97 +1,91 @@
 import { Injectable } from '@angular/core';
-import { Observable, of, BehaviorSubject } from 'rxjs';
-import { tap } from 'rxjs/operators';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError } from 'rxjs/operators';
-import { throwError } from 'rxjs';
+import { Observable } from 'rxjs';
+import { tap } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
+interface LoginResponse {
+  codigo: number;
+  mensaje: string;
+  payload: any[];
+  jwt: string;
+}
 
 @Injectable({
   providedIn: 'root'
 })
-
-
 export class AuthService {
-  private usuarios: any[] = [
-  ];
-  UrlApi = 'http://localhost:4000/api';
-  private usuarioLogueado: any = null;
-  private usuarioLogueadoSubject = new BehaviorSubject<any>(null);
+  private apiUrl = 'http://localhost:4000/api';
 
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
-  constructor(private http: HttpClient) {
-    const usuarioInicial = JSON.parse(localStorage.getItem('usuarioLogueado') || 'null');
-    this.usuarioLogueadoSubject = new BehaviorSubject<any>(usuarioInicial);
-    this.usuarioLogueado = this.usuarioLogueadoSubject.asObservable();
-  }
-
-
-  // Método login con manejo de errores
-  login(body: any) {
-
-
-    const headers = new HttpHeaders({ "Content-Type": "application/json" });
-    return this.http.post(`${this.UrlApi}/login`, body, { headers }).pipe(
-      tap((response: any) => {
-        if (response && response.usuario) {
-          this.usuarioLogueado = response.usuario;
-          this.usuarioLogueadoSubject.next(this.usuarioLogueado);
-
-          /* Para que guarde el usuario y esconder los botones */
-          localStorage.setItem('isLoggedIn', 'true');
-        }
-      }),
-      catchError(error => {
-        console.error('Error en el login:', error);
-        return throwError(() => error);
-      })
-    );
-  }
-
-
-  // Método para crear un usuario
-  crearUsuario(userData: any): Observable<any> {
-    const headers = new HttpHeaders({ "Content-Type": "application/json"
+  private getHeaders(): HttpHeaders {
+    const token = localStorage.getItem('jwt');
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token || ''
     });
-    return this.http.post(`${this.UrlApi}/crearUsuario`, userData, { headers }).pipe(
-      catchError(error => {
-        console.error('Error al crear el usuario:', error);
-        return throwError(() => error);
-      })
-    );
   }
 
-  
-  // Método para actualizar los datos del usuario
-  actualizarDatosUsuario(id: number, cambios: any): Observable<any> {
-    return this.http.put(`${this.UrlApi}/usuarios/${id}`, cambios).pipe(
-      tap((usuarioActualizado: any) => {
-        this.usuarioLogueado = usuarioActualizado;
-        this.usuarioLogueadoSubject.next(this.usuarioLogueado);
-      })
-    );
+  crearUsuario(usuario: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/crearUsuario`, usuario);
   }
 
-  // Método para cerrar sesión (logout)
+  login(usuario: string, password: string): Observable<LoginResponse> {
+    return this.http.post<LoginResponse>(`${this.apiUrl}/login`, { usuario, password })
+      .pipe(
+        tap(response => {
+          if (response.codigo === 200) {
+            localStorage.setItem('jwt', response.jwt);
+            localStorage.setItem('usuario', JSON.stringify(response.payload[0]));
+            localStorage.setItem('rol', response.payload[0].rol.toLowerCase());
+            localStorage.setItem('nombre', response.payload[0].nombre);
+            localStorage.setItem('apellido', response.payload[0].apellido);
+          }
+        })
+      );
+  }
+
   logout(): void {
-    localStorage.removeItem('authToken');  // elimina el token guardado
-    localStorage.removeItem('isLoggedIn');
-    console.log('Sesión cerrada');
+    localStorage.removeItem('jwt');
+    localStorage.removeItem('usuario');
+    localStorage.removeItem('rol');
+    localStorage.removeItem('nombre');
+    localStorage.removeItem('apellido');
+    this.router.navigate(['/login']);
   }
 
-  public getUsuarioLogueado(): any {
-    // Obtener el usuario del local storage
-    const usuarioInicial = JSON.parse(localStorage.getItem('usuarioLogueado') || 'null');
-    return usuarioInicial;  
+  isLoggedIn(): boolean {
+    const token = localStorage.getItem('jwt');
+    return !!token;
   }
 
-/*   public getUsuarioLogueadoObservable(): Observable<any> {
-    return this.usuarioLogueado;
-  } */
-
-  public setUsuarioLogueado(user: any): void {
-    localStorage.setItem('usuarioLogueado', JSON.stringify(user));
-    this.usuarioLogueadoSubject.next(user);
+  getToken(): string | null {
+    return localStorage.getItem('jwt');
   }
 
 
+  /* Para que me de el usuario actual  */
+  getCurrentUser(): any {
+    const usuario = localStorage.getItem('usuario');
+    return usuario ? JSON.parse(usuario) : null;
+  }
+
+  resetPassword(id: number, password: string): Observable<any> {
+    return this.http.put(`${this.apiUrl}/login/resetearPassword/${id}`, { password }, 
+      { headers: this.getHeaders() });
+  }
+
+  actualizarUsuario(id: number, datos: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/actualizarUsuario/${id}`, datos, 
+      { headers: this.getHeaders() });
+  }
+
+  obtenerUsuario(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtenerUsuario/${id}`, 
+      { headers: this.getHeaders() });
+  }
 }

@@ -20,7 +20,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private authService: AuthService) {}
 
   ngOnInit() {
-    const usuarioLogueado = this.authService.getUsuarioLogueado();
+    const usuarioLogueado = this.authService.getCurrentUser();
    /*  this.updateUserInfo(usuarioLogueado); */
   }
 

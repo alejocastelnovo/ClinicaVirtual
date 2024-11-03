@@ -2,7 +2,7 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: calc(100vh - 110px); /*  altura para evitar solapamiento */
+    min-height: calc(100vh - 80px); /*  altura para evitar solapamiento */
     background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
     padding: 20px;
     box-sizing: border-box;

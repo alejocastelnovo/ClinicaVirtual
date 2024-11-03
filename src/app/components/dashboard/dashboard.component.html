@@ -1,5 +1,5 @@
 <div class="dashboard-content">
-  <h2>Bienvenido/a, {{ userName }} !</h2>
+  <h2>Bienvenido/a {{usuario?.nombre}} {{usuario?.apellido}}</h2>
 
   <div class="main-content">
     <h2>Hace click en alguna de las opciones para acceder</h2>
@@ -18,6 +18,18 @@
         </mat-card-content>
       </mat-card>
     </div>
+    
+        <div *ngSwitchCase="'medico'">
+          <mat-card>
+            <mat-card-content>
+              <h3>Opciones para Médico</h3>
+              <ul>
+                <li><a routerLink="/medico/turnos-programados">Turnos Programados</a></li>
+                <li><a routerLink="/medico/gestion-agenda">Gestión de Agenda</a></li>
+              </ul>
+            </mat-card-content>
+          </mat-card>
+        </div>
 
     <div *ngSwitchCase="'operador'">
       <mat-card>

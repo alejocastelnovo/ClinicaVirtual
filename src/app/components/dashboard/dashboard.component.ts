@@ -7,17 +7,20 @@ import { AuthService } from '../../services/auth.service';
   styleUrls: ['./dashboard.component.css']
 })
 export class DashboardComponent implements OnInit {
-  userName: string | null = localStorage.getItem('usuario');
-  userType: string | null = localStorage.getItem('rol');
+  usuario: any = null;
+  userType: string | null = null;
 
   constructor(private authService: AuthService) {}
 
   ngOnInit() {
-    const usuarioLogueado = this.authService.getUsuarioLogueado();
-    if (usuarioLogueado) {
-      console.log('El usuario logueado es,', this.userName);
+    const usuarioString = this.authService.getCurrentUser();
+    if (usuarioString) {
+      this.usuario = usuarioString;
+      this.userType = this.usuario.rol?.toLowerCase();
+      console.log('Usuario logueado:', this.usuario);
+      console.log('Tipo de usuario:', this.userType);
     } else {
-      console.log('No hay usuario logueado.');
+      console.log('No hay usuario logueado');
     }
   }
 }

@@ -19,14 +19,17 @@ export class AgendaService {
   }
 
   obtenerAgenda(idMedico: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/agenda/${idMedico}`, { headers: this.getHeaders() });
+    return this.http.get(`${this.apiUrl}/obtenerAgenda/${idMedico}`, 
+      { headers: this.getHeaders() });
   }
 
   crearAgenda(agendaData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/agenda`, agendaData, { headers: this.getHeaders() });
+    return this.http.post(`${this.apiUrl}/crearAgenda`, agendaData, 
+      { headers: this.getHeaders() });
   }
 
   modificarAgenda(id: number, agendaData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/agenda/${id}`, agendaData, { headers: this.getHeaders() });
+    return this.http.put(`${this.apiUrl}/modificarAgenda/${id}`, agendaData, 
+      { headers: this.getHeaders() });
   }
 } 
