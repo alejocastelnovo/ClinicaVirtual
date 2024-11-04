@@ -7,6 +7,9 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AgendaService {
+  obtenerMedicosConTurnos(fecha: string): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/medicos-turnos/${fecha}`);
+  }
   private apiUrl = 'http://localhost:4000/api';
 
   constructor(private http: HttpClient) {}

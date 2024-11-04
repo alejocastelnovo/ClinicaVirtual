@@ -18,6 +18,12 @@ import { TurnosProgramadosComponent } from './components/medico/turnos-programad
 /* Componentes de Administrador */
 import { CrearUsuarioComponent } from './components/administrador/crear-usuario/crear-usuario.component';
 
+
+/* Componentes de Operador  */
+import { DashboardOperadorComponent } from './components/operador/dashboard-operador/dashboard-operador.component';
+import { ListaMedicosComponent } from './components/operador/lista-medicos/lista-medicos.component';
+
+
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' }, 
   { path: 'home', component: HomeComponent },
@@ -30,6 +36,8 @@ const routes: Routes = [
   { path: 'administrador/crear-usuario', component: CrearUsuarioComponent },
   { path: 'medico/gestion-agenda', component: GestionAgendaComponent },
   { path: 'medico/turnos-programados', component: TurnosProgramadosComponent },
+  { path: 'operador/dashboard-operador', component: DashboardOperadorComponent },
+  { path: 'operador/lista-medicos', component: ListaMedicosComponent },
 ];
 
 @NgModule({

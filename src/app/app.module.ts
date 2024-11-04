@@ -53,6 +53,9 @@ import { GestionAgendaComponent } from './components/medico/gestion-agenda/gesti
 import { CrearUsuarioComponent } from './components/administrador/crear-usuario/crear-usuario.component';
 import { NavComponent } from './components/nav/nav.component';
 import { DialogExitoComponent } from './components/dialog-exito/dialog-exito.component';
+import { DashboardOperadorComponent } from './components/operador/dashboard-operador/dashboard-operador.component';
+import { ListaMedicosComponent } from './components/operador/lista-medicos/lista-medicos.component';
+
 
 /* Servicios */
 import { AuthService } from './services/auth.service';
@@ -77,7 +80,10 @@ import { EspecialidadService } from './services/especialidad.service';
     GestionAgendaComponent,
     CrearUsuarioComponent,
     NavComponent,
-    DialogExitoComponent
+    DialogExitoComponent,
+    DashboardOperadorComponent,
+    ListaMedicosComponent,
+
   ],
   imports: [
     BrowserModule,

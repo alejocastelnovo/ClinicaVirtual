@@ -1,0 +1,67 @@
+.lista-medicos-container {
+  padding: 20px;
+  background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+  min-height: calc(100vh - 64px);
+}
+
+mat-card {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 30px;
+  background-color: #ffffff;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-title {
+  font-size: 28px;
+  color: #00796b;
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+mat-form-field {
+  width: 100%;
+  margin-bottom: 20px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.no-medicos {
+  text-align: center;
+  padding: 20px;
+  color: #666;
+  font-size: 1.1em;
+}
+
+.mat-column-acciones {
+  width: 120px;
+  text-align: center;
+}
+
+button[mat-icon-button] {
+  margin: 0 4px;
+}
+
+@media (max-width: 600px) {
+  .lista-medicos-container {
+    padding: 10px;
+  }
+
+  mat-card {
+    padding: 20px;
+  }
+
+  mat-card-title {
+    font-size: 24px;
+  }
+} 
