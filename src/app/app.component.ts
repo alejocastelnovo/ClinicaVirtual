@@ -8,7 +8,7 @@ import { Component } from '@angular/core';
 export class AppComponent {
   footerVisible = false;
   onFooterVisibilityChange(isVisible: boolean) {
-    // Aquí puedes manejar el cambio de visibilidad del footer
+    // Aca se puede manejar el cambio de visibilidad del footer
     console.log('Footer visibility changed:', isVisible);
   }
 }
