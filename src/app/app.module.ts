@@ -52,7 +52,7 @@ import { TurnosProgramadosComponent } from './components/medico/turnos-programad
 import { GestionAgendaComponent } from './components/medico/gestion-agenda/gestion-agenda.component';
 import { CrearUsuarioComponent } from './components/administrador/crear-usuario/crear-usuario.component';
 import { NavComponent } from './components/nav/nav.component';
-import { DialogExitoComponent } from './components/shared/dialog-exito/dialog-exito.component';
+import { DialogExitoComponent } from './components/dialog-exito/dialog-exito.component';
 
 /* Servicios */
 import { AuthService } from './services/auth.service';
