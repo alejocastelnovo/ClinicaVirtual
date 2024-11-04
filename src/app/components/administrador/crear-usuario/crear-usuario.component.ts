@@ -16,7 +16,7 @@ export class CrearUsuarioComponent {
 
   constructor(private router: Router) {}
 
-  // Método para manejar el envío del formulario
+
   onSubmit() {
     const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
     const nuevoUsuario = { nombre: this.nombre, apellido: this.apellido, email: this.email, tipoUsuario: this.tipoUsuario, password: this.password };
@@ -28,7 +28,6 @@ export class CrearUsuarioComponent {
     this.router.navigate(['/administrador/gestion-usuarios']);
   }
 
-  // Método para manejar la cancelación
   onCancel(): void {
     this.router.navigate(['/administrador/gestion-usuarios']);
   }

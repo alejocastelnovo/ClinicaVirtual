@@ -1,65 +1,78 @@
-<div class="dashboard-content">
-  <h2>Bienvenido/a {{usuario?.nombre}} {{usuario?.apellido}}</h2>
+<div class="dashboard-container">
+  <mat-card class="welcome-card">
+    <mat-card-content>
+      <h1>Bienvenido/a {{usuario?.nombre}} {{usuario?.apellido}}</h1>
+      <p>Selecciona una opción para comenzar</p>
+    </mat-card-content>
+  </mat-card>
 
-  <div class="main-content">
-    <h2>Hace click en alguna de las opciones para acceder</h2>
-  </div>
-
-  <div [ngSwitch]="userType">
-    <div *ngSwitchCase="'paciente'">
-      <mat-card>
-        <mat-card-content>
-          <h3>Opciones para Pacientes</h3>
-          <ul>
-            <li><a routerLink="/paciente/nuevo-turno">Solicitar Nuevo Turno</a></li>
-            <li><a routerLink="/paciente/mis-turnos">Ver Mis Turnos</a></li>
-            <li><a routerLink="/paciente/mis-datos">Mis Datos Personales</a></li>
-          </ul>
-        </mat-card-content>
+  <div [ngSwitch]="userType" class="options-grid">
+    <!-- Paciente -->
+    <div *ngSwitchCase="'paciente'" class="options-container">
+      <mat-card class="option-card" routerLink="/paciente/nuevo-turno">
+        <mat-icon>event_available</mat-icon>
+        <h3>Solicitar Turno</h3>
+        <p>Agenda una nueva cita médica</p>
       </mat-card>
-    </div>
-    
-        <div *ngSwitchCase="'medico'">
-          <mat-card>
-            <mat-card-content>
-              <h3>Opciones para Médico</h3>
-              <ul>
-                <li><a routerLink="/medico/turnos-programados">Turnos Programados</a></li>
-                <li><a routerLink="/medico/gestion-agenda">Gestión de Agenda</a></li>
-              </ul>
-            </mat-card-content>
-          </mat-card>
-        </div>
 
-    <div *ngSwitchCase="'operador'">
-      <mat-card>
-        <mat-card-content>
-          <h3>Opciones para Operador</h3>
-          <ul>
-            <li><a routerLink="/operador/dashboard-operador">Dash del Operador</a></li>
-            <li><a routerLink="/operador/lista-medicos">Lista Medicos</a></li>
-          </ul>
-        </mat-card-content>
+      <mat-card class="option-card" routerLink="/paciente/mis-turnos">
+        <mat-icon>calendar_today</mat-icon>
+        <h3>Mis Turnos</h3>
+        <p>Ver y gestionar tus citas</p>
+      </mat-card>
+
+      <mat-card class="option-card" routerLink="/paciente/mis-datos">
+        <mat-icon>person</mat-icon>
+        <h3>Mis Datos</h3>
+        <p>Gestiona tu información personal</p>
       </mat-card>
     </div>
 
-    <div *ngSwitchCase="'administrador'">
-      <mat-card>
-        <mat-card-content>
-          <h3>Opciones para Administrador</h3>
-          <ul>
-            <li><a routerLink="/administrador/gestion-usuarios">Gestión de Usuarios</a></li>
-          </ul>
-        </mat-card-content>
+    <!-- Médico -->
+    <div *ngSwitchCase="'medico'" class="options-container">
+      <mat-card class="option-card" routerLink="/medico/turnos-programados">
+        <mat-icon>schedule</mat-icon>
+        <h3>Turnos Programados</h3>
+        <p>Ver agenda del día</p>
+      </mat-card>
+
+      <mat-card class="option-card" routerLink="/medico/gestion-agenda">
+        <mat-icon>event_note</mat-icon>
+        <h3>Gestión de Agenda</h3>
+        <p>Configura tus horarios</p>
       </mat-card>
     </div>
 
+    <!-- Operador -->
+    <div *ngSwitchCase="'operador'" class="options-container">
+      <mat-card class="option-card" routerLink="/operador/dashboard-operador">
+        <mat-icon>dashboard</mat-icon>
+        <h3>Panel Principal</h3>
+        <p>Acceso rápido a funciones</p>
+      </mat-card>
+
+      <mat-card class="option-card" routerLink="/operador/lista-medicos">
+        <mat-icon>people</mat-icon>
+        <h3>Lista Médicos</h3>
+        <p>Gestionar profesionales</p>
+      </mat-card>
+    </div>
+
+    <!-- Administrador -->
+    <div *ngSwitchCase="'administrador'" class="options-container">
+      <mat-card class="option-card" routerLink="/administrador/gestion-usuarios">
+        <mat-icon>admin_panel_settings</mat-icon>
+        <h3>Gestión de Usuarios</h3>
+        <p>Administrar usuarios del sistema</p>
+      </mat-card>
+    </div>
+
+    <!-- Default -->
     <div *ngSwitchDefault>
-      <mat-card>
-        <mat-card-content>
-          <h3>Error - Rol no reconocido</h3>
-          <p>No se han encontrado opciones para tu rol de usuario.</p>
-        </mat-card-content>
+      <mat-card class="error-card">
+        <mat-icon color="warn">error</mat-icon>
+        <h3>Error - Rol no reconocido</h3>
+        <p>No se han encontrado opciones para tu rol de usuario.</p>
       </mat-card>
     </div>
   </div>

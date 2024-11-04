@@ -37,13 +37,12 @@ export class LoginComponent {
       this.authService.login(usuario, password).subscribe({
         next: (response) => {
           if (response.codigo === 200) {
-            // El token y usuario se guardan en el AuthService
             this.snackBar.open('Inicio de sesión exitoso', 'Cerrar', {
               duration: 3000,
               panelClass: ['success-snackbar']
             });
             
-            // Redirigir al dashboard general
+            //dashboard general
             this.router.navigate(['/dashboard']);
           } else {
             this.mostrarError(response.mensaje || 'Error en el inicio de sesión');

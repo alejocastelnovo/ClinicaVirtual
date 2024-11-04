@@ -1,60 +1,59 @@
 <div class="gestion-agenda-container">
-  <mat-card>
-    <mat-card-title>Gestión de Agenda</mat-card-title>
+    <mat-card>
+        <mat-card-title>Gestión de Agenda</mat-card-title>
 
-    <mat-card-content>
-      <form [formGroup]="agendaForm" (ngSubmit)="guardarAgenda()">
-        <mat-form-field appearance="outline">
-          <mat-label>Día de atención</mat-label>
-          <mat-select formControlName="dia">
-            <mat-option *ngFor="let dia of diasSemana" [value]="dia">
-              {{dia}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="agendaForm.get('dia')?.hasError('required')">
-            Seleccione un día
-          </mat-error>
-        </mat-form-field>
+        <mat-card-content>
+            <form [formGroup]="agendaForm" (ngSubmit)="guardarAgenda()">
+                <mat-form-field appearance="outline">
+                    <mat-label>Día de atención</mat-label>
+                    <mat-select formControlName="dia">
+                        <mat-option *ngFor="let dia of diasSemana" [value]="dia">
+                            {{dia}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="agendaForm.get('dia')?.hasError('required')">
+                        Seleccione un día
+                    </mat-error>
+                </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Hora de inicio</mat-label>
-          <mat-select formControlName="hora_entrada">
-            <mat-option *ngFor="let hora of horas" [value]="hora">
-              {{hora}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="agendaForm.get('hora_entrada')?.hasError('required')">
-            Seleccione hora de inicio
-          </mat-error>
-        </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Hora de inicio</mat-label>
+                    <mat-select formControlName="hora_entrada">
+                        <mat-option *ngFor="let hora of horas" [value]="hora">
+                            {{hora}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="agendaForm.get('hora_entrada')?.hasError('required')">
+                        Seleccione hora de inicio
+                    </mat-error>
+                </mat-form-field>
 
-        <mat-form-field appearance="outline">
-          <mat-label>Hora de fin</mat-label>
-          <mat-select formControlName="hora_salida">
-            <mat-option *ngFor="let hora of horas" [value]="hora">
-              {{hora}}
-            </mat-option>
-          </mat-select>
-          <mat-error *ngIf="agendaForm.get('hora_salida')?.hasError('required')">
-            Seleccione hora de fin
-          </mat-error>
-        </mat-form-field>
+                <mat-form-field appearance="outline">
+                    <mat-label>Hora de fin</mat-label>
+                    <mat-select formControlName="hora_salida">
+                        <mat-option *ngFor="let hora of horas" [value]="hora">
+                            {{hora}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="agendaForm.get('hora_salida')?.hasError('required')">
+                        Seleccione hora de fin
+                    </mat-error>
+                </mat-form-field>
 
-        <mat-error *ngIf="agendaForm.hasError('horariosInvalidos')" class="horarios-error">
-          La hora de fin debe ser posterior a la hora de inicio
-        </mat-error>
+                <mat-error *ngIf="agendaForm.hasError('horariosInvalidos')" class="horarios-error">
+                    La hora de fin debe ser posterior a la hora de inicio
+                </mat-error>
 
-        <div class="button-container">
-          <button mat-raised-button color="primary" type="submit"
-                  [disabled]="!agendaForm.valid || loading">
-            {{loading ? 'Guardando...' : 'Guardar Agenda'}}
-          </button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
+                <div class="button-container">
+                    <button mat-raised-button color="primary" type="submit" [disabled]="!agendaForm.valid || loading">
+                        {{loading ? 'Guardando...' : 'Guardar Agenda'}}
+                    </button>
+                </div>
+            </form>
+        </mat-card-content>
+    </mat-card>
 
-  <div class="loading-overlay" *ngIf="loading">
-    <mat-spinner></mat-spinner>
-  </div>
+    <div class="loading-overlay" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
 </div>
