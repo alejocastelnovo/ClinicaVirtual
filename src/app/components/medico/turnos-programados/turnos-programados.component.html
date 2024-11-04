@@ -1,1 +1,43 @@
-<p>turnos-programados works!</p>
+<div class="turnos-programados-container">
+    <mat-card>
+        <mat-card-title>Turnos Programados</mat-card-title>
+
+        <mat-card-content>
+            <mat-form-field appearance="fill">
+                <mat-label>Seleccionar fecha</mat-label>
+                <input matInput [matDatepicker]="picker" [formControl]="fechaSeleccionada"
+                    (dateChange)="onFechaChange()">
+                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                <mat-datepicker #picker></mat-datepicker>
+            </mat-form-field>
+
+            <div *ngIf="loading" class="loading-spinner">
+                <mat-spinner diameter="40"></mat-spinner>
+            </div>
+
+            <div *ngIf="!loading && turnos.length === 0" class="no-turnos">
+                <p>No hay turnos programados para esta fecha</p>
+            </div>
+
+            <mat-accordion *ngIf="!loading && turnos.length > 0">
+                <mat-expansion-panel *ngFor="let turno of turnos">
+                    <mat-expansion-panel-header>
+                        <mat-panel-title>
+                            {{turno.hora}} - {{turno.nombre_paciente}}
+                        </mat-panel-title>
+                        <mat-panel-description>
+                            {{turno.cobertura}}
+                        </mat-panel-description>
+                    </mat-expansion-panel-header>
+
+                    <div class="turno-detalles">
+                        <p><strong>Paciente:</strong> {{turno.nombre_paciente}}</p>
+                        <p><strong>Fecha de nacimiento:</strong> {{formatearFechaMostrar(turno.fecha_nacimiento)}}</p>
+                        <p><strong>Cobertura:</strong> {{turno.cobertura}}</p>
+                        <p><strong>Nota:</strong> {{turno.nota}}</p>
+                    </div>
+                </mat-expansion-panel>
+            </mat-accordion>
+        </mat-card-content>
+    </mat-card>
+</div>

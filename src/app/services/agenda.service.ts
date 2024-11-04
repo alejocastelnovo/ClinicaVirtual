@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -23,13 +24,13 @@ export class AgendaService {
       { headers: this.getHeaders() });
   }
 
-  crearAgenda(agendaData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/crearAgenda`, agendaData, 
+  crearAgenda(agenda: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/crearAgenda`, agenda,
       { headers: this.getHeaders() });
   }
 
-  modificarAgenda(id: number, agendaData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/modificarAgenda/${id}`, agendaData, 
+  modificarAgenda(id: number, agenda: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/modificarAgenda/${id}`, agenda,
       { headers: this.getHeaders() });
   }
 } 

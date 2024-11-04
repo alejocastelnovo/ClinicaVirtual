@@ -12,11 +12,8 @@ export class TurnoService {
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('jwt');
-    return new HttpHeaders({
-      'Content-Type': 'application/json',
-      'Authorization': token || ''
-    });
+    const token = localStorage.getItem('token');
+    return new HttpHeaders().set('Authorization', `${token}`);
   }
 
   obtenerTurnosPaciente(idPaciente: number): Observable<any> {
@@ -25,23 +22,23 @@ export class TurnoService {
   }
 
   obtenerTurnosMedico(idMedico: number, fecha: string): Observable<any> {
-    const body = { id_medico: idMedico, fecha: fecha };
-    return this.http.post(`${this.apiUrl}/obtenerTurnosMedico`, body, 
+    return this.http.post(`${this.apiUrl}/obtenerTurnosMedico`, 
+      { id_medico: idMedico, fecha: fecha },
       { headers: this.getHeaders() });
   }
 
-  asignarTurno(turnoData: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/asignarTurnoPaciente`, turnoData, 
+  asignarTurno(turno: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/asignarTurnoPaciente`, turno,
       { headers: this.getHeaders() });
   }
 
-  actualizarTurno(id: number, turnoData: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/actualizarTurnoPaciente/${id}`, turnoData, 
+  actualizarTurno(id: number, turno: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/actualizarTurnoPaciente/${id}`, turno,
       { headers: this.getHeaders() });
   }
 
   eliminarTurno(id: number): Observable<any> {
-    return this.http.delete(`${this.apiUrl}/eliminarTurnoPaciente/${id}`, 
+    return this.http.delete(`${this.apiUrl}/eliminarTurnoPaciente/${id}`,
       { headers: this.getHeaders() });
   }
 }

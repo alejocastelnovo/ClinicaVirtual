@@ -1,0 +1,111 @@
+.turnos-programados-container {
+    padding: 20px;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+    min-height: calc(100vh - 64px);
+}
+
+mat-card {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-title {
+    font-size: 28px;
+    color: #00796b;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.loading-spinner {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+}
+
+.no-turnos {
+    text-align: center;
+    padding: 20px;
+    color: #666;
+    font-size: 1.1em;
+}
+
+mat-expansion-panel {
+    margin-bottom: 10px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+mat-expansion-panel-header {
+    height: 64px !important;
+}
+
+.mat-expansion-panel-header.mat-expanded {
+    background-color: #e0f7fa;
+}
+
+mat-panel-title {
+    color: #00796b;
+    font-weight: 500;
+}
+
+mat-panel-description {
+    color: #666;
+}
+
+.turno-detalles {
+    padding: 15px 0;
+}
+
+.turno-detalles p {
+    margin: 10px 0;
+    color: #333;
+    line-height: 1.5;
+}
+
+.turno-detalles strong {
+    color: #00796b;
+    font-weight: 500;
+}
+
+/* para el datepicker */
+::ng-deep .mat-datepicker-toggle {
+    color: #00796b;
+}
+
+::ng-deep .mat-calendar-body-selected {
+    background-color: #00796b;
+}
+
+
+mat-expansion-panel:hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+}
+
+
+@media (max-width: 600px) {
+    .turnos-programados-container {
+        padding: 10px;
+    }
+
+    mat-card {
+        padding: 20px;
+    }
+
+    mat-card-title {
+        font-size: 24px;
+    }
+
+    mat-expansion-panel-header {
+        height: 54px !important;
+    }
+}

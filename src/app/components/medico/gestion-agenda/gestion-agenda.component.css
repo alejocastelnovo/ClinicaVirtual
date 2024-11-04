@@ -1,0 +1,91 @@
+.gestion-agenda-container {
+    padding: 20px;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
+    min-height: calc(100vh - 64px);
+}
+
+mat-card {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+mat-card-title {
+    font-size: 28px;
+    color: #00796b;
+    margin-bottom: 30px;
+    text-align: center;
+}
+
+mat-form-field {
+    width: 100%;
+    margin-bottom: 20px;
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+}
+
+button {
+    min-width: 150px;
+    padding: 8px 24px;
+}
+
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.horarios-error {
+    color: #f44336;
+    font-size: 0.75rem;
+    margin-top: -15px;
+    margin-bottom: 15px;
+}
+
+
+::ng-deep .mat-select-value {
+    color: #00796b;
+}
+
+::ng-deep .mat-select-arrow {
+    color: #00796b;
+}
+
+
+button:not([disabled]):hover {
+    transform: translateY(-2px);
+    transition: transform 0.3s ease;
+}
+
+
+@media (max-width: 600px) {
+    .gestion-agenda-container {
+        padding: 10px;
+    }
+
+    mat-card {
+        padding: 20px;
+    }
+
+    mat-card-title {
+        font-size: 24px;
+    }
+
+    button {
+        width: 100%;
+    }
+}
