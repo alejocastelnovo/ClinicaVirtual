@@ -28,7 +28,7 @@ export class FooterComponent implements OnInit {
     const documentHeight = document.documentElement.scrollHeight;
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     
-    // Muestra el footer cuando estamos a 50px del final de la página
+    /*  Muestra el footer cuando estamos cerca del final de la pagina */
     const shouldBeVisible = (windowHeight + scrollTop >= documentHeight - 50);
     
     if (this.isVisible !== shouldBeVisible) {

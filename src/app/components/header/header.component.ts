@@ -17,11 +17,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
   userImagePath: string = 'assets/images/usuario.png';
   logueado: boolean = false;
 
-  constructor(private router: Router, private authService: AuthService) {}
+  constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
     const usuarioLogueado = this.authService.getCurrentUser();
-   /*  this.updateUserInfo(usuarioLogueado); */
   }
 
   ngOnDestroy() {
@@ -30,19 +29,6 @@ export class HeaderComponent implements OnInit, OnDestroy {
     }
   }
 
-
-  /* updateUserInfo(user: any) {
-    if (user && user.nombre && user.apellido) {
-      this.userName = `${user.nombre} ${user.apellido}`;
-      this.userType = user.rol || null;
-      this.userTypeShort = this.getUserTypeShort(this.userType);
-    } else {
-      this.userName = localStorage.getItem(user);
-      this.userType = null;
-      this.userTypeShort = null;
-    }
-    console.log('Usuario:', this.userName, 'Tipo:', this.userType);
-  } */
 
   getUserTypeShort(userType: string | null): string {
     switch (userType) {
@@ -71,7 +57,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
 
   navigateToHome() {
-    switch(this.userType) {
+    switch (this.userType) {
       case 'Paciente':
         this.router.navigate(['/dashboard']);
         break;
