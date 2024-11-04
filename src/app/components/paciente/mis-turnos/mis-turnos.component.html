@@ -1,10 +1,44 @@
-<h2>Mis Turnos</h2>
-<ul>
-  <li *ngFor="let turno of turnos" (click)="toggleExpandirTurno(turno)">
-    {{ formatearFecha(turno.fecha) }}
-    <div *ngIf="turno.expandido">
-      Especialista: {{ turno.especialista }}<br>
-      Especialidad: {{ turno.especialidad }}
-    </div>
-  </li>
-</ul>
+<div class="mis-turnos-container">
+  <mat-card>
+    <mat-card-title>Mis Turnos</mat-card-title>
+    
+    <mat-card-content>
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
+
+      <div *ngIf="!loading && turnos.length === 0" class="no-turnos">
+        <p>No tenés turnos programados</p>
+        <button mat-raised-button color="primary" routerLink="/paciente/nuevo-turno">
+          Solicitar Turno
+        </button>
+      </div>
+
+      <mat-accordion *ngIf="!loading && turnos.length > 0">
+        <mat-expansion-panel *ngFor="let turno of turnos">
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              {{formatearFecha(turno.fecha)}} - {{turno.hora}}
+            </mat-panel-title>
+            <mat-panel-description>
+              {{turno.especialidad}}
+            </mat-panel-description>
+          </mat-expansion-panel-header>
+
+          <div class="turno-detalles">
+            <p><strong>Profesional:</strong> {{turno.especialista}}</p>
+            <p><strong>Estado:</strong> {{turno.estado}}</p>
+            <p><strong>Nota:</strong> {{turno.nota}}</p>
+          </div>
+
+          <mat-action-row>
+            <button mat-button color="warn" (click)="cancelarTurno(turno.id)"
+                    [disabled]="turno.estado === 'CANCELADO'">
+              Cancelar Turno
+            </button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </mat-accordion>
+    </mat-card-content>
+  </mat-card>
+</div>

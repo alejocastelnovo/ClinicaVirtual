@@ -79,8 +79,8 @@ export class AuthService {
       { headers: this.getHeaders() });
   }
 
-  actualizarUsuario(id: number, datos: any): Observable<any> {
-    return this.http.put(`${this.apiUrl}/actualizarUsuario/${id}`, datos, 
+  actualizarUsuario(cambios: any): Observable<any> {
+    return this.http.put(`${this.apiUrl}/actualizarUsuario/${cambios.id}`, cambios, 
       { headers: this.getHeaders() });
   }
 

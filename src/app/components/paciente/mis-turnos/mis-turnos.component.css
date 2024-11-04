@@ -1,52 +1,74 @@
 .mis-turnos-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   padding: 20px;
   background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
-  min-height: 100vh;
+  min-height: calc(100vh - 64px);
 }
 
-h2 {
-  font-size: 28px;
+mat-card {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+mat-card-title {
   color: #00796b;
-  margin-bottom: 30px;
+  font-size: 24px;
+  margin-bottom: 20px;
   text-align: center;
 }
 
-ul {
-  list-style-type: none;
-  padding: 0;
-  width: 100%;
-  max-width: 600px;
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
 }
 
-li {
-  background-color: #ffffff;
+.no-turnos {
+  text-align: center;
+  padding: 20px;
+}
+
+.no-turnos p {
+  margin-bottom: 20px;
+  color: #666;
+}
+
+mat-expansion-panel {
+  margin-bottom: 10px;
   border-radius: 8px;
-  margin-bottom: 15px;
-  padding: 15px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  cursor: pointer;
-  transition: all 0.3s ease;
 }
 
-li:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+mat-expansion-panel-header {
+  height: 64px !important;
 }
 
-li div {
-  margin-top: 10px;
-  padding-top: 10px;
+.turno-detalles {
+  padding: 16px 0;
+}
+
+.turno-detalles p {
+  margin: 8px 0;
+}
+
+mat-panel-title {
+  color: #00796b;
+  font-weight: 500;
+}
+
+mat-panel-description {
+  color: #666;
+}
+
+mat-action-row {
   border-top: 1px solid #e0e0e0;
+  padding: 16px;
 }
 
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
+button[color="warn"] {
+  background-color: #f44336;
+  color: white;
 }
 
-li {
-  animation: fadeIn 0.5s ease-in-out;
+button[color="warn"]:disabled {
+  background-color: #ccc;
 }

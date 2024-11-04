@@ -1,36 +1,58 @@
 <div class="mis-datos-container">
   <mat-card>
-    <mat-card-title>Mis Datos</mat-card-title>
+    <mat-card-header>
+      <mat-card-title>Mis Datos Personales</mat-card-title>
+    </mat-card-header>
+
     <mat-card-content>
       <form [formGroup]="usuarioForm" (ngSubmit)="guardarCambios()">
         <mat-form-field appearance="outline">
-          <input matInput formControlName="nombre" readonly>
+          <mat-label>Nombre</mat-label>
+          <input matInput formControlName="nombre">
         </mat-form-field>
-        
+
         <mat-form-field appearance="outline">
-          <input matInput formControlName="apellido" readonly>
+          <mat-label>Apellido</mat-label>
+          <input matInput formControlName="apellido">
         </mat-form-field>
-        
+
         <mat-form-field appearance="outline">
-          <input matInput formControlName="dni" readonly>
+          <mat-label>DNI</mat-label>
+          <input matInput formControlName="dni">
         </mat-form-field>
-        
+
         <mat-form-field appearance="outline">
-          <input matInput formControlName="email">
+          <mat-label>Email</mat-label>
+          <input matInput formControlName="email" type="email">
+          <mat-error *ngIf="usuarioForm.get('email')?.hasError('required')">
+            El email es requerido
+          </mat-error>
         </mat-form-field>
-        
+
         <mat-form-field appearance="outline">
+          <mat-label>Teléfono</mat-label>
+          <input matInput formControlName="telefono" type="tel">
+          <mat-error *ngIf="usuarioForm.get('telefono')?.hasError('required')">
+            El teléfono es requerido
+          </mat-error>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <mat-label>Nueva Contraseña (opcional)</mat-label>
           <input matInput type="password" formControlName="password">
         </mat-form-field>
-        
-        <mat-form-field appearance="outline">
-          <input matInput type="date" formControlName="fechaNacimiento">
-        </mat-form-field>
-        
+
         <div class="button-container">
-          <button mat-raised-button color="primary" type="submit" [disabled]="!usuarioForm.valid">Guardar cambios</button>
+          <button mat-raised-button color="primary" type="submit" 
+                  [disabled]="!usuarioForm.valid || loading">
+            {{loading ? 'Guardando...' : 'Guardar cambios'}}
+          </button>
         </div>
       </form>
     </mat-card-content>
   </mat-card>
+
+  <div class="loading-overlay" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
 </div>

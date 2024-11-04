@@ -2,56 +2,90 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/auth.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { MatSnackBar } from '@angular/material/snack-bar';
+
 @Component({
   selector: 'app-mis-datos',
   templateUrl: './mis-datos.component.html',
   styleUrls: ['./mis-datos.component.css']
 })
 export class MisDatosComponent implements OnInit {
-guardarCambios() {
-throw new Error('Method not implemented.');
-}
   usuarioForm: FormGroup;
-  usuario: any;
+  loading = false;
 
   constructor(
     private authService: AuthService,
     private fb: FormBuilder,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.usuarioForm = this.fb.group({
-      nombre: ['', Validators.required],
-      apellido: ['', Validators.required],
-      dni: ['', Validators.required],
+      nombre: [{value: '', disabled: true}],
+      apellido: [{value: '', disabled: true}],
+      dni: [{value: '', disabled: true}],
       email: ['', [Validators.required, Validators.email]],
-      password: ['', Validators.required],
-      fechaNacimiento: ['', Validators.required]
+      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{7}$')]],
+      password: ['', [Validators.minLength(3)]]
     });
   }
 
   ngOnInit() {
-    this.usuario = this.authService.getCurrentUser();
-    if (this.usuario) {
+    const usuario = this.authService.getCurrentUser();
+    if (usuario) {
       this.usuarioForm.patchValue({
-        nombre: this.usuario.nombre,
-        apellido: this.usuario.apellido,
-        dni: this.usuario.dni,
-        email: this.usuario.email,
-        password: this.usuario.password,
-        fechaNacimiento: this.usuario.fechaNacimiento || ''
+        nombre: usuario.nombre,
+        apellido: usuario.apellido,
+        dni: usuario.dni,
+        email: usuario.email,
+        telefono: usuario.telefono || '',
+      });
+    } else {
+      this.router.navigate(['/login']);
+    }
+  }
+
+  guardarCambios() {
+    if (this.usuarioForm.valid) {
+      this.loading = true;
+      const usuario = this.authService.getCurrentUser();
+      const cambios = {
+        id: usuario.id,
+        email: this.usuarioForm.get('email')?.value,
+        telefono: this.usuarioForm.get('telefono')?.value,
+        password: this.usuarioForm.get('password')?.value || undefined
+      };
+
+      this.authService.actualizarUsuario(cambios).subscribe({
+        next: (response) => {
+          if (response.codigo === 200) {
+            const usuarioActualizado = { ...usuario, ...cambios };
+            localStorage.setItem('usuario', JSON.stringify(usuarioActualizado));
+            this.mostrarMensaje('Datos actualizados correctamente');
+            this.router.navigate(['/dashboard']);
+          }
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          this.mostrarError('Error al actualizar los datos');
+        },
+        complete: () => {
+          this.loading = false;
+        }
       });
     }
   }
 
-/*   guardarCambios() {
-    if (this.usuarioForm.valid) {
-      const cambios = this.usuarioForm.value;
-      if (this.authService.actualizarDatosUsuario(this.usuario.id, cambios)) {
-        alert('Cambios guardados con éxito');
-        this.router.navigate(['/dashboard']);
-      } else {
-        alert('Error al guardar los cambios');
-      }
-    }
-  } */
+  private mostrarMensaje(mensaje: string) {
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000
+    });
+  }
+
+  private mostrarError(mensaje: string) {
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
+  }
 }
+

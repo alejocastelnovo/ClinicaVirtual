@@ -25,6 +25,11 @@ import { MatOptionModule } from '@angular/material/core';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MatTableModule } from '@angular/material/table';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatListModule } from '@angular/material/list';
+
 
 
 /* Forms */
@@ -47,6 +52,7 @@ import { TurnosProgramadosComponent } from './components/medico/turnos-programad
 import { GestionAgendaComponent } from './components/medico/gestion-agenda/gestion-agenda.component';
 import { CrearUsuarioComponent } from './components/administrador/crear-usuario/crear-usuario.component';
 import { NavComponent } from './components/nav/nav.component';
+import { DialogExitoComponent } from './components/shared/dialog-exito/dialog-exito.component';
 
 /* Servicios */
 import { AuthService } from './services/auth.service';
@@ -71,6 +77,7 @@ import { EspecialidadService } from './services/especialidad.service';
     GestionAgendaComponent,
     CrearUsuarioComponent,
     NavComponent,
+    DialogExitoComponent
   ],
   imports: [
     BrowserModule,
@@ -94,7 +101,10 @@ import { EspecialidadService } from './services/especialidad.service';
     MatDatepickerModule,
     MatNativeDateModule,
     MatTableModule,
-
+    MatExpansionModule,
+    MatToolbarModule,
+    MatSidenavModule,
+    MatListModule,
   ],
   providers: [
     AuthService,
