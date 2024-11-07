@@ -2,13 +2,14 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Subscription } from 'rxjs';
+import { LoginService } from '../../services/login.service';
 
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.css']
 })
-export class HeaderComponent implements OnInit, OnDestroy {
+export class HeaderComponent implements OnInit {
 
   userName: string | null = null;
   userType: string | null = null;
@@ -20,15 +21,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
   constructor(private router: Router, private authService: AuthService) { }
 
   ngOnInit() {
-    const usuarioLogueado = this.authService.getCurrentUser();
-  }
 
-  ngOnDestroy() {
-    if (this.userSubscription) {
-      this.userSubscription.unsubscribe();
-    }
   }
-
 
   getUserTypeShort(userType: string | null): string {
     switch (userType) {
@@ -50,6 +44,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   logout() {
+    localStorage.clear();
     this.authService.logout();
     this.router.navigate(['/login']);
   }

@@ -15,7 +15,7 @@ operador; 1  ///  paciente;2 //// medico;3 //// admin;4
         </mat-card-header>
 
         <mat-card-content>
-            <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+            <form [formGroup]="loginForm" (ngSubmit)="login()">
                 <mat-form-field appearance="fill">
                     <mat-label>Usuario (DNI)</mat-label>
                     <input matInput formControlName="usuario" type="text">

@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AuthService } from '../../services/auth.service';
+import { LoginService } from 'src/app/services/login.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { AuthService } from 'src/app/services/auth.service';
+
 
 @Component({
   selector: 'app-login',
@@ -19,47 +21,44 @@ export class LoginComponent {
 
   constructor(
     private fb: FormBuilder,
-    private authService: AuthService,
+    private loginService: LoginService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private authService: AuthService,
+
   ) {
-    // Si ya está logueado, redirigir al dashboard
-    if (this.authService.isLoggedIn()) {
+
+    this.loginForm = this.fb.group({
+      dni: ['', Validators.required],
+      password: ['', Validators.required],
+    });
+
+
+    // Si ya está logueado, lo manda al dashboard
+    if (this.authService.isLoggedin()) {
       this.router.navigate(['/dashboard']);
     }
   }
 
-  onSubmit() {
-    if (this.loginForm.valid) {
-      this.loading = true;
-      const { usuario, password } = this.loginForm.value;
+  login() {
+    let body = {
+      usuario: this.loginForm.controls['dni'].value,
+      password: this.loginForm.controls['password'].value 
+    };
 
-      this.authService.login(usuario, password).subscribe({
-        next: (response) => {
-          if (response.codigo === 200) {
-            this.snackBar.open('Inicio de sesión exitoso', 'Cerrar', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
-            
-            //dashboard general
-            this.router.navigate(['/dashboard']);
-          } else {
-            this.mostrarError(response.mensaje || 'Error en el inicio de sesión');
-          }
-        },
-        error: (error) => {
-          console.error('Error en login:', error);
-          this.mostrarError('Error en el inicio de sesión. Por favor, intente nuevamente.');
-        },
-        complete: () => {
-          this.loading = false;
-        }
-      });
-    } else {
-      this.mostrarError('Por favor, complete todos los campos');
-    }
+    this.loginService.login(JSON.stringify(body)).subscribe((data: any) => {
+      if (data.codigo === 200 && data.payload.length > 0) {
+        localStorage.setItem('jwt', data.jwt)
+        localStorage.setItem('id', data.payload[0].id);
+        localStorage.setItem('rol', data.payload[0].rol);
+        localStorage.setItem('nombreUsuario', data.payload[0].nombre + ' ' + data.payload[0].apellido);
+        this.router.navigate(['/pantalla-principal']);
+      }else{
+        this.mostrarError(data.mensaje || 'Error en el inicio de sesión');
+      }
+    })
   }
+
 
   private mostrarError(mensaje: string) {
     this.snackBar.open(mensaje, 'Cerrar', {

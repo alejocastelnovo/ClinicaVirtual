@@ -4,7 +4,7 @@
         <a routerLink="/" class="logo-text">Clinica virtual</a>
     </div>
 
-    <div class="auth-buttons" *ngIf="!authService.isLoggedIn()">
+    <div class="auth-buttons" *ngIf="!authService.isLoggedin()">
         <button mat-button routerLink="/login">
             <mat-icon>login</mat-icon>
             Iniciar sesión
@@ -15,7 +15,7 @@
         </button>
     </div>
 
-    <div class="user-info" *ngIf="authService.isLoggedIn()">
+    <div class="user-info" *ngIf="authService.isLoggedin()">
         <div class="user-image-container">
             <img [src]="userImagePath" alt="Icono de usuario" class="user-icon">
 

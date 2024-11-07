@@ -1,8 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { LoginService } from '../../services/login.service';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-register',
@@ -11,14 +13,20 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 })
 export class RegisterComponent {
   registerForm: FormGroup;
-  loading = false;
-  mensajeError: string | null = null;
+  token: any;
+  rol: any;
+  id: any;
+  hoy: Date = new Date();
 
   constructor(
     private fb: FormBuilder, 
     private authService: AuthService, 
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackbar: MatSnackBar, 
+    @Inject(MAT_DIALOG_DATA) public data: { isLoginMode: boolean },
+    private dialogRef: MatDialogRef<RegisterComponent>,
+    private LoginService: LoginService,
+
   ) {
     this.registerForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
@@ -31,44 +39,30 @@ export class RegisterComponent {
     });
   }
 
-  onSubmit(): void {
-    if (this.registerForm.valid) {
-      this.loading = true;
-      const userData = {
-        dni: this.registerForm.value.dni,
-        apellido: this.registerForm.value.apellido,
-        nombre: this.registerForm.value.nombre,
-        fecha_nacimiento: this.registerForm.value.fechaNacimiento,
-        password: this.registerForm.value.password,
-        email: this.registerForm.value.email,
-        rol: 'paciente',
-        telefono: this.registerForm.value.telefono,
-      };
-
-      this.authService.crearUsuario(userData).subscribe({
-        next: (response) => {
-          if (response.codigo === 200) {
-            this.mostrarMensaje('¡Registro exitoso! Redirigiendo al login...', 'success');
-            setTimeout(() => this.router.navigate(['/login']), 2000);
-          } else {
-            this.mostrarMensaje(response.mensaje || 'Error en el registro', 'error');
-          }
-        },
-        error: (error) => {
-          console.error('Error al crear el usuario:', error);
-          this.mostrarMensaje('Error en el servidor. Por favor, intente más tarde', 'error');
-        },
-        complete: () => {
-          this.loading = false;
-        }
-      });
-    } else {
-      this.mostrarErroresValidacion();
+  register(): void {
+    let body = {
+      dni: this.registerForm.controls['dni'].value,
+      apellido: this.registerForm.controls['apellido'].value,
+      nombre: this.registerForm.controls['nombre'].value,
+      fecha_nacimiento: this.registerForm.controls['fechaNacimiento'].value,
+      password: this.registerForm.controls['password'].value,
+      rol: 'paciente',
+      email: this.registerForm.controls['email'].value,
+      telefono: this.registerForm.controls['telefono'].value,
     }
+    
+    this.LoginService.register(JSON.stringify(body)).subscribe((data: any) => {
+      if (data.codigo === 200) {
+        this.openSnackBar('Usuario creado correctamente', 'Aceptar')
+        this.dialogRef.close(true);
+      } else {
+        this.openSnackBar(data.mensaje, 'Aceptar')
+      }
+    })
   }
 
   private mostrarMensaje(mensaje: string, tipo: 'success' | 'error'): void {
-    this.snackBar.open(mensaje, 'Cerrar', {
+    this.snackbar.open(mensaje, 'Cerrar', {
       duration: 3000,
       panelClass: tipo === 'success' ? ['success-snackbar'] : ['error-snackbar']
     });
@@ -97,4 +91,10 @@ export class RegisterComponent {
     this.registerForm.reset();
     this.router.navigate(['/login']);
   }
+
+  openSnackBar(message: string, action: string) {
+    this.snackbar.open(message, action, { duration: 2000 });
+  }
+
 }
+

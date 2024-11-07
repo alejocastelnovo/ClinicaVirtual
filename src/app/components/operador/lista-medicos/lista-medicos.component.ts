@@ -32,7 +32,7 @@ export class ListaMedicosComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        if (!this.authService.isLoggedIn() || this.authService.getCurrentUser()?.rol !== 'operador') {
+        if (!this.authService.isLoggedin() || this.authService.getCurrentUser()?.rol !== 'operador') {
             this.router.navigate(['/login']);
             return;
         }

@@ -7,6 +7,8 @@ import { EspecialidadService } from '../../../services/especialidad.service';
 import { AgendaService } from '../../../services/agenda.service';
 import { AuthService } from '../../../services/auth.service';
 import { finalize } from 'rxjs/operators';
+import { UsuariosService } from '../../../services/usuarios.service';
+import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-nuevo-turno',
@@ -29,6 +31,7 @@ export class NuevoTurnoComponent implements OnInit {
   horariosDisponibles: string[] = [];
   loading = false;
   agendaSeleccionada: any = null;
+  LoginService: any;
 
   constructor(
     private fb: FormBuilder,
@@ -41,7 +44,7 @@ export class NuevoTurnoComponent implements OnInit {
   ) {}
 
   ngOnInit() {
-    if (!this.authService.isLoggedIn()) {
+    if (!this.LoginService.isLoggedIn()) {
       this.router.navigate(['/login']);
       return;
     }

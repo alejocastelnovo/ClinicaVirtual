@@ -4,6 +4,8 @@ import { AgendaService } from '../../../services/agenda.service';
 import { AuthService } from '../../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { LoginService } from 'src/app/services/login.service';
+import { EspecialidadService } from '../../../services/especialidad.service';
 
 interface Agenda {
   id: number;
@@ -38,7 +40,9 @@ export class GestionAgendaComponent implements OnInit {
     private agendaService: AgendaService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private loginService: LoginService,
+    private EspecialidadService: EspecialidadService
   ) {
     this.agendaForm = this.fb.group({
       hora_entrada: ['', Validators.required],
@@ -52,10 +56,10 @@ export class GestionAgendaComponent implements OnInit {
   }
 
   private cargarEspecialidadMedico() {
-    const usuario = this.authService.getCurrentUser();
-    if (usuario && usuario.id) {
-      this.authService.obtenerEspecialidadMedico(usuario.id).subscribe({
-        next: (response) => {
+    const usuario = this.authService.isLoggedin() ? this.authService.getCurrentUser() : null;
+    if (usuario) {
+      this.EspecialidadService.obtenerEspecialidadesMedico(usuario.id).subscribe({
+        next: (response: any) => {
           if (response.codigo === 200 && response.payload.length > 0) {
             const usuarioActualizado = {
               ...usuario,
@@ -66,7 +70,7 @@ export class GestionAgendaComponent implements OnInit {
             this.mostrarError('No se encontraron especialidades asignadas al médico');
           }
         },
-        error: (error) => {
+        error: (error: any) => {
           console.error('Error:', error);
           this.mostrarError('Error al obtener la especialidad del médico');
         }
