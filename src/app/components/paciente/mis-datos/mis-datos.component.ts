@@ -54,6 +54,7 @@ export class MisDatosComponent implements OnInit {
         this.usuarioForm.controls['telefono'].setValue(this.datos.telefono);
         this.usuarioForm.controls['password'].setValue(this.datos.password);
         this.usuarioForm.controls['correo'].setValue(this.datos.email);
+        this.usuarioForm.controls['fecha_nacimiento'].setValue(this.datos.fecha_nacimiento);
         this.usuarioForm.disable();
       } else if (data.codigo === -1) {
         this.jwtExpirado();
