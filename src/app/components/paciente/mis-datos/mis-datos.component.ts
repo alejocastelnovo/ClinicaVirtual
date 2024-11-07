@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { UsuariosService } from 'src/app/services/usuarios.service';
+import {format} from 'date-fns';
 
 @Component({
   selector: 'app-mis-datos',
@@ -50,11 +51,11 @@ export class MisDatosComponent implements OnInit {
         this.usuarioForm.controls['nombre'].setValue(this.datos.nombre);
         this.usuarioForm.controls['apellido'].setValue(this.datos.apellido);
         this.usuarioForm.controls['dni'].setValue(this.datos.dni);
+        this.usuarioForm.controls['fecha_nacimiento'].setValue(format(this.datos.fecha_nacimiento, 'dd/MM/yyyy'));
         this.usuarioForm.controls['email'].setValue(this.datos.email);
         this.usuarioForm.controls['telefono'].setValue(this.datos.telefono);
         this.usuarioForm.controls['password'].setValue(this.datos.password);
         this.usuarioForm.controls['correo'].setValue(this.datos.email);
-        this.usuarioForm.controls['fecha_nacimiento'].setValue(this.datos.fecha_nacimiento);
         this.usuarioForm.disable();
       } else if (data.codigo === -1) {
         this.jwtExpirado();
