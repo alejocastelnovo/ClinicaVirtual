@@ -19,11 +19,13 @@ export class NavComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        const usuarioLogueado = this.authService.getCurrentUser();
-        if (usuarioLogueado) {
-            this.userName = `${usuarioLogueado.nombre} ${usuarioLogueado.apellido}`;
-            this.userType = usuarioLogueado.rol;
-            this.userTypeShort = this.getUserTypeShort(usuarioLogueado.rol);
+        const nombreUsuario = localStorage.getItem('nombreUsuario');
+        const rol = localStorage.getItem('rol');
+        
+        if (nombreUsuario && rol) {
+            this.userName = nombreUsuario;
+            this.userType = rol;
+            this.userTypeShort = this.getUserTypeShort(rol);
         }
     }
 

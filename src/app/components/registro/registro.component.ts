@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, Optional } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
@@ -23,8 +23,8 @@ export class RegisterComponent {
     private authService: AuthService, 
     private router: Router,
     private snackbar: MatSnackBar, 
-    @Inject(MAT_DIALOG_DATA) public data: { isLoginMode: boolean },
-    private dialogRef: MatDialogRef<RegisterComponent>,
+    @Optional() @Inject(MAT_DIALOG_DATA) public data: { isLoginMode: boolean },
+    @Optional() private dialogRef: MatDialogRef<RegisterComponent>,
     private LoginService: LoginService,
 
   ) {

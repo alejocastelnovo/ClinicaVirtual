@@ -18,7 +18,9 @@
     <div class="user-info" *ngIf="authService.isLoggedin()">
         <div class="user-image-container">
             <img [src]="userImagePath" alt="Icono de usuario" class="user-icon">
-
+            <div class="tooltip">
+                <span>{{userType}}</span>
+            </div>
         </div>
         <span class="user-name">{{ userName }}</span>
         <button mat-button (click)="navigateToHome()">
