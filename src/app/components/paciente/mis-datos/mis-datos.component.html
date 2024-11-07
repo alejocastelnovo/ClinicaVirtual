@@ -8,22 +8,22 @@
       <form [formGroup]="usuarioForm" (ngSubmit)="guardarCambios()">
         <mat-form-field appearance="outline">
           <mat-label>Nombre</mat-label>
-          <input matInput formControlName="nombre">
+          <input matInput formControlName="nombre" [readonly]="true">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Apellido</mat-label>
-          <input matInput formControlName="apellido">
+          <input matInput formControlName="apellido"[readonly]="true">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>DNI</mat-label>
-          <input matInput formControlName="dni" readonly>
+          <input matInput formControlName="dni" [readonly]="true">
         </mat-form-field>
 
         <mat-form-field appearance="outline">
           <mat-label>Fecha de Nacimiento</mat-label>
-          <input matInput formControlName="fecha_nacimiento" readonly>
+          <input matInput formControlName="fecha_nacimiento" [readonly]="true">
         </mat-form-field>
 
         <mat-form-field appearance="outline">

@@ -43,3 +43,10 @@ button {
     align-items: center;
     z-index: 1000;
 }
+
+input[readonly] {
+    color: rgba(0, 0, 0, 0.87);
+    background-color: rgba(0, 0, 0, 0.04);
+    cursor: not-allowed;
+}
+
