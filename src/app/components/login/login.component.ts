@@ -52,7 +52,7 @@ export class LoginComponent {
         localStorage.setItem('id', data.payload[0].id);
         localStorage.setItem('rol', data.payload[0].rol);
         localStorage.setItem('nombreUsuario', data.payload[0].nombre + ' ' + data.payload[0].apellido);
-        this.router.navigate(['/pantalla-principal']);
+        this.router.navigate(['/dashboard']);
       }else{
         this.mostrarError(data.mensaje || 'Error en el inicio de sesión');
       }

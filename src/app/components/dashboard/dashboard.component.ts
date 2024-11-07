@@ -16,6 +16,7 @@ export class DashboardComponent implements OnInit {
   ngOnInit() {
     const id = localStorage.getItem('id') ?? '';
     const jwt = localStorage.getItem('jwt') ?? '';
+    const userType = localStorage.getItem('rol') ?? '';
 
     if (!id || !jwt) {
       console.log('No hay usuario logueado o token no disponible');
