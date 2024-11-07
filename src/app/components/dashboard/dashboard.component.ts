@@ -17,6 +17,7 @@ export class DashboardComponent implements OnInit {
     const id = localStorage.getItem('id') ?? '';
     const jwt = localStorage.getItem('jwt') ?? '';
     const storedRol = localStorage.getItem('rol') ?? '';
+    const storedNombreUsuario = localStorage.getItem('nombreUsuario') ?? '';
 
     if (!id || !jwt) {
       console.log('No hay usuario logueado o token no disponible');
@@ -24,19 +25,16 @@ export class DashboardComponent implements OnInit {
     }
 
     this.userType = storedRol.toLowerCase();
+    const [nombre, apellido] = storedNombreUsuario.split(' ');
 
-    const usuarioString = this.usuariosService.obtenerUsuario(id, jwt);
-    usuarioString.subscribe((data: any) => {
-      if (data.codigo === 200 && data.payload) {
-        this.usuario = data.payload;
-        this.userType = this.usuario.rol?.toLowerCase() || storedRol.toLowerCase();
-        console.log('Usuario logueado:', this.usuario);
-        console.log('Tipo de usuario:', this.userType);
-      } else {
-        console.log('No hay usuario logueado');
-      }
-    }, error => {
-      console.error('Error al obtener el usuario:', error);
-    });
+    this.usuario = {
+      nombre: nombre || '',
+      apellido: apellido || '',
+      rol: storedRol
+    };
+
+    console.log('Usuario logueado:', this.usuario);
+    console.log('Tipo de usuario:', this.userType);
   }
 }
+
