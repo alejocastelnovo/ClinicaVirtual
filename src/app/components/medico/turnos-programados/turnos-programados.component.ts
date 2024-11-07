@@ -3,94 +3,76 @@ import { TurnoService } from '../../../services/turno.service';
 import { AuthService } from '../../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { FormControl } from '@angular/forms';
-
-interface Turno {
-  id_turno: number;
-  fecha: string;
-  hora: string;
-  nombre_paciente: string;
-  fecha_nacimiento: string;
-  cobertura: string;
-  nota: string;
-}
+import { FormControl, FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { AgendaService } from 'src/app/services/agenda.service';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-turnos-programados',
   templateUrl: './turnos-programados.component.html',
   styleUrls: ['./turnos-programados.component.css']
 })
-export class TurnosProgramadosComponent implements OnInit {
-  turnos: Turno[] = [];
+export class TurnosProgramadosComponent{
+  id: any;
+  token: any;
+  displayedColumns = ['fecha', 'hora_entrada', 'hora_salida'];
+  horarios: FormGroup;
+  agenda: any;
+  hoy: Date = new Date();
+  fecha = new Date().toISOString().split('T')[0];
+  
   loading = false;
   fechaSeleccionada = new FormControl(new Date());
 
-  constructor(
-    private turnoService: TurnoService,
-    private authService: AuthService,
-    private snackBar: MatSnackBar,
-    private router: Router
-  ) {}
-
-  ngOnInit() {
-    this.cargarTurnos();
+  constructor(private router: Router, private snackBar: MatSnackBar, private fb: FormBuilder, private agendaService: AgendaService, private dialog: MatDialog) {
+    this.id = localStorage.getItem('id');
+    this.token = localStorage.getItem('jwt');
+    this.horarios = this.fb.group({
+      fecha: [new Date(), Validators.required]
+    });
+    const hoy = new Date().toISOString();
+    this.obtenerAgenda(hoy);
+    this.horarios.get('fecha')?.valueChanges.subscribe((value) => {
+      this.fecha = this.horarios.controls['fecha'].value.toISOString().split('T')[0]
+    })
   }
 
-  cargarTurnos() {
-    const usuario = this.authService.getCurrentUser();
-    if (!usuario) {
-      this.router.navigate(['/login']);
-      return;
+  obtenerAgenda(fecha: any) {
+    if (fecha === '') {
+      fecha = this.horarios.controls['fecha'].value;
     }
+    this.agendaService.obtenerAgenda(this.id).subscribe((data: any) => {
+      if (data.codigo === 200 && data.payload.length > 0) {
 
-    this.loading = true;
-    const fecha = this.formatearFechaParaAPI(this.fechaSeleccionada.value!);
+        const fechaSeleccionada = new Date(this.horarios.controls['fecha'].value);
 
-    this.turnoService.obtenerTurnosMedico(usuario.id, fecha).subscribe({
-      next: (response) => {
-        if (response.codigo === 200) {
-          this.turnos = response.payload;
-        } else {
-          this.mostrarError('Error al cargar los turnos');
-        }
-      },
-      error: (error) => {
-        console.error('Error:', error);
-        this.mostrarError('Error al cargar los turnos');
-      },
-      complete: () => {
-        this.loading = false;
+        let fechaFormatted = fechaSeleccionada.toISOString().split('T')[0];
+
+        const payload = Array.isArray(data.payload) ? data.payload : Object.values(data.payload);
+
+        this.agenda = payload.filter((horario: { fecha: any; }) => {
+          const fechaHorario = new Date(horario.fecha).toISOString().split('T')[0];
+          return fechaHorario === fechaFormatted;
+        });
+        console.log(this.agenda);
+      } else if (data.codigo === -1) {
+        this.jwtExpirado();
+      } else {
+        this.openSnackBar(data.mensaje);
       }
-    });
+    })
+  }
+  jwtExpirado() {
+    this.openSnackBar('Sesión expirada.');
+
+    setTimeout(() => {
+      this.router.navigate(['/home']);
+    }, 1000);
   }
 
-  onFechaChange() {
-    this.cargarTurnos();
-  }
-
-  formatearFechaParaAPI(fecha: Date): string {
-    return fecha.toISOString().split('T')[0];
-  }
-
-  formatearFechaMostrar(fecha: string): string {
-    return new Date(fecha).toLocaleDateString('es-AR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  }
-
-  private mostrarMensaje(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000
-    });
-  }
-
-  private mostrarError(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000,
-      panelClass: ['error-snackbar']
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'Cerrar', {
+      duration: 5000,
     });
   }
 }

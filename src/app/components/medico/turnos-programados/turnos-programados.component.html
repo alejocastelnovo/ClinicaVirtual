@@ -3,41 +3,46 @@
         <mat-card-title>Turnos Programados</mat-card-title>
 
         <mat-card-content>
-            <mat-form-field appearance="fill">
-                <mat-label>Seleccionar fecha</mat-label>
-                <input matInput [matDatepicker]="picker" [formControl]="fechaSeleccionada"
-                    (dateChange)="onFechaChange()">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
-            </mat-form-field>
+            <form [formGroup]="horarios">
+                <mat-form-field appearance="fill">
+                    <mat-label>Seleccionar fecha</mat-label>
+                    <input matInput [matDatepicker]="picker" formControlName="fecha"
+                        (dateChange)="obtenerAgenda($event.value)">
+                    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+                    <mat-datepicker #picker></mat-datepicker>
+                </mat-form-field>
+            </form>
 
             <div *ngIf="loading" class="loading-spinner">
                 <mat-spinner diameter="40"></mat-spinner>
             </div>
 
-            <div *ngIf="!loading && turnos.length === 0" class="no-turnos">
+            <div *ngIf="!loading && (!agenda || agenda.length === 0)" class="no-turnos">
                 <p>No hay turnos programados para esta fecha</p>
             </div>
 
-            <mat-accordion *ngIf="!loading && turnos.length > 0">
-                <mat-expansion-panel *ngFor="let turno of turnos">
-                    <mat-expansion-panel-header>
-                        <mat-panel-title>
-                            {{turno.hora}} - {{turno.nombre_paciente}}
-                        </mat-panel-title>
-                        <mat-panel-description>
-                            {{turno.cobertura}}
-                        </mat-panel-description>
-                    </mat-expansion-panel-header>
+            <table mat-table [dataSource]="agenda" class="mat-elevation-z8" *ngIf="!loading && agenda && agenda.length > 0">
+                <!-- Fecha Column -->
+                <ng-container matColumnDef="fecha">
+                    <th mat-header-cell *matHeaderCellDef> Fecha </th>
+                    <td mat-cell *matCellDef="let elemento"> {{elemento.fecha | date:'dd/MM/yyyy'}} </td>
+                </ng-container>
 
-                    <div class="turno-detalles">
-                        <p><strong>Paciente:</strong> {{turno.nombre_paciente}}</p>
-                        <p><strong>Fecha de nacimiento:</strong> {{formatearFechaMostrar(turno.fecha_nacimiento)}}</p>
-                        <p><strong>Cobertura:</strong> {{turno.cobertura}}</p>
-                        <p><strong>Nota:</strong> {{turno.nota}}</p>
-                    </div>
-                </mat-expansion-panel>
-            </mat-accordion>
+                <!-- Hora Entrada Column -->
+                <ng-container matColumnDef="hora_entrada">
+                    <th mat-header-cell *matHeaderCellDef> Hora Entrada </th>
+                    <td mat-cell *matCellDef="let elemento"> {{elemento.hora_entrada}} </td>
+                </ng-container>
+
+                <!-- Hora Salida Column -->
+                <ng-container matColumnDef="hora_salida">
+                    <th mat-header-cell *matHeaderCellDef> Hora Salida </th>
+                    <td mat-cell *matCellDef="let elemento"> {{elemento.hora_salida}} </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+            </table>
         </mat-card-content>
     </mat-card>
 </div>
