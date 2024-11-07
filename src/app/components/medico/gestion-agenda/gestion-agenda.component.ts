@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { AgendaService } from '../../../services/agenda.service';
 import { AuthService } from '../../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -14,6 +14,11 @@ interface Agenda {
   hora_salida: string;
 }
 
+interface RangoHorario {
+  hora_entrada: string;
+  hora_salida: string;
+}
+
 @Component({
   selector: 'app-gestion-agenda',
   templateUrl: './gestion-agenda.component.html',
@@ -24,7 +29,9 @@ export class GestionAgendaComponent implements OnInit {
   loading = false;
   agendaActual: Agenda | null = null;
   horas = Array.from({length: 13}, (_, i) => `${(i + 8).toString().padStart(2, '0')}:00`);
-diasSemana: any;
+  diasSemana: any;
+  fechaSeleccionada = new FormControl(new Date());
+  rangosHorarios: RangoHorario[] = [];
 
   constructor(
     private fb: FormBuilder,
@@ -34,7 +41,6 @@ diasSemana: any;
     private router: Router
   ) {
     this.agendaForm = this.fb.group({
-      fecha: ['', Validators.required],
       hora_entrada: ['', Validators.required],
       hora_salida: ['', Validators.required]
     }, { validator: this.horariosValidos });
@@ -42,6 +48,30 @@ diasSemana: any;
 
   ngOnInit() {
     this.cargarAgenda();
+    this.cargarEspecialidadMedico();
+  }
+
+  private cargarEspecialidadMedico() {
+    const usuario = this.authService.getCurrentUser();
+    if (usuario && usuario.id) {
+      this.authService.obtenerEspecialidadMedico(usuario.id).subscribe({
+        next: (response) => {
+          if (response.codigo === 200 && response.payload.length > 0) {
+            const usuarioActualizado = {
+              ...usuario,
+              id_especialidad: response.payload[0].id_especialidad
+            };
+            localStorage.setItem('user', JSON.stringify(usuarioActualizado));
+          } else {
+            this.mostrarError('No se encontraron especialidades asignadas al médico');
+          }
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          this.mostrarError('Error al obtener la especialidad del médico');
+        }
+      });
+    }
   }
 
   cargarAgenda() {
@@ -73,6 +103,117 @@ diasSemana: any;
         this.loading = false;
       }
     });
+  }
+
+  onFechaChange() {
+    const fecha = this.formatearFecha(this.fechaSeleccionada.value!);
+    this.cargarAgendaPorFecha(fecha);
+  }
+  
+  cargarAgendaPorFecha(fecha: string) {
+    const usuario = this.authService.getCurrentUser();
+    if (!usuario) {
+      this.router.navigate(['/login']);
+      return;
+    }
+  
+    this.loading = true;
+    this.agendaService.obtenerAgenda(usuario.id).subscribe({
+      next: (response) => {
+        if (response.codigo === 200) {
+          this.rangosHorarios = response.payload
+            .filter((agenda: Agenda) => agenda.fecha === fecha)
+            .map((agenda: Agenda) => ({
+              hora_entrada: agenda.hora_entrada,
+              hora_salida: agenda.hora_salida
+            }));
+        } else {
+          this.rangosHorarios = [];
+        }
+      },
+      error: (error) => {
+        console.error('Error:', error);
+        this.mostrarError('Error al cargar la agenda');
+        this.rangosHorarios = [];
+      },
+      complete: () => {
+        this.loading = false;
+      }
+    });
+  }
+  
+  agregarRangoHorario() {
+    if (this.agendaForm.valid && this.fechaSeleccionada.value) {
+      const usuario = this.authService.getCurrentUser();
+      
+      if (!usuario || !usuario.id) {
+        this.mostrarError('Error: Información de usuario incompleta');
+        this.router.navigate(['/login']);
+        return;
+      }
+
+      const agenda = {
+        id_medico: usuario.id,
+        id_especialidad: 1,
+        fecha: this.formatearFecha(this.fechaSeleccionada.value),
+        hora_entrada: this.agendaForm.value.hora_entrada,
+        hora_salida: this.agendaForm.value.hora_salida
+      };
+
+      this.loading = true;
+      this.agendaService.crearAgenda(agenda).subscribe({
+        next: (response) => {
+          if (response && response.codigo === 200) {
+            this.mostrarMensaje('Horario agregado correctamente');
+            this.cargarAgendaPorFecha(agenda.fecha);
+            this.agendaForm.reset();
+          } else {
+            this.mostrarError(response?.mensaje || 'Error al guardar el horario');
+          }
+        },
+        error: (error) => {
+          console.error('Error completo:', error);
+          this.mostrarError('Error al guardar la agenda');
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
+    } else {
+      this.mostrarError('Por favor, complete todos los campos requeridos');
+    }
+  }
+  
+  private formatearFecha(fecha: Date): string {
+    return fecha.toISOString().split('T')[0];
+  }
+
+  eliminarRango(rango: RangoHorario) {
+    if (this.agendaActual) {
+      this.loading = true;
+      this.agendaService.modificarAgenda(this.agendaActual.id, {
+        ...this.agendaActual,
+        hora_entrada: '',
+        hora_salida: ''
+      }).subscribe({
+        next: (response) => {
+          if (response.codigo === 200) {
+            this.mostrarMensaje('Horario eliminado correctamente');
+            const fecha = this.formatearFecha(this.fechaSeleccionada.value!);
+            this.cargarAgendaPorFecha(fecha);
+          } else {
+            this.mostrarError(response.mensaje);
+          }
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          this.mostrarError('Error al eliminar el horario');
+        },
+        complete: () => {
+          this.loading = false;
+        }
+      });
+    }
   }
 
   guardarAgenda() {
@@ -140,3 +281,5 @@ diasSemana: any;
     });
   }
 }
+
+

@@ -21,14 +21,15 @@ export class AgendaService {
       'Authorization': token || ''
     });
   }
+  
+  crearAgenda(agenda: any): Observable<any> {
+    return this.http.post(`${this.apiUrl}/crearAgenda`, agenda, {
+      headers: this.getHeaders()
+    });
+  }
 
   obtenerAgenda(idMedico: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/obtenerAgenda/${idMedico}`, 
-      { headers: this.getHeaders() });
-  }
-
-  crearAgenda(agenda: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/crearAgenda`, agenda,
       { headers: this.getHeaders() });
   }
 
