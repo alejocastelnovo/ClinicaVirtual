@@ -67,6 +67,12 @@ export class AuthService {
     return localStorage.getItem('jwt');
   }
 
+  obtenerEspecialidadMedico(idMedico: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtenerEspecialidadesMedico/${idMedico}`, {
+      headers: this.getHeaders()
+    });
+  }
+
 
   /* Para que me de el usuario actual  */
   getCurrentUser(): any {
