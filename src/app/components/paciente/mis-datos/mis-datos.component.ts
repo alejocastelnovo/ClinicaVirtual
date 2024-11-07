@@ -20,9 +20,9 @@ export class MisDatosComponent implements OnInit {
     private snackBar: MatSnackBar
   ) {
     this.usuarioForm = this.fb.group({
-      nombre: [{value: '', disabled: true}],
-      apellido: [{value: '', disabled: true}],
-      dni: [{value: '', disabled: true}],
+      nombre: [{ value: '', disabled: true }],
+      apellido: [{ value: '', disabled: true }],
+      dni: [{ value: '', disabled: true }],
       email: ['', [Validators.required, Validators.email]],
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{7}$')]],
       password: ['', [Validators.minLength(3)]]
@@ -50,9 +50,14 @@ export class MisDatosComponent implements OnInit {
       const usuario = this.authService.getCurrentUser();
       const cambios = {
         id: usuario.id,
+        dni: usuario.dni,
+        apellido: usuario.apellido,
+        nombre: usuario.nombre,
+        fecha_nacimiento: usuario.fecha_nacimiento,
+        rol: usuario.rol,
         email: this.usuarioForm.get('email')?.value,
         telefono: this.usuarioForm.get('telefono')?.value,
-        password: this.usuarioForm.get('password')?.value || undefined
+        password: this.usuarioForm.get('password')?.value || usuario.password
       };
 
       this.authService.actualizarUsuario(cambios).subscribe({

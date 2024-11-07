@@ -81,7 +81,10 @@ diasSemana: any;
       const agenda = {
         ...this.agendaForm.value,
         id_medico: usuario.id,
-        id_especialidad: usuario.id_especialidad
+        id_especialidad: usuario.id_especialidad,
+/*         fecha: this.formatearFecha(this.agendaForm.value.fecha),
+ */        hora_entrada: this.agendaForm.value.hora_entrada,
+        hora_salida: this.agendaForm.value.hora_salida
       };
 
       this.loading = true;
