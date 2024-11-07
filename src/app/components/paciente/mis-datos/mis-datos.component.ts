@@ -25,7 +25,8 @@ export class MisDatosComponent implements OnInit {
       dni: [{ value: '', disabled: true }],
       email: ['', [Validators.required, Validators.email]],
       telefono: ['', [Validators.required, Validators.pattern('^[0-9]{7}$')]],
-      password: ['', [Validators.minLength(3)]]
+      password: ['', [Validators.minLength(3)]],
+      fecha_nacimiento: [{ value: '', disabled: true }]
     });
   }
 
@@ -38,6 +39,7 @@ export class MisDatosComponent implements OnInit {
         dni: usuario.dni,
         email: usuario.email,
         telefono: usuario.telefono || '',
+        fecha_nacimiento: usuario.fecha_nacimiento
       });
     } else {
       this.router.navigate(['/login']);
