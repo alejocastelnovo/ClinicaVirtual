@@ -12,7 +12,7 @@ export class TurnoService {
   constructor(private http: HttpClient) {}
 
   private getHeaders(): HttpHeaders {
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem('jwt');
     return new HttpHeaders().set('Authorization', `${token}`);
   }
 

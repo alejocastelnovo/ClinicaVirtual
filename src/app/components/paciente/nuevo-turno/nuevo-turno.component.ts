@@ -143,10 +143,11 @@ export class NuevoTurnoComponent implements OnInit {
   onSubmit() {
     if (this.turnoForm.valid) {
       this.loading = true;
+      const usuario = this.authService.getCurrentUser();
       
       const turnoData = {
         id_agenda: this.agendaSeleccionada.id,
-        id_paciente: 1, // Esto debería venir del usuario logueado
+        id_paciente: usuario.id,
         id_cobertura: this.turnoForm.value.cobertura,
         fecha: this.formatearFecha(this.turnoForm.value.fecha),
         hora: this.turnoForm.value.hora,
@@ -156,16 +157,22 @@ export class NuevoTurnoComponent implements OnInit {
       this.turnoService.asignarTurno(turnoData).subscribe({
         next: (response) => {
           if (response.codigo === 200) {
-            this.snackBar.open('Turno asignado correctamente', 'Cerrar', {
-              duration: 3000
+            this.snackBar.open('Turno asignado correctamente', 'Cerrar',{
+            
+              duration: 2000
             });
             this.router.navigate(['/paciente/mis-turnos']);
           } else {
-            this.mostrarError(response.mensaje);
+            this.mostrarError(response.mensaje || 'Error al asignar el turno');
           }
         },
-        error: (error) => this.mostrarError('Error al asignar el turno'),
-        complete: () => this.loading = false
+        error: (error) => {
+          console.error('Error:', error);
+          this.mostrarError('Error al asignar el turno')
+        },
+        complete: () => {
+          this.loading = false
+        }
       });
     }
   }
