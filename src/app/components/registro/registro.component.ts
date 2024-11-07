@@ -27,7 +27,7 @@ export class RegisterComponent {
       password: ['', [Validators.required, Validators.minLength(4)]],
       dni: ['', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
       fechaNacimiento: ['', Validators.required],
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      telefono: ['', [Validators.required]],
     });
   }
 
