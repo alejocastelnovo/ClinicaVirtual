@@ -28,7 +28,9 @@
       </mat-card>
     </div>
 
-    <!-- Médico -->
+
+
+    <!-- medico -->
     <div *ngSwitchCase="'medico'" class="options-container">
       <mat-card class="option-card" routerLink="/medico/turnos-programados">
         <mat-icon>schedule</mat-icon>
@@ -67,12 +69,12 @@
       </mat-card>
     </div>
 
-    <!-- Default -->
+    <!-- por defecto si no hay rol -->
     <div *ngSwitchDefault>
       <mat-card class="error-card">
         <mat-icon color="warn">error</mat-icon>
         <h3>Error - Rol no reconocido</h3>
-        <p>No se han encontrado opciones para tu rol de usuario.</p>
+        <p>No se encontraron opciones para tu rol de usuario.</p>
       </mat-card>
     </div>
   </div>
