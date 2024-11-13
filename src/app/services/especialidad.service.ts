@@ -1,13 +1,13 @@
-import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
 export class EspecialidadService {
-    private apiUrl = 'http://localhost:4000/api';
 
+  private apiUrl = 'http://localhost:4000/api';  // La URL del backend
     constructor(private http: HttpClient) { }
 
     private getHeaders(): HttpHeaders {
@@ -16,25 +16,38 @@ export class EspecialidadService {
             'Content-Type': 'application/json',
             'Authorization': token || ''
         });
+    return this.http.get(`${this.apiUrl}/obtenerEspecialidadesMedico/${id}`, { headers });
     }
 
-    obtenerEspecialidades(): Observable<any> {
-        return this.http.get(`${this.apiUrl}/obtenerEspecialidades`, { headers: this.getHeaders() });
+  obtenerEspecialidades(token:string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'authorization': token
+    });
+    return this.http.get(`${this.apiUrl}/obtenerEspecialidades`, { headers });
     }
 
-    obtenerEspecialidadesMedico(idMedico: number): Observable<any> {
-        return this.http.get(`${this.apiUrl}/obtenerEspecialidadesMedico/${idMedico}`, { headers: this.getHeaders() });
+  crearMedicoEspecialidad(body: any, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'authorization': token
+    });
+    return this.http.post(`${this.apiUrl}/crearMedicoEspecialidad`, body ,{ headers });
     }
 
-    obtenerMedicoPorEspecialidad(idEspecialidad: number): Observable<any> {
-        return this.http.get(`${this.apiUrl}/obtenerMedicoPorEspecialidad/${idEspecialidad}`, { headers: this.getHeaders() });
-    }
+  obtenerCobertura(token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'authorization': token
+    });
+    return this.http.get(`${this.apiUrl}/obtenerCoberturas` ,{ headers });
+  }
 
-    crearMedicoEspecialidad(data: any): Observable<any> {
-        return this.http.post(`${this.apiUrl}/crearMedicoEspecialidad`, data, { headers: this.getHeaders() });
+  obtenerMedicoPorEspecialidad(id_especialidad: any, token: string): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'authorization': token
+    });
+    return this.http.get(`${this.apiUrl}/obtenerMedicoPorEspecialidad/${id_especialidad}` ,{ headers });
     }
-
-    obtenerCoberturas(): Observable<any> {
-        return this.http.get(`${this.apiUrl}/obtenerCoberturas`, { headers: this.getHeaders() });
-    }
-} 
+}
