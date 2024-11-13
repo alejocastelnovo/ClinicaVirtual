@@ -51,11 +51,16 @@ export class GestionAgendaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cargarAgenda();
-    this.cargarEspecialidadMedico();
-  }
+    const usuario = this.authService.getCurrentUser();
+    console.log('Usuario actual:', usuario);
+    if (!usuario) {
+        this.router.navigate(['/login']);
+        return;
+    }
+    this.cargarAgenda(); // Solo se llama si el usuario está autenticado
+}
 
-  private cargarEspecialidadMedico() {
+ /*  private cargarEspecialidadMedico() {
     const usuario = this.authService.isLoggedin() ? this.authService.getCurrentUser() : null;
     if (usuario) {
       this.EspecialidadService.obtenerEspecialidadesMedico(usuario.id).subscribe({
@@ -76,7 +81,7 @@ export class GestionAgendaComponent implements OnInit {
         }
       });
     }
-  }
+  } */
 
   cargarAgenda() {
     const usuario = this.authService.getCurrentUser();
@@ -227,8 +232,8 @@ export class GestionAgendaComponent implements OnInit {
         ...this.agendaForm.value,
         id_medico: usuario.id,
         id_especialidad: usuario.id_especialidad,
-/*         fecha: this.formatearFecha(this.agendaForm.value.fecha),
- */        hora_entrada: this.agendaForm.value.hora_entrada,
+        fecha: this.formatearFecha(this.agendaForm.value.fecha),
+        hora_entrada: this.agendaForm.value.hora_entrada,
         hora_salida: this.agendaForm.value.hora_salida
       };
 
@@ -285,5 +290,3 @@ export class GestionAgendaComponent implements OnInit {
     });
   }
 }
-
-

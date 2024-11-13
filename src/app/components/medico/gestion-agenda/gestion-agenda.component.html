@@ -1,54 +1,54 @@
 <div class="gestion-agenda-container">
     <mat-card>
-        <mat-card-title>Gestión de Agenda</mat-card-title>
+<mat-card-title>Gestión de Agenda</mat-card-title>
 
-        <mat-card-content>
-            <mat-form-field appearance="fill">
-                <mat-label>Seleccionar fecha</mat-label>
-                <input matInput [matDatepicker]="picker" [formControl]="fechaSeleccionada"
-                    (dateChange)="onFechaChange()">
-                <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-                <mat-datepicker #picker></mat-datepicker>
+<mat-card-content>
+    <mat-form-field appearance="fill">
+        <mat-label>Seleccionar fecha</mat-label>
+        <input matInput [matDatepicker]="picker" [formControl]="fechaSeleccionada"
+            (dateChange)="onFechaChange()">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+    </mat-form-field>
+
+    <div class="rangos-horarios">
+        <h3>Horarios configurados para {{fechaSeleccionada.value | date}}</h3>
+        <div *ngFor="let rango of rangosHorarios" class="rango-horario">
+            <span>{{rango.hora_entrada}} - {{rango.hora_salida}}</span>
+            <button mat-icon-button color="warn" (click)="eliminarRango(rango)">
+                <mat-icon>delete</mat-icon>
+            </button>
+        </div>
+    </div>
+
+    <form [formGroup]="agendaForm" (ngSubmit)="agregarRangoHorario()">
+        <div class="nuevo-rango">
+            <mat-form-field appearance="outline">
+                <mat-label>Hora de inicio</mat-label>
+                <mat-select formControlName="hora_entrada">
+                    <mat-option *ngFor="let hora of horas" [value]="hora">
+                        {{hora}}
+                    </mat-option>
+                </mat-select>
             </mat-form-field>
 
-            <div class="rangos-horarios">
-                <h3>Horarios configurados para {{fechaSeleccionada.value | date}}</h3>
-                <div *ngFor="let rango of rangosHorarios" class="rango-horario">
-                    <span>{{rango.hora_entrada}} - {{rango.hora_salida}}</span>
-                    <button mat-icon-button color="warn" (click)="eliminarRango(rango)">
-                        <mat-icon>delete</mat-icon>
-                    </button>
-                </div>
-            </div>
+            <mat-form-field appearance="outline">
+                <mat-label>Hora de fin</mat-label>
+                <mat-select formControlName="hora_salida">
+                    <mat-option *ngFor="let hora of horas" [value]="hora">
+                        {{hora}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
 
-            <form [formGroup]="agendaForm" (ngSubmit)="agregarRangoHorario()">
-                <div class="nuevo-rango">
-                    <mat-form-field appearance="outline">
-                        <mat-label>Hora de inicio</mat-label>
-                        <mat-select formControlName="hora_entrada">
-                            <mat-option *ngFor="let hora of horas" [value]="hora">
-                                {{hora}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-
-                    <mat-form-field appearance="outline">
-                        <mat-label>Hora de fin</mat-label>
-                        <mat-select formControlName="hora_salida">
-                            <mat-option *ngFor="let hora of horas" [value]="hora">
-                                {{hora}}
-                            </mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
-
-                <div class="button-container">
-                    <button mat-raised-button color="primary" type="submit" 
-                            [disabled]="!agendaForm.valid || loading">
-                        Agregar nuevo horario
-                    </button>
-                </div>
-            </form>
-        </mat-card-content>
-    </mat-card>
+        <div class="button-container">
+            <button mat-raised-button color="primary" type="submit" 
+                    [disabled]="!agendaForm.valid || loading">
+                Agregar nuevo horario
+            </button>
+        </div>
+    </form>
+</mat-card-content>
+</mat-card>
 </div>
