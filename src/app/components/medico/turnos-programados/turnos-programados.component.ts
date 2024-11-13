@@ -24,7 +24,12 @@ export class TurnosProgramadosComponent{
   loading = false;
   fechaSeleccionada = new FormControl(new Date());
 
-  constructor(private router: Router, private snackBar: MatSnackBar, private fb: FormBuilder, private agendaService: AgendaService, private dialog: MatDialog) {
+  constructor(
+    private router: Router, 
+    private snackBar: MatSnackBar, 
+    private fb: FormBuilder, 
+    private agendaService: AgendaService, 
+    private dialog: MatDialog) {
     this.id = localStorage.getItem('id');
     this.token = localStorage.getItem('jwt');
     this.horarios = this.fb.group({
@@ -36,6 +41,7 @@ export class TurnosProgramadosComponent{
       this.fecha = this.horarios.controls['fecha'].value.toISOString().split('T')[0]
     })
   }
+
 
   obtenerAgenda(fecha: any) {
     if (fecha === '') {
