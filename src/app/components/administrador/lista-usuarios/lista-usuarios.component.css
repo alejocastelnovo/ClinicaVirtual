@@ -1,0 +1,13 @@
+h2{
+    text-align: center;
+    margin: 10px ;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(169, 226, 147);
+    min-height: 100vh;
+  }
+
+

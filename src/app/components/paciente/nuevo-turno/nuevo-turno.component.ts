@@ -1,168 +1,144 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
-import { TurnoService } from '../../../services/turno.service';
-import { EspecialidadService } from '../../../services/especialidad.service';
-import { AgendaService } from '../../../services/agenda.service';
-import { AuthService } from '../../../services/auth.service';
+import { TurnoService } from 'src/app/services/turno.service';
+import { UsuariosService } from 'src/app/services/usuarios.service';
+import { EspecialidadService } from 'src/app/services/especialidad.service';
+import { AgendaService } from 'src/app/services/agenda.service';
 
 @Component({
   selector: 'app-nuevo-turno',
   templateUrl: './nuevo-turno.component.html',
   styleUrls: ['./nuevo-turno.component.css']
 })
-export class NuevoTurnoComponent implements OnInit {
+export class NuevoTurnoComponent {
   turnoForm: FormGroup;
-  loading = false;
-  coberturas: any[] = [];
-  especialidades: any[] = [];
-  medicos: any[] = [];
-  horariosDisponibles: string[] = [];
-  agendaSeleccionada: any = null;
+  loading: boolean = false;
+  token: any = localStorage.getItem('jwt');
+  id: any = localStorage.getItem('id');
+  rol: any = localStorage.getItem('rol');
+  profesionales: any;
+  especialidad: any;
+  cobertura: any;
+  agenda: any[] = [];
+  agendaHoras: any[] = [];
+  horas: any[] = [];
+  numArray: number = 0;
+  turnos: any[] = [];
+  pacientes: any;
 
-  constructor(
-    private fb: FormBuilder,
-    private turnoService: TurnoService,
-    private especialidadService: EspecialidadService,
-    private agendaService: AgendaService,
-    private authService: AuthService,
-    private snackBar: MatSnackBar,
-    private router: Router
-  ) {
+  constructor(private fb: FormBuilder,
+              private router: Router,
+              private snackBar: MatSnackBar,
+              private turnosService: TurnoService,
+              private usuariosService: UsuariosService,
+              private especialidadesService: EspecialidadService,
+              private agendaService: AgendaService) {
     this.turnoForm = this.fb.group({
+      paciente: [''],
       cobertura: ['', Validators.required],
       especialidad: ['', Validators.required],
       profesional: ['', Validators.required],
       fecha: ['', Validators.required],
       hora: ['', Validators.required],
-      nota: ['', [Validators.required, Validators.minLength(10)]]
+      minutos: ['', Validators.required],
+      razon: ['', Validators.required],
+    });
+
+    this.turnoForm.disable();
+    this.obtenerDatosIniciales();
+  }
+
+  obtenerDatosIniciales() {
+    this.obtenerEspecialidades();
+    this.obtenerCoberturas();
+    this.obtenerPacientes();
+  }
+
+  obtenerEspecialidades() {
+    this.especialidadesService.obtenerEspecialidades(this.token).subscribe((data: any) => {
+      if (data.codigo === 200 && data.payload.length > 0) {
+        this.especialidad = data.payload;
+      } else if (data.codigo === -1) {
+        this.jwtExpirado();
+      } else {
+        this.snackBar.open(data.mensaje, 'Cerrar', { duration: 3000 });
+      }
     });
   }
 
-  ngOnInit() {
-    if (!this.authService.isLoggedin()) {
-      this.router.navigate(['/login']);
-      return;
-    }
-    this.cargarDatosIniciales();
+  obtenerPacientes() {
+    this.usuariosService.obtenerUsuarios(this.token).subscribe((data: any) => {
+      this.pacientes = data.payload.filter((data: any) => data.rol === 'paciente');
+    });
   }
 
-  cargarDatosIniciales() {
+  obtenerCoberturas() {
+    this.especialidadesService.obtenerCobertura(this.token).subscribe((data: any) => {
+      if (data.codigo === 200 && data.payload.length > 0) {
+        this.cobertura = data.payload;
+      }
+    });
+  }
+  obtenerAgenda(id: number) {
+    this.agendaService.obtenerAgenda(id).subscribe((data: any) => {
+      if (data.codigo === 200 && data.payload.length > 0) {
+        this.agenda = data.payload.map((item: any) => new Date(item.fecha));
+        let fecha = new Date(this.turnoForm.controls['fecha'].value).toISOString();
+        this.agendaHoras = data.payload.filter((obj: { fecha: any; }) => obj.fecha.startsWith(fecha));
+        if (this.agendaHoras) {
+          this.horas = [];
+          for (let i = 0; i < this.agendaHoras.length; i++) {
+            let horasEntre = this.obtenerHorasEntre(this.agendaHoras[i].hora_entrada, this.agendaHoras[i].hora_salida);
+            this.numArray = i;
+            this.horas = this.horas.concat(horasEntre).sort();
+          }
+        }
+      }
+    });
+  }
+
+  guardarTurno() {
     this.loading = true;
+    let body = this.crearBodyTurno();
 
-    this.especialidadService.obtenerEspecialidades().subscribe({
-      next: (response) => {
-        if (response.codigo === 200) {
-          this.especialidades = response.payload;
-        } else {
-          this.mostrarError(response.mensaje || 'Error al cargar especialidades');
-        }
-      },
-      error: (error) => {
-        this.mostrarError('Error al cargar especialidades. Por favor, intente nuevamente.');
-      },
-      complete: () => this.loading = false
-    });
-
-    this.especialidadService.obtenerCoberturas().subscribe({
-      next: (response) => {
-        if (response.codigo === 200) {
-          this.coberturas = response.payload;
-        } else {
-          this.mostrarError(response.mensaje || 'Error al cargar coberturas');
-        }
-      },
-      error: (error) => {
-        this.mostrarError('Error al cargar coberturas. Por favor, intente nuevamente.');
+    this.turnosService.asignarTurno(JSON.stringify(body)).subscribe((data: any) => {
+      this.loading = false;
+      if (data.codigo === 200) {
+        this.snackBar.open('Turno confirmado', 'Cerrar', { duration: 3000 });
+        this.router.navigate(['/pantalla-principal']);
+      } else {
+        this.snackBar.open(data.mensaje, 'Cerrar', { duration: 3000 });
       }
+    }, error => {
+      this.loading = false;
+      this.snackBar.open('Error al asignar el turno', 'Cerrar', { duration: 3000 });
     });
   }
 
-  onEspecialidadChange() {
-    const especialidadId = this.turnoForm.get('especialidad')?.value;
-    if (especialidadId) {
-      this.loading = true;
-      this.especialidadService.obtenerMedicoPorEspecialidad(especialidadId).subscribe({
-        next: (response) => {
-          if (response.codigo === 200) {
-            this.medicos = response.payload;
-          }
-        },
-        error: () => this.mostrarError('Error al cargar médicos'),
-        complete: () => this.loading = false
-      });
-    }
+  crearBodyTurno() {
+    return {
+      nota: this.turnoForm.controls['razon'].value,
+      id_agenda: this.agendaHoras[this.numArray].id,
+      fecha: this.turnoForm.controls['fecha'].value,
+      hora: this.turnoForm.controls['hora'].value + ':' + this.turnoForm.controls['minutos'].value,
+      id_paciente: this.id,
+      id_cobertura: this.turnoForm.controls['cobertura'].value
+    };
   }
 
-  onMedicoChange() {
-    const medicoId = this.turnoForm.get('profesional')?.value;
-    if (medicoId) {
-      this.loading = true;
-      this.agendaService.obtenerAgenda(medicoId).subscribe({
-        next: (response) => {
-          if (response.codigo === 200 && response.payload.length > 0) {
-            this.agendaSeleccionada = response.payload[0];
-            this.generarHorariosDisponibles();
-          }
-        },
-        error: () => this.mostrarError('Error al cargar agenda del médico'),
-        complete: () => this.loading = false
-      });
-    }
+  cancelar() {
+    this.router.navigate(['/dashboard']);
   }
 
-  generarHorariosDisponibles() {
-    if (this.agendaSeleccionada) {
-      const horaInicio = parseInt(this.agendaSeleccionada.hora_entrada.split(':')[0]);
-      const horaFin = parseInt(this.agendaSeleccionada.hora_salida.split(':')[0]);
-      
-      this.horariosDisponibles = [];
-      for (let hora = horaInicio; hora < horaFin; hora++) {
-        this.horariosDisponibles.push(`${hora.toString().padStart(2, '0')}:00`);
-        this.horariosDisponibles.push(`${hora.toString().padStart(2, '0')}:30`);
-      }
-    }
+  jwtExpirado() {
+    this.snackBar.open('Su sesión ha expirado. Por favor, inicie sesión nuevamente.', 'Cerrar', { duration: 3000 });
+    this.router.navigate(['/login']);
   }
 
-  onSubmit() {
-    if (this.turnoForm.valid) {
-      this.loading = true;
-      const usuario = this.authService.getCurrentUser();
-      
-      const turnoData = {
-        id_agenda: this.agendaSeleccionada.id,
-        id_paciente: usuario.id,
-        id_cobertura: this.turnoForm.value.cobertura,
-        fecha: this.formatearFecha(this.turnoForm.value.fecha),
-        hora: this.turnoForm.value.hora,
-        nota: this.turnoForm.value.nota
-      };
-
-      this.turnoService.asignarTurno(turnoData).subscribe({
-        next: (response) => {
-          if (response.codigo === 200) {
-            this.snackBar.open('Turno asignado correctamente', 'Cerrar', {
-              duration: 2000
-            });
-            this.router.navigate(['/paciente/mis-turnos']);
-          } else {
-            this.mostrarError(response.mensaje || 'Error al asignar el turno');
-          }
-        },
-        error: () => this.mostrarError('Error al asignar el turno'),
-        complete: () => this.loading = false
-      });
-    }
-  }
-
-  private formatearFecha(fecha: Date): string {
-    return fecha.toISOString().split('T')[0];
-  }
-
-  private mostrarError(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000
-    });
+  obtenerHorasEntre(horaEntrada: string, horaSalida: string): string[] {
+    // Lógica para obtener horas entre dos tiempos
+    return []; // Implementar según sea necesario
   }
 }
