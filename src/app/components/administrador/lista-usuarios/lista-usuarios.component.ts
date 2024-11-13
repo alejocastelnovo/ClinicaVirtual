@@ -33,10 +33,16 @@ export class ListaUsuariosComponent implements OnInit{
 
   obtenerUsuario(){
     this.usuariosService.obtenerUsuarios(this.token).subscribe((data : any) =>{      
+      console.log(data)
       if (data.codigo === 200 && data.payload.length > 0){
       this.listaUsuarios = data.payload
       console.log(this.listaUsuarios)
       this.dataSource=this.listaUsuarios
+      }else if(data.codigo === -1){
+        this.jwtExpirado();
+      } 
+      else {
+        this.openSnackBar(data.mensaje);
       }
     })
   }

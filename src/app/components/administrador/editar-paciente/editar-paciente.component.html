@@ -25,9 +25,10 @@
 
             <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Correo</mat-label>
-                    <input matInput formControlName="email" type="email" required autocomplete="email">
-                    <mat-error *ngIf="editarUsuarioForm.get('email')?.hasError('email') && editarUsuarioForm.get('email')?.touched">Formato de correo incorrecto.
-                    </mat-error>
+                <input matInput formControlName="email" type="email" required autocomplete="email">
+                <mat-error *ngIf="editarUsuarioForm.get('email')?.hasError('email') && editarUsuarioForm.get('email')?.touched">
+                    Formato de correo incorrecto.
+                </mat-error>
             </mat-form-field>
 
             <mat-form-field appearance="fill" class="full-width">
@@ -42,36 +43,34 @@
                 <mat-datepicker #picker></mat-datepicker>
             </mat-form-field>
 
-            <mat-form-field appearance="fill" class="full-width" >
+            <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Tipo usuario</mat-label>
                 <mat-select formControlName="tipo_usuario" required>
-                  <mat-option value="administrador">Administrador</mat-option>
-                  <mat-option value="operador">Operador</mat-option>
-                  <mat-option value="medico">Medico</mat-option>
-                  <mat-option value="paciente">Paciente</mat-option>
+                    <mat-option value="administrador">Administrador</mat-option>
+                    <mat-option value="operador">Operador</mat-option>
+                    <mat-option value="medico">Medico</mat-option>
+                    <mat-option value="paciente">Paciente</mat-option>
                 </mat-select>
-              </mat-form-field>
+            </mat-form-field>
 
-              <mat-form-field appearance="fill" class="full-width" *ngIf="mostrarEspecialidades">
+            <mat-form-field appearance="fill" class="full-width" *ngIf="mostrarEspecialidades">
                 <mat-label>Especialidad</mat-label>
                 <mat-select formControlName="especialidad" required>
-                  <mat-option *ngFor="let especialidad of especialidades" [value]="especialidad.id">{{ especialidad.descripcion }}</mat-option>
+                    <mat-option *ngFor="let especialidad of especialidades" [value]="especialidad.id">
+                        {{especialidad.descripcion}}
+                    </mat-option>
                 </mat-select>
-              </mat-form-field>
-          
+            </mat-form-field>
+
             <mat-form-field appearance="fill" class="full-width">
                 <mat-label>Contraseña</mat-label>
                 <input matInput type="password" formControlName="contrasenia" required autocomplete="new-password">
             </mat-form-field>
-          
-
         </form>
     </mat-dialog-content>
 
-    <mat-dialog-actions class="dialog-actions" >
+    <mat-dialog-actions class="dialog-actions">
         <button mat-button (click)="onCancel()">Cancelar</button>
         <button mat-button [disabled]="!editarUsuarioForm.valid" (click)="guardar()">Guardar</button>
-        
     </mat-dialog-actions>
-
 </body>
