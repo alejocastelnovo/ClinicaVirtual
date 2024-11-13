@@ -1,11 +1,13 @@
 .nuevo-turno-container {
     padding: 20px;
     position: relative;
+    margin-bottom: 80px;
 }
 
 mat-card {
     max-width: 800px;
     margin: 0 auto;
+    margin-bottom: 15px;
 }
 
 mat-form-field {

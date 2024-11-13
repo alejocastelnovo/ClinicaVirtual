@@ -63,6 +63,8 @@ import { AuthService } from './services/auth.service';
 import { TurnoService } from './services/turno.service';
 import { AgendaService } from './services/agenda.service';
 import { EspecialidadService } from './services/especialidad.service';
+import { ListaUsuariosComponent } from './components/administrador/lista-usuarios/lista-usuarios.component';
+import { EditarPacienteComponent } from './components/administrador/editar-paciente/editar-paciente.component';
 
 
 @NgModule({
@@ -84,6 +86,8 @@ import { EspecialidadService } from './services/especialidad.service';
     DialogExitoComponent,
     DashboardOperadorComponent,
     ListaMedicosComponent,
+    ListaUsuariosComponent,
+    EditarPacienteComponent,
 
   ],
   imports: [

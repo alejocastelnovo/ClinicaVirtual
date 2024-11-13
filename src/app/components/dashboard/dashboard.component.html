@@ -62,10 +62,16 @@
 
     <!-- Administrador -->
     <div *ngSwitchCase="'administrador'" class="options-container">
-      <mat-card class="option-card" routerLink="/administrador/gestion-usuarios">
+      <mat-card class="option-card" routerLink="/administrador/lista-usuarios">
         <mat-icon>admin_panel_settings</mat-icon>
-        <h3>Gestión de Usuarios</h3>
-        <p>Administrar usuarios del sistema</p>
+        <h3>Lista Usuarios</h3>
+        <p>Ver la lista de todos los usuarios</p>
+      </mat-card>
+
+      <mat-card class="option-card" routerLink="/administrador/crear-usuario">
+        <mat-icon>people</mat-icon>
+        <h3>Crear nuevo usuario</h3>
+        <p>Alta de un nuevo usuario </p>
       </mat-card>
     </div>
 

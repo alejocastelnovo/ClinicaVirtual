@@ -22,6 +22,7 @@ import { CrearUsuarioComponent } from './components/administrador/crear-usuario/
 /* Componentes de Operador  */
 import { DashboardOperadorComponent } from './components/operador/dashboard-operador/dashboard-operador.component';
 import { ListaMedicosComponent } from './components/operador/lista-medicos/lista-medicos.component';
+import { ListaUsuariosComponent } from './components/administrador/lista-usuarios/lista-usuarios.component';
 
 
 const routes: Routes = [
@@ -34,6 +35,7 @@ const routes: Routes = [
   { path: 'paciente/mis-turnos', component: MisTurnosComponent },
   { path: 'paciente/mis-datos', component: MisDatosComponent }, 
   { path: 'administrador/crear-usuario', component: CrearUsuarioComponent },
+  { path: 'administrador/lista-usuarios', component: ListaUsuariosComponent},
   { path: 'medico/gestion-agenda', component: GestionAgendaComponent },
   { path: 'medico/turnos-programados', component: TurnosProgramadosComponent },
   { path: 'operador/dashboard-operador', component: DashboardOperadorComponent },

@@ -1,5 +1,6 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -50,3 +51,5 @@ export class EspecialidadService {
     return this.http.get(`${this.apiUrl}/obtenerMedicoPorEspecialidad/${id_especialidad}` ,{ headers });
   }
 }
+
+   
