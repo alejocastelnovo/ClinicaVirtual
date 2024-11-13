@@ -6,9 +6,6 @@ import { TurnoService } from '../../../services/turno.service';
 import { EspecialidadService } from '../../../services/especialidad.service';
 import { AgendaService } from '../../../services/agenda.service';
 import { AuthService } from '../../../services/auth.service';
-import { finalize } from 'rxjs/operators';
-import { UsuariosService } from '../../../services/usuarios.service';
-import { LoginService } from '../../../services/login.service';
 
 @Component({
   selector: 'app-nuevo-turno',
@@ -16,22 +13,13 @@ import { LoginService } from '../../../services/login.service';
   styleUrls: ['./nuevo-turno.component.css']
 })
 export class NuevoTurnoComponent implements OnInit {
-  turnoForm: FormGroup = this.fb.group({
-    cobertura: ['', Validators.required],
-    especialidad: ['', Validators.required],
-    profesional: ['', Validators.required],
-    fecha: ['', Validators.required],
-    hora: ['', Validators.required],
-    nota: ['', [Validators.required, Validators.minLength(10)]]
-  });
-
+  turnoForm: FormGroup;
+  loading = false;
   coberturas: any[] = [];
   especialidades: any[] = [];
   medicos: any[] = [];
   horariosDisponibles: string[] = [];
-  loading = false;
   agendaSeleccionada: any = null;
-  LoginService: any;
 
   constructor(
     private fb: FormBuilder,
@@ -41,10 +29,19 @@ export class NuevoTurnoComponent implements OnInit {
     private authService: AuthService,
     private snackBar: MatSnackBar,
     private router: Router
-  ) {}
+  ) {
+    this.turnoForm = this.fb.group({
+      cobertura: ['', Validators.required],
+      especialidad: ['', Validators.required],
+      profesional: ['', Validators.required],
+      fecha: ['', Validators.required],
+      hora: ['', Validators.required],
+      nota: ['', [Validators.required, Validators.minLength(10)]]
+    });
+  }
 
   ngOnInit() {
-    if (!this.LoginService.isLoggedIn()) {
+    if (!this.authService.isLoggedin()) {
       this.router.navigate(['/login']);
       return;
     }
@@ -54,47 +51,32 @@ export class NuevoTurnoComponent implements OnInit {
   cargarDatosIniciales() {
     this.loading = true;
 
-    this.especialidadService.obtenerEspecialidades()
-      .pipe(finalize(() => this.loading = false))
-      .subscribe({
-        next: (response) => {
-          console.log('Respuesta especialidades:', response);
-          if (response.codigo === 200) {
-            this.especialidades = response.payload;
-          } else {
-            this.mostrarError(response.mensaje || 'Error al cargar especialidades');
-          }
-        },
-        error: (error) => {
-          console.error('Error al cargar especialidades:', error);
-          if (error.status === 401) {
-            this.router.navigate(['/login']);
-          } else {
-            this.mostrarError('Error al cargar especialidades. Por favor, intente nuevamente.');
-          }
+    this.especialidadService.obtenerEspecialidades().subscribe({
+      next: (response) => {
+        if (response.codigo === 200) {
+          this.especialidades = response.payload;
+        } else {
+          this.mostrarError(response.mensaje || 'Error al cargar especialidades');
         }
-      });
+      },
+      error: (error) => {
+        this.mostrarError('Error al cargar especialidades. Por favor, intente nuevamente.');
+      },
+      complete: () => this.loading = false
+    });
 
-    this.especialidadService.obtenerCoberturas()
-      .pipe(finalize(() => this.loading = false))
-      .subscribe({
-        next: (response) => {
-          console.log('Respuesta coberturas:', response);
-          if (response.codigo === 200) {
-            this.coberturas = response.payload;
-          } else {
-            this.mostrarError(response.mensaje || 'Error al cargar coberturas');
-          }
-        },
-        error: (error) => {
-          console.error('Error al cargar coberturas:', error);
-          if (error.status === 401) {
-            this.router.navigate(['/login']);
-          } else {
-            this.mostrarError('Error al cargar coberturas. Por favor, intente nuevamente.');
-          }
+    this.especialidadService.obtenerCoberturas().subscribe({
+      next: (response) => {
+        if (response.codigo === 200) {
+          this.coberturas = response.payload;
+        } else {
+          this.mostrarError(response.mensaje || 'Error al cargar coberturas');
         }
-      });
+      },
+      error: (error) => {
+        this.mostrarError('Error al cargar coberturas. Por favor, intente nuevamente.');
+      }
+    });
   }
 
   onEspecialidadChange() {
@@ -107,7 +89,7 @@ export class NuevoTurnoComponent implements OnInit {
             this.medicos = response.payload;
           }
         },
-        error: (error) => this.mostrarError('Error al cargar médicos'),
+        error: () => this.mostrarError('Error al cargar médicos'),
         complete: () => this.loading = false
       });
     }
@@ -124,7 +106,7 @@ export class NuevoTurnoComponent implements OnInit {
             this.generarHorariosDisponibles();
           }
         },
-        error: (error) => this.mostrarError('Error al cargar agenda del médico'),
+        error: () => this.mostrarError('Error al cargar agenda del médico'),
         complete: () => this.loading = false
       });
     }
@@ -160,8 +142,7 @@ export class NuevoTurnoComponent implements OnInit {
       this.turnoService.asignarTurno(turnoData).subscribe({
         next: (response) => {
           if (response.codigo === 200) {
-            this.snackBar.open('Turno asignado correctamente', 'Cerrar',{
-            
+            this.snackBar.open('Turno asignado correctamente', 'Cerrar', {
               duration: 2000
             });
             this.router.navigate(['/paciente/mis-turnos']);
@@ -169,13 +150,8 @@ export class NuevoTurnoComponent implements OnInit {
             this.mostrarError(response.mensaje || 'Error al asignar el turno');
           }
         },
-        error: (error) => {
-          console.error('Error:', error);
-          this.mostrarError('Error al asignar el turno')
-        },
-        complete: () => {
-          this.loading = false
-        }
+        error: () => this.mostrarError('Error al asignar el turno'),
+        complete: () => this.loading = false
       });
     }
   }
