@@ -30,13 +30,6 @@
             <p><strong>Estado:</strong> {{turno.estado}}</p>
             <p><strong>Nota:</strong> {{turno.nota}}</p>
           </div>
-
-          <mat-action-row>
-            <button mat-button color="warn" (click)="cancelarTurno(turno.id)"
-                    [disabled]="turno.estado === 'CANCELADO'">
-              Cancelar Turno
-            </button>
-          </mat-action-row>
         </mat-expansion-panel>
       </mat-accordion>
     </mat-card-content>

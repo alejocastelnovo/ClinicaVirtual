@@ -47,10 +47,15 @@ export class MisTurnosComponent implements OnInit {
       next: (response) => {
         if (response.codigo === 200) {
           this.turnos = response.payload.map((turno: any) => ({
-            ...turno,
+            id: turno.id,
+            fecha: turno.fecha,
+            hora: turno.hora,
+            especialista: turno.especialista,
+            especialidad: turno.especialidad,
+            estado: 'Solicitado', // Establecer el estado como "Solicitado"
+            nota: turno.nota,
             expandido: false
           }));
-          // Ordenar por fecha y hora
           this.turnos.sort((a, b) => {
             const fechaA = new Date(`${a.fecha} ${a.hora}`);
             const fechaB = new Date(`${b.fecha} ${b.hora}`);
@@ -69,11 +74,6 @@ export class MisTurnosComponent implements OnInit {
       }
     });
   }
-
-  toggleExpandirTurno(turno: Turno) {
-    turno.expandido = !turno.expandido;
-  }
-
   cancelarTurno(turnoId: number) {
     if (confirm('¿Está seguro que desea cancelar este turno?')) {
       this.loading = true;

@@ -33,7 +33,7 @@ export class CrearUsuarioComponent {
       fecha_nacimiento: this.fechaNacimiento,
       email: this.email, 
       password: this.password,
-      rol: this.tipoUsuario,
+      rol: this.formatearRol(this.tipoUsuario),
       telefono: this.telefono
     };
 
@@ -48,9 +48,15 @@ export class CrearUsuarioComponent {
         alert('Error al crear el usuario: ' + error.message);
       }
     );
+    
   }
+  private formatearRol(rol: string): string {
+    return rol.toLowerCase().replace(/[^a-z]/g, '');
+  }
+  
 
   onCancel(): void {
     this.router.navigate(['/administrador/gestion-usuarios']);
   }
+  
 }
