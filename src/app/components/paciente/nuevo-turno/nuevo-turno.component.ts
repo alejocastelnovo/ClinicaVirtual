@@ -18,15 +18,11 @@ export class NuevoTurnoComponent {
   token: any = localStorage.getItem('jwt');
   id: any = localStorage.getItem('id');
   rol: any = localStorage.getItem('rol');
-  profesionales: any;
-  especialidad: any;
-  cobertura: any;
-  agenda: any[] = [];
+  profesionales: any[] = [];
+  especialidades: any[] = [];
+  coberturas: any[] = [];
   agendaHoras: any[] = [];
-  horas: any[] = [];
   numArray: number = 0;
-  turnos: any[] = [];
-  pacientes: any;
 
   constructor(private fb: FormBuilder,
               private router: Router,
@@ -36,7 +32,6 @@ export class NuevoTurnoComponent {
               private especialidadesService: EspecialidadService,
               private agendaService: AgendaService) {
     this.turnoForm = this.fb.group({
-      paciente: [''],
       cobertura: ['', Validators.required],
       especialidad: ['', Validators.required],
       profesional: ['', Validators.required],
@@ -45,43 +40,43 @@ export class NuevoTurnoComponent {
       minutos: ['', Validators.required],
       razon: ['', Validators.required],
     });
-
-    this.turnoForm.disable();
     this.obtenerDatosIniciales();
   }
 
   obtenerDatosIniciales() {
     this.obtenerEspecialidades();
     this.obtenerCoberturas();
-    this.obtenerPacientes();
+    this.obtenerProfesionales();
   }
 
   obtenerEspecialidades() {
     this.especialidadesService.obtenerEspecialidades(this.token).subscribe((data: any) => {
-      if (data.codigo === 200 && data.payload.length > 0) {
-        this.especialidad = data.payload;
-      } else if (data.codigo === -1) {
-        this.jwtExpirado();
+      if (data.codigo === 200) {
+        this.especialidades = data.payload;
       } else {
         this.snackBar.open(data.mensaje, 'Cerrar', { duration: 3000 });
       }
     });
   }
 
-  obtenerPacientes() {
-    this.usuariosService.obtenerUsuarios(this.token).subscribe((data: any) => {
-      this.pacientes = data.payload.filter((data: any) => data.rol === 'paciente');
+  obtenerProfesionales() {
+    this.usuariosService.obtenerMedicos(this.token).subscribe((data: any) => {
+        this.profesionales = data;
+    }, (error) => {
+        this.snackBar.open(error.message, 'Cerrar', { duration: 3000 });
     });
-  }
+}
 
   obtenerCoberturas() {
     this.especialidadesService.obtenerCobertura(this.token).subscribe((data: any) => {
-      if (data.codigo === 200 && data.payload.length > 0) {
-        this.cobertura = data.payload;
+      if (data.codigo === 200) {
+        this.coberturas = data.payload;
+      } else {
+        this.snackBar.open(data.mensaje, 'Cerrar', { duration: 3000 });
       }
     });
   }
-  obtenerAgenda(id: number) {
+  /* obtenerAgenda(id: number) {
     this.agendaService.obtenerAgenda(id).subscribe((data: any) => {
       if (data.codigo === 200 && data.payload.length > 0) {
         this.agenda = data.payload.map((item: any) => new Date(item.fecha));
@@ -98,7 +93,7 @@ export class NuevoTurnoComponent {
       }
     });
   }
-
+ */
   guardarTurno() {
     this.loading = true;
     let body = this.crearBodyTurno();
@@ -107,7 +102,7 @@ export class NuevoTurnoComponent {
       this.loading = false;
       if (data.codigo === 200) {
         this.snackBar.open('Turno confirmado', 'Cerrar', { duration: 3000 });
-        this.router.navigate(['/pantalla-principal']);
+        this.router.navigate(['/dashboard']);
       } else {
         this.snackBar.open(data.mensaje, 'Cerrar', { duration: 3000 });
       }
@@ -127,18 +122,6 @@ export class NuevoTurnoComponent {
       id_cobertura: this.turnoForm.controls['cobertura'].value
     };
   }
-
-  cancelar() {
-    this.router.navigate(['/dashboard']);
-  }
-
-  jwtExpirado() {
-    this.snackBar.open('Su sesión ha expirado. Por favor, inicie sesión nuevamente.', 'Cerrar', { duration: 3000 });
-    this.router.navigate(['/login']);
-  }
-
-  obtenerHorasEntre(horaEntrada: string, horaSalida: string): string[] {
-    // Lógica para obtener horas entre dos tiempos
-    return []; // Implementar según sea necesario
-  }
 }
+
+  

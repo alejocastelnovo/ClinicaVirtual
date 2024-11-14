@@ -6,30 +6,27 @@
 
     <mat-card-content>
       <form [formGroup]="turnoForm" (ngSubmit)="guardarTurno()">
-        <!-- Cobertura -->
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Cobertura</mat-label>
           <mat-select formControlName="cobertura" required>
-            <mat-option *ngFor="let cob of cobertura" [value]="cob.id">{{cob.nombre}}</mat-option>
+            <mat-option *ngFor="let cob of coberturas" [value]="cob.id">{{cob.nombre}}</mat-option>
           </mat-select>
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Especialidad</mat-label>
-          <mat-select formControlName="especialidad" required>
-            <mat-option *ngFor="let esp of especialidad" [value]="esp.id">{{esp.descripcion}}</mat-option>
+          <mat-select formControlName="especialidad" (selectionChange)="obtenerProfesionales()" required>
+            <mat-option *ngFor="let esp of especialidades" [value]="esp.id">{{esp.descripcion}}</mat-option>
           </mat-select>
         </mat-form-field>
 
-        <!-- Profesional -->
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Profesional</mat-label>
           <mat-select formControlName="profesional" required>
-            <mat-option *ngFor="let prof of profesionales" [value]="prof.id">{{prof.nombre}}</mat-option>
+              <mat-option *ngFor="let prof of profesionales" [value]="prof.id">{{prof.nombre}} {{prof.apellido}}</mat-option>
           </mat-select>
-        </mat-form-field>
+      </mat-form-field>
 
-        <!-- Fecha y Hora -->
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Fecha</mat-label>
           <input matInput [matDatepicker]="picker" formControlName="fecha" required>
@@ -52,14 +49,8 @@
           <textarea matInput formControlName="razon" required></textarea>
         </mat-form-field>
 
-        <div class="button-container">
-          <button mat-button (click)="cancelar()">Cancelar</button>
-          <button mat-button type="submit" [disabled]="loading">Aceptar</button>
-        </div>
+        <button mat-raised-button color="primary" type="submit">Solicitar Turno</button>
       </form>
-      <div class="loading-overlay" *ngIf="loading">
-        <mat-spinner></mat-spinner>
-      </div>
     </mat-card-content>
   </mat-card>
 </div>
