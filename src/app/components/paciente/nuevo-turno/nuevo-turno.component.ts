@@ -6,6 +6,7 @@ import { TurnoService } from 'src/app/services/turno.service';
 import { UsuariosService } from 'src/app/services/usuarios.service';
 import { EspecialidadService } from 'src/app/services/especialidad.service';
 import { AgendaService } from 'src/app/services/agenda.service';
+import { format } from 'date-fns';
 
 @Component({
   selector: 'app-nuevo-turno',
@@ -22,6 +23,8 @@ export class NuevoTurnoComponent {
   especialidades: any[] = [];
   coberturas: any[] = [];
   agendaHoras: any[] = [];
+ /*  horas: string[] = [];
+  minutos: string[] = []; */
 
   constructor(private fb: FormBuilder,
     private router: Router,
@@ -102,6 +105,18 @@ obtenerAgendas() {
       }
     });
   }
+
+/*   generarHoras() {
+    const horas = [];
+    for (let i = 8; i <= 20; i++) { 
+      horas.push(i.toString().padStart(2, '0') + ':00');
+    }
+    return horas;
+  }
+
+  generarMinutos() {
+    return ['00', '15', '30', '45']; // Minutos disponibles
+  } */
   /* obtenerAgenda(id: number) {
     this.agendaService.obtenerAgenda(id).subscribe((data: any) => {
       if (data.codigo === 200 && data.payload.length > 0) {
@@ -148,20 +163,29 @@ obtenerAgendas() {
   crearBodyTurno() {
     // Obtener el ID de la agenda seleccionada desde el formulario
     const idAgendaSeleccionada = this.turnoForm.controls['agenda'].value;
-
+  
     // Verificar que el ID de la agenda seleccionada sea válido
     if (idAgendaSeleccionada) {
-      return {
-        id_agenda: idAgendaSeleccionada, // Usar el ID de la agenda seleccionada
-        fecha: this.turnoForm.controls['fecha'].value,
-        hora: this.turnoForm.controls['hora'].value + ':' + this.turnoForm.controls['minutos'].value,
-        id_paciente: this.id,
-        id_cobertura: this.turnoForm.controls['cobertura'].value,
-        nota: this.turnoForm.controls['razon'].value
-      };
+      // Buscar la agenda seleccionada en agendaHoras
+      const agendaSeleccionada = this.agendaHoras.find(agenda => agenda.id === idAgendaSeleccionada);
+  
+      // Verificar que se encontró la agenda
+      if (agendaSeleccionada) {
+        return {
+          id_agenda: idAgendaSeleccionada, // Usar el ID de la agenda seleccionada
+          fecha: this.turnoForm.controls['fecha'].value,
+          hora: agendaSeleccionada.hora_entrada, // Usar la hora de inicio de la agenda
+          id_paciente: this.id,
+          id_cobertura: this.turnoForm.controls['cobertura'].value,
+          nota: String(this.turnoForm.controls['razon'].value)
+        };
+      } else {
+        this.snackBar.open('No se ha encontrado la agenda seleccionada', 'Cerrar', { duration: 3000 });
+        return null;
+      }
     } else {
       this.snackBar.open('No se ha seleccionado una agenda válida', 'Cerrar', { duration: 3000 });
       return null;
     }
-  }
+}
 }

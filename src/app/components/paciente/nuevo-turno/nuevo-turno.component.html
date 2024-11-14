@@ -33,15 +33,29 @@
           <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
           <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
+<!-- 
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Hora</mat-label>
+          <mat-select formControlName="hora" required>
+            <mat-option *ngFor="let h of horas" [value]="h">{{h}}</mat-option>
+          </mat-select>
+        </mat-form-field>
+        
+        <mat-form-field appearance="fill" class="full-width">
+          <mat-label>Minutos</mat-label>
+          <mat-select formControlName="minutos" required>
+            <mat-option *ngFor="let m of minutos" [value]="m">{{m}}</mat-option>
+          </mat-select>
+        </mat-form-field> -->
 
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Seleccionar Horario</mat-label>
           <mat-select formControlName="agenda" required>
-              <mat-option *ngFor="let agenda of agendaHoras" [value]="agenda.id">
-                  {{agenda.fecha}} - {{agenda.hora_entrada}} a {{agenda.hora_salida}}
-              </mat-option>
+            <mat-option *ngFor="let agenda of agendaHoras" [value]="agenda.id">
+              {{ agenda.hora_entrada }} - {{ agenda.hora_salida }}
+            </mat-option>
           </mat-select>
-      </mat-form-field>
+        </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Razón</mat-label>
