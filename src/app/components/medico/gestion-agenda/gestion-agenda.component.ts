@@ -60,7 +60,7 @@ export class GestionAgendaComponent implements OnInit {
     this.cargarAgenda(); // Solo se llama si el usuario está autenticado
 }
 
- /*  private cargarEspecialidadMedico() {
+/*  private cargarEspecialidadMedico() {
     const usuario = this.authService.isLoggedin() ? this.authService.getCurrentUser() : null;
     if (usuario) {
       this.EspecialidadService.obtenerEspecialidadesMedico(usuario.id).subscribe({

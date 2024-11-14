@@ -37,7 +37,7 @@ export class CrearUsuarioComponent {
       telefono: this.telefono
     };
 
-    const token = localStorage.getItem('jwt'); // Obtener el token de localStorage
+    const token = localStorage.getItem('jwt');
 
     this.usuariosService.crearUsuario(nuevoUsuario, token).subscribe(
       (response) => {
