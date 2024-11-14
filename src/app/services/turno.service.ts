@@ -13,7 +13,10 @@ export class TurnoService {
 
   private getHeaders(): HttpHeaders {
     const token = localStorage.getItem('jwt');
-    return new HttpHeaders().set('Authorization', `${token}`);
+    return new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token || ''
+    });
   }
 
   obtenerTurnosPaciente(idPaciente: number): Observable<any> {

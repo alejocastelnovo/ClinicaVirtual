@@ -35,14 +35,13 @@
         </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Hora</mat-label>
-          <input matInput formControlName="hora" required>
-        </mat-form-field>
-
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Minutos</mat-label>
-          <input matInput formControlName="minutos" required>
-        </mat-form-field>
+          <mat-label>Seleccionar Horario</mat-label>
+          <mat-select formControlName="agenda" required>
+              <mat-option *ngFor="let agenda of agendaHoras" [value]="agenda.id">
+                  {{agenda.fecha}} - {{agenda.hora_entrada}} a {{agenda.hora_salida}}
+              </mat-option>
+          </mat-select>
+      </mat-form-field>
 
         <mat-form-field appearance="fill" class="full-width">
           <mat-label>Razón</mat-label>

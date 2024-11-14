@@ -22,15 +22,14 @@ export class NuevoTurnoComponent {
   especialidades: any[] = [];
   coberturas: any[] = [];
   agendaHoras: any[] = [];
-  numArray: number = 0;
 
   constructor(private fb: FormBuilder,
-              private router: Router,
-              private snackBar: MatSnackBar,
-              private turnosService: TurnoService,
-              private usuariosService: UsuariosService,
-              private especialidadesService: EspecialidadService,
-              private agendaService: AgendaService) {
+    private router: Router,
+    private snackBar: MatSnackBar,
+    private turnosService: TurnoService,
+    private usuariosService: UsuariosService,
+    private especialidadesService: EspecialidadService,
+    private agendaService: AgendaService) {
     this.turnoForm = this.fb.group({
       cobertura: ['', Validators.required],
       especialidad: ['', Validators.required],
@@ -39,6 +38,7 @@ export class NuevoTurnoComponent {
       hora: ['', Validators.required],
       minutos: ['', Validators.required],
       razon: ['', Validators.required],
+      agenda: ['', Validators.required],
     });
     this.obtenerDatosIniciales();
   }
@@ -49,6 +49,21 @@ export class NuevoTurnoComponent {
     this.obtenerProfesionales();
   }
 
+  ngOnInit() {
+    this.obtenerAgendas();
+    this.obtenerProfesionales();
+}
+
+obtenerAgendas() {
+  this.agendaService.obtenerAgenda(this.id).subscribe((data: any) => {
+      console.log('Datos de la API:', data);
+      if (data.codigo === 200) {
+          this.agendaHoras = data.payload;
+      } else {
+          this.snackBar.open(data.mensaje, 'Cerrar', { duration: 3000 });
+      }
+  });
+}
   obtenerEspecialidades() {
     this.especialidadesService.obtenerEspecialidades(this.token).subscribe((data: any) => {
       if (data.codigo === 200) {
@@ -61,11 +76,22 @@ export class NuevoTurnoComponent {
 
   obtenerProfesionales() {
     this.usuariosService.obtenerMedicos(this.token).subscribe((data: any) => {
-        this.profesionales = data;
+      this.profesionales = data;
     }, (error) => {
-        this.snackBar.open(error.message, 'Cerrar', { duration: 3000 });
+      this.snackBar.open(error.message, 'Cerrar', { duration: 3000 });
     });
-}
+  }
+
+  onMedicoChange(medicoId: number) {
+    this.agendaService.obtenerAgenda(medicoId).subscribe((data: any) => {
+      console.log('Datos de la API de agendas:', data);
+      if (data.codigo === 200) {
+        this.agendaHoras = data.payload; // Asigna las agendas del médico seleccionado
+      } else {
+        this.snackBar.open(data.mensaje, 'Cerrar', { duration: 3000 });
+      }
+    });
+  }
 
   obtenerCoberturas() {
     this.especialidadesService.obtenerCobertura(this.token).subscribe((data: any) => {
@@ -94,11 +120,19 @@ export class NuevoTurnoComponent {
     });
   }
  */
+  
   guardarTurno() {
     this.loading = true;
     let body = this.crearBodyTurno();
 
-    this.turnosService.asignarTurno(JSON.stringify(body)).subscribe((data: any) => {
+    // Verificar si el cuerpo del turno es válido
+    if (!body) {
+      this.loading = false;
+      return; // Si el cuerpo es nulo, no continuar
+    }
+
+    // Asignar el turno
+    this.turnosService.asignarTurno(body).subscribe((data: any) => {
       this.loading = false;
       if (data.codigo === 200) {
         this.snackBar.open('Turno confirmado', 'Cerrar', { duration: 3000 });
@@ -111,17 +145,23 @@ export class NuevoTurnoComponent {
       this.snackBar.open('Error al asignar el turno', 'Cerrar', { duration: 3000 });
     });
   }
-
   crearBodyTurno() {
-    return {
-      nota: this.turnoForm.controls['razon'].value,
-      id_agenda: this.agendaHoras[this.numArray].id,
-      fecha: this.turnoForm.controls['fecha'].value,
-      hora: this.turnoForm.controls['hora'].value + ':' + this.turnoForm.controls['minutos'].value,
-      id_paciente: this.id,
-      id_cobertura: this.turnoForm.controls['cobertura'].value
-    };
+    // Obtener el ID de la agenda seleccionada desde el formulario
+    const idAgendaSeleccionada = this.turnoForm.controls['agenda'].value;
+
+    // Verificar que el ID de la agenda seleccionada sea válido
+    if (idAgendaSeleccionada) {
+      return {
+        id_agenda: idAgendaSeleccionada, // Usar el ID de la agenda seleccionada
+        fecha: this.turnoForm.controls['fecha'].value,
+        hora: this.turnoForm.controls['hora'].value + ':' + this.turnoForm.controls['minutos'].value,
+        id_paciente: this.id,
+        id_cobertura: this.turnoForm.controls['cobertura'].value,
+        nota: this.turnoForm.controls['razon'].value
+      };
+    } else {
+      this.snackBar.open('No se ha seleccionado una agenda válida', 'Cerrar', { duration: 3000 });
+      return null;
+    }
   }
 }
-
-  
