@@ -20,6 +20,13 @@ export class UsuariosService {
     return this.http.get(`${this.apiUrl}/obtenerUsuario/${id}`, { headers });
   }
 
+  crearUsuario(usuario: any, token: any): Observable<any> {
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'authorization': token
+    });
+    return this.http.post(`${this.apiUrl}/crearUsuario`, usuario, { headers });
+  }
   
   obtenerUsuarios(token: string): Observable<any> {
     const headers = new HttpHeaders({

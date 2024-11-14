@@ -20,6 +20,18 @@
         </mat-form-field>
 
         <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="dni" name="dni" placeholder="DNI" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="telefono" name="telefono" placeholder="Teléfono" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
+          <input matInput [(ngModel)]="fechaNacimiento" name="fechaNacimiento" type="date" placeholder="Fecha de Nacimiento" required>
+        </mat-form-field>
+
+        <mat-form-field appearance="outline">
           <mat-select [(ngModel)]="tipoUsuario" name="tipoUsuario" placeholder="Tipo de Usuario" required>
             <mat-option value="Operador">Operador</mat-option>
             <mat-option value="Médico">Médico</mat-option>

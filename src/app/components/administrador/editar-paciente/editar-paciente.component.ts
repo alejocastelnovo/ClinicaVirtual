@@ -82,7 +82,7 @@ export class EditarPacienteComponent implements OnInit {
         this.editarUsuarioForm.controls['tipo_usuario'].setValue(this.datos.rol);
         this.editarUsuarioForm.controls['contrasenia'].setValue(this.datos.password);
         if (this.datos.rol === 'medico') {
-          this.especialidadesService.obtenerEspecialidadesMedico(this.datos.id, this.token).subscribe((data: any) => {
+          this.especialidadesService.obtenerEspecialidades(this.token).subscribe((data: any) => {
             this.editarUsuarioForm.controls['especialidad'].setValue(data.payload[0].id_especialidad)
           })
         }
