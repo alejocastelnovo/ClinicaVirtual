@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef } from '@angular/material/dialog'; // Añadir esta línea
 
 @Component({
   selector: 'app-login',
@@ -21,7 +22,8 @@ export class LoginComponent {
     private fb: FormBuilder,
     private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialogRef: MatDialogRef<LoginComponent>,
   ) {
     // Si ya está logueado, redirigir al dashboard
     if (this.authService.isLoggedIn()) {
@@ -33,7 +35,6 @@ export class LoginComponent {
     if (this.loginForm.valid) {
       this.loading = true;
       const { usuario, password } = this.loginForm.value;
-
       this.authService.login(usuario, password).subscribe({
         next: (response) => {
           if (response.codigo === 200) {
@@ -41,9 +42,9 @@ export class LoginComponent {
               duration: 3000,
               panelClass: ['success-snackbar']
             });
-            
-            //dashboard general
+
             this.router.navigate(['/dashboard']);
+            this.dialogRef.close();
           } else {
             this.mostrarError(response.mensaje || 'Error en el inicio de sesión');
           }
@@ -68,7 +69,7 @@ export class LoginComponent {
     });
   }
 
-  onRegister() {
-    this.router.navigate(['/registro']);
+  cancelar() {
+    this.dialogRef.close();
   }
 }

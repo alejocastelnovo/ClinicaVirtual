@@ -23,17 +23,6 @@ export class NavComponent implements OnInit {
         if (usuarioLogueado) {
             this.userName = `${usuarioLogueado.nombre} ${usuarioLogueado.apellido}`;
             this.userType = usuarioLogueado.rol;
-            this.userTypeShort = this.getUserTypeShort(usuarioLogueado.rol);
-        }
-    }
-
-    getUserTypeShort(userType: string | null): string {
-        switch (userType) {
-            case 'administrador': return 'A';
-            case 'operador': return 'O';
-            case 'medico': return 'M';
-            case 'paciente': return 'P';
-            default: return '?';
         }
     }
 

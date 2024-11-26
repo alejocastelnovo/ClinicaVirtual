@@ -3,6 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatDialogRef } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-register',
@@ -18,7 +19,8 @@ export class RegisterComponent {
     private fb: FormBuilder, 
     private authService: AuthService, 
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private dialogRef: MatDialogRef<RegisterComponent>
   ) {
     this.registerForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
@@ -48,8 +50,10 @@ export class RegisterComponent {
       this.authService.crearUsuario(userData).subscribe({
         next: (response) => {
           if (response.codigo === 200) {
-            this.mostrarMensaje('¡Registro exitoso! Redirigiendo al login...', 'success');
-            setTimeout(() => this.router.navigate(['/login']), 2000);
+            this.mostrarMensaje('¡Registro exitoso! Redirigiendo al home...', 'success');
+            setTimeout(() => this.router.navigate(['/home']), 2000);
+            this.dialogRef.close();
+
           } else {
             this.mostrarMensaje(response.mensaje || 'Error en el registro', 'error');
           }
@@ -94,7 +98,6 @@ export class RegisterComponent {
   }
 
   onCancel(): void {
-    this.registerForm.reset();
-    this.router.navigate(['/login']);
+    this.dialogRef.close();
   }
 }

@@ -1,13 +1,4 @@
 
-
-<!-- 
-CONTRASEÑAS DE LOS USUARIOS: 1234
-
-ROLES Y SUS DNI PARA INICIAR SESION; (numero del 1 al 4 para hacerlo mas facil): 
-
-operador; 1  ///  paciente;2 //// medico;3 //// admin;4 
--->
-
 <div class="login-container">
     <mat-card>
         <mat-card-header>
@@ -37,8 +28,8 @@ operador; 1  ///  paciente;2 //// medico;3 //// admin;4
                             [disabled]="!loginForm.valid || loading">
                         {{loading ? 'Iniciando sesión...' : 'Iniciar Sesión'}}
                     </button>
-                    <button mat-button type="button" (click)="onRegister()">
-                        Registrarse
+                    <button mat-button color="warn" type="button" (click)="cancelar()">
+                        Cancelar
                     </button>
                 </div>
             </form>

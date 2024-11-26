@@ -3,6 +3,8 @@ import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LoginComponent } from '../login/login.component';
+import { RegisterComponent } from '../registro/registro.component';
 
 @Component({
   selector: 'app-home',
@@ -11,7 +13,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class HomeComponent {
   loginForm: FormGroup;
-  
+
   @ViewChild('loginDialog') loginDialog!: TemplateRef<any>;
 
   constructor(
@@ -26,12 +28,22 @@ export class HomeComponent {
     });
   }
 
-  openLoginDialog() {
-    const dialogRef = this.dialog.open(this.loginDialog);
+  abrirLoginDialog() {
+    const dialogRef = this.dialog.open(LoginComponent);
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         console.log('Inicio de sesión exitoso');
+      }
+    });
+  }
+
+  abrirRegisterDialog() {
+    const dialogRef = this.dialog.open(RegisterComponent);
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Registro exitoso');
       }
     });
   }
@@ -44,13 +56,13 @@ export class HomeComponent {
     if (this.loginForm.valid) {
       const { username, password } = this.loginForm.value;
       const usuarios = JSON.parse(localStorage.getItem('usuarios') || '[]');
-    
+
       const usuario = usuarios.find((u: any) => u.email === username && u.password === password);
-    
+
       if (usuario) {
         localStorage.setItem('userName', `${usuario.nombre} ${usuario.apellido}`);
         localStorage.setItem('userType', 'Paciente');
-    
+
         this.dialog.closeAll();
         this.router.navigate(['/dashboard']);
       } else {

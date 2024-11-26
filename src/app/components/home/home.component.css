@@ -16,6 +16,25 @@
     opacity: 0;
 }
 
+.botoneslogin{   
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.botoneslogin button {
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.botoneslogin button:hover {
+    background-color: #004d40;
+    color: white;
+}
+
 .main-content h2 {
     margin-bottom: 1rem;
     font-size: 2rem;
@@ -56,28 +75,6 @@
     margin: 0 1rem;
 }
 
-.actions button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-.actions button[color="primary"] {
-    background-color: #00796b;
-    color: white;
-}
-
-.actions button[color="primary"]:hover {
-    background-color: #004d40;
-}
-
-.actions button[color="accent"] {
-    background-color: #00796b;
-    color: white;
-}
-
-.actions button[color="accent"]:hover {
-    background-color: #004d40;
-}
 
 .modal-actions {
     display: flex;
@@ -187,10 +184,6 @@
     color: #00796b
 }
 
-.cta h2 {
-    font-size: 2.5rem;
-    margin-bottom: 30px;
-}
 
 .actions {
     display: flex;
@@ -244,19 +237,6 @@
     .feature {
         margin-bottom: 30px;
     }
-
-    .cta h2 {
-        font-size: 2rem;
-    }
-
-    .actions {
-        flex-direction: column;
-    }
-
-    .actions button {
-        width: 100%;
-        margin-bottom: 10px;
-    }
 }
 
 .header {
@@ -302,40 +282,6 @@
     background-color: transparent;
 }
 
-.auth-buttons button {
-    padding: 0.5rem 1rem;
-    border: none;
-    border-radius: 20px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    background-color: rgba(0, 121, 107, 0.1);
-    color: rgba(0, 121, 107, 0.8);
-}
-
-.auth-buttons button:hover {
-    background-color: rgba(0, 121, 107, 0.2);
-    color: rgba(0, 121, 107, 1);
-    box-shadow: 0 2px 4px rgba(0, 121, 107, 0.2);
-}
-
-.auth-buttons .btn-login {
-    border: 2px solid rgba(0, 121, 107, 0.6);
-}
-
-.auth-buttons .btn-register {
-    background-color: rgba(0, 121, 107, 0.8);
-    color: white;
-}
-
-.auth-buttons .btn-register:hover {
-    background-color: rgb(255, 255, 255);
-    color: #00796b;
-}
-
-.auth-buttons button:active {
-    transform: scale(0.95);
-}
 
 @media (max-width: 768px) {
     .auth-buttons {
@@ -365,8 +311,7 @@
 
     .hero {
         padding-top: 120px;
-        /* Ajustar para el header fijo en móviles */
     }
 
-    /* Resto de los estilos responsivos existentes... */
+
 }

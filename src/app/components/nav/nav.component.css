@@ -46,19 +46,6 @@
     border-radius: 50%;
 }
 
-.user-type-tooltip {
-    position: absolute;
-    top: -20px;
-    right: -10px;
-}
-
-.user-type-badge {
-    background-color: #00796b;
-    color: white;
-    padding: 2px 6px;
-    border-radius: 50%;
-    font-size: 0.8rem;
-}
 
 .user-name {
     font-weight: 500;
