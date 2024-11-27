@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
@@ -16,10 +16,11 @@ interface LoginResponse {
 })
 export class AuthService {
   private apiUrl = 'http://localhost:4000/api';
+  private userSubject = new BehaviorSubject<any>(this.getCurrentUser());
 
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
   ) {}
 
   private getHeaders(): HttpHeaders {
@@ -44,7 +45,8 @@ export class AuthService {
             localStorage.setItem('rol', response.payload[0].rol.toLowerCase());
             localStorage.setItem('nombre', response.payload[0].nombre);
             localStorage.setItem('apellido', response.payload[0].apellido);
-            this.getCurrentUser();
+            this.userSubject.next(response.payload[0]);
+
           }
         })
       );
@@ -53,11 +55,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('jwt');
     localStorage.removeItem('usuario');
-    localStorage.removeItem('rol');
-    localStorage.removeItem('nombre');
-    localStorage.removeItem('apellido');
-    localStorage.clear();
-    console.log('logout');
+    this.userSubject.next(null);
     this.router.navigate(['/login']);
   }
 
@@ -77,9 +75,15 @@ export class AuthService {
   }
 
 
+  // Método para obtener el usuario actual
   getCurrentUser(): any {
     const usuario = localStorage.getItem('usuario');
     return usuario ? JSON.parse(usuario) : null;
+  }
+
+  // Método para obtener el observable del usuario
+  getUserObservable() {
+    return this.userSubject.asObservable();
   }
 
   resetPassword(id: number, password: string): Observable<any> {
