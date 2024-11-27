@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../../services/auth.service';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Component, OnInit, inject } from '@angular/core';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { UsuariosService } from 'src/app/services/usuarios.service';
+import { Router, RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-mis-datos',
@@ -10,90 +10,109 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./mis-datos.component.css']
 })
 export class MisDatosComponent implements OnInit {
+
+  id = localStorage.getItem('id');
+  datos: any;
   usuarioForm: FormGroup;
-  loading = false;
+  editing: boolean = false;
+  token: any;
+  private snackBar = inject(MatSnackBar);
 
-  constructor(
-    private authService: AuthService,
-    private fb: FormBuilder,
-    private router: Router,
-    private snackBar: MatSnackBar
-  ) {
+  constructor(private usuarioService: UsuariosService, private fb: FormBuilder, private route: Router) {
+
     this.usuarioForm = this.fb.group({
-      nombre: [{ value: '', disabled: true }],
-      apellido: [{ value: '', disabled: true }],
-      dni: [{ value: '', disabled: true }],
-      email: ['', [Validators.required, Validators.email]],
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{7}$')]],
-      password: ['', [Validators.minLength(3)]],
-      fecha_nacimiento: [{ value: '', disabled: true }]
+      nombre: [''],
+      apellido: [''],
+      dni: [''],
+      mail: [''],
+      telefono: [''],
+      contrasenia: [''],
+      correo: [''],
     });
+
+    this.token = localStorage.getItem('jwt')
   }
 
-  ngOnInit() {
-    const usuario = this.authService.getCurrentUser();
-    console.log(usuario);
-    if (usuario) {
-      this.usuarioForm.patchValue({
-        nombre: usuario.nombre,
-        apellido: usuario.apellido,
-        dni: usuario.dni,
-        email: usuario.email,
-        telefono: usuario.telefono || '',
-        fecha_nacimiento: usuario.fecha_nacimiento
-      });
-    } else {
-      this.router.navigate(['/login']);
+  ngOnInit(): void {
+    this.obtenerUsuarios();
+  }
+
+  obtenerUsuarios() {
+    this.usuarioService.obtenerUsuario(this.id, this.token).subscribe((data: any) => {
+      if (data.codigo === 200 && data.payload.length > 0) {
+        this.datos = data.payload[0];
+        this.usuarioForm.controls['nombre'].setValue(this.datos.nombre);
+        this.usuarioForm.controls['apellido'].setValue(this.datos.apellido);
+        this.usuarioForm.controls['dni'].setValue(this.datos.dni);
+        this.usuarioForm.controls['mail'].setValue(this.datos.mail);
+        this.usuarioForm.controls['telefono'].setValue(this.datos.telefono);
+        this.usuarioForm.controls['contrasenia'].setValue(this.datos.password);
+        this.usuarioForm.controls['correo'].setValue(this.datos.email);
+        this.usuarioForm.disable();
+      } else if (data.codigo === -1) {
+        this.jwtExpirado();
+      } else {
+        this.openSnackBar(data.mensaje);
+      }
+    })
+  }
+
+  editar() {
+    this.editing = true
+    this.usuarioForm.controls['correo'].enable()
+    this.usuarioForm.controls['contrasenia'].enable()
+    this.usuarioForm.controls['telefono'].enable()
+  }
+
+  cancelar() {
+    this.editing = false
+    this.usuarioForm.controls['correo'].disable()
+    this.usuarioForm.controls['contrasenia'].disable()
+    this.usuarioForm.controls['telefono'].disable()
+  }
+
+  volver() {
+    this.route.navigate(['/dashboard'])
+  }
+
+
+  guardar() {
+    let body = {
+      dni: this.datos.dni,
+      apellido: this.datos.apellido,
+      nombre: this.datos.nombre,
+      fecha_nacimiento: this.datos.fecha_nacimiento,
+      password: this.usuarioForm.controls['contrasenia'].value,
+      rol: this.datos.rol,
+      email: this.usuarioForm.controls['correo'].value,
+      telefono: this.usuarioForm.controls['telefono'].value
     }
+    this.usuarioService.actualizarUsuario(this.id, body, this.token).subscribe((data: any) => {
+      if (data.codigo === 200) {
+        this.editing = false;
+        this.openSnackBar('Cambios guardados con exito');
+        this.usuarioForm.controls['correo'].disable()
+        this.usuarioForm.controls['contrasenia'].disable()
+        this.usuarioForm.controls['telefono'].disable()
+      } else if (data.codigo === -1) {
+        this.jwtExpirado();
+      } else {
+        this.openSnackBar(data.mensaje)
+      }
+    })
   }
 
-  guardarCambios() {
-    if (this.usuarioForm.valid) {
-      this.loading = true;
-      const usuario = this.authService.getCurrentUser();
-      const cambios = {
-        id: usuario.id,
-        dni: usuario.dni,
-        apellido: usuario.apellido,
-        nombre: usuario.nombre,
-        fecha_nacimiento: usuario.fecha_nacimiento,
-        rol: usuario.rol,
-        email: this.usuarioForm.get('email')?.value,
-        telefono: this.usuarioForm.get('telefono')?.value,
-        password: this.usuarioForm.get('password')?.value || usuario.password
-      };
+  jwtExpirado() {
+    this.openSnackBar('Sesión expirada.');
 
-      this.authService.actualizarUsuario(cambios).subscribe({
-        next: (response) => {
-          if (response.codigo === 200) {
-            const usuarioActualizado = { ...usuario, ...cambios };
-            localStorage.setItem('usuario', JSON.stringify(usuarioActualizado));
-            this.mostrarMensaje('Datos actualizados correctamente');
-            this.router.navigate(['/dashboard']);
-          }
-        },
-        error: (error) => {
-          console.error('Error:', error);
-          this.mostrarError('Error al actualizar los datos');
-        },
-        complete: () => {
-          this.loading = false;
-        }
-      });
-    }
+    setTimeout(() => {
+      this.route.navigate(['/home']);
+    }, 1000);
   }
 
-  private mostrarMensaje(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000
-    });
-  }
-
-  private mostrarError(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000,
-      panelClass: ['error-snackbar']
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'Cerrar', {
+      duration: 5000,
     });
   }
 }
-

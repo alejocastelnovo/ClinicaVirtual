@@ -38,11 +38,12 @@ export class LoginComponent {
       this.authService.login(usuario, password).subscribe({
         next: (response) => {
           if (response.codigo === 200) {
-            this.snackBar.open('Inicio de sesión exitoso', 'Cerrar', {
-              duration: 3000,
-              panelClass: ['success-snackbar']
-            });
             
+            localStorage.setItem('jwt', response.jwt)
+            localStorage.setItem('id', response.payload[0].id);
+            localStorage.setItem('rol', response.payload[0].rol);
+            localStorage.setItem('nombreUsuario', response.payload[0].nombre + ' ' + response.payload[0].apellido);
+
             this.router.navigate(['/dashboard']);
             this.dialogRef.close();
           } else {

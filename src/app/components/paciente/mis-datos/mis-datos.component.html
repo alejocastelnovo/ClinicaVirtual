@@ -1,63 +1,48 @@
-<div class="mis-datos-container">
-  <mat-card>
-    <mat-card-header>
-      <mat-card-title>Mis Datos Personales</mat-card-title>
-    </mat-card-header>
 
-    <mat-card-content>
-      <form [formGroup]="usuarioForm" (ngSubmit)="guardarCambios()">
-        <mat-form-field appearance="outline">
-          <mat-label>Nombre</mat-label>
-          <input matInput formControlName="nombre" [readonly]="true">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Apellido</mat-label>
-          <input matInput formControlName="apellido"[readonly]="true">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>DNI</mat-label>
-          <input matInput formControlName="dni" [readonly]="true">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Fecha de Nacimiento</mat-label>
-          <input matInput formControlName="fecha_nacimiento" [readonly]="true">
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Email</mat-label>
-          <input matInput formControlName="email" type="email">
-          <mat-error *ngIf="usuarioForm.get('email')?.hasError('required')">
-            El email es requerido
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Teléfono</mat-label>
-          <input matInput formControlName="telefono" type="tel">
-          <mat-error *ngIf="usuarioForm.get('telefono')?.hasError('required')">
-            El teléfono es requerido
-          </mat-error>
-        </mat-form-field>
-
-        <mat-form-field appearance="outline">
-          <mat-label>Nueva Contraseña (opcional)</mat-label>
-          <input matInput type="password" formControlName="password">
-        </mat-form-field>
-
-        <div class="button-container">
-          <button mat-raised-button color="primary" type="submit" 
-                  [disabled]="!usuarioForm.valid || loading">
-            {{loading ? 'Guardando...' : 'Guardar cambios'}}
-          </button>
-        </div>
-      </form>
-    </mat-card-content>
-  </mat-card>
-
-  <div class="loading-overlay" *ngIf="loading">
-    <mat-spinner></mat-spinner>
-  </div>
-</div>
+      <div class="form-wrapper">            
+                        <form class="form-container"  [formGroup]="usuarioForm">
+                <div class="row">
+                <mat-form-field appearance="fill" class="full-width">
+                  <mat-label>Nombre</mat-label>
+                  <input matInput formControlName="nombre" autocomplete="given-name">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field appearance="fill" class="full-width">
+                  <mat-label>Apellido</mat-label>
+                  <input matInput formControlName="apellido" autocomplete="family-name">
+                </mat-form-field>
+              </div>
+              <div class="row">
+                <mat-form-field appearance="fill" class="full-width">
+                  <mat-label>DNI</mat-label>
+                  <input matInput formControlName="dni" autocomplete="off">
+                </mat-form-field>
+              </div>              
+              <div class="row">
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Correo</mat-label>
+                <input matInput formControlName="correo">
+              </mat-form-field>
+            </div>
+              <div class="row">
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Teléfono</mat-label>
+                <input matInput formControlName="telefono" autocomplete="tel">
+              </mat-form-field>
+            </div>
+            <div class="row">
+              <mat-form-field appearance="fill" class="full-width">
+                <mat-label>Contraseña</mat-label>
+                <input matInput type="password" formControlName="contrasenia" autocomplete="new-password">
+              </mat-form-field>
+            </div>
+            <div class="botones">
+              <button mat-button (click)="volver()" *ngIf="!editing">Volver</button>
+              <button mat-button (click)="editar()" *ngIf="!editing">Editar</button>
+              <button mat-button (click)="cancelar()" *ngIf="editing">Cancelar</button>
+              <button mat-button (click)="guardar()" *ngIf="editing">Guardar</button>
+            </div>
+                
+              </form>
+            </div>

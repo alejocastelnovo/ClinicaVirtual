@@ -77,7 +77,6 @@ export class AuthService {
   }
 
 
-  /* Para que me de el usuario actual  */
   getCurrentUser(): any {
     const usuario = localStorage.getItem('usuario');
     return usuario ? JSON.parse(usuario) : null;
