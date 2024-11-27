@@ -28,17 +28,10 @@ mat-card-title {
 mat-form-field {
     width: 100%;
     margin-bottom: 10px; 
-    background-color: #f1f1f1;
     border-radius: 5px;
     padding-top: 10px;
 }
 
-.mat-mdc-text-field-wrapper {
-    background-color: #e0f7fa;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    transition: all 0.3s ease;
-}
 
 .mat-mdc-form-field-flex {
     padding: 0;
@@ -47,22 +40,6 @@ mat-form-field {
 .mat-mdc-form-field-infix {
     padding: 12px 15px;
     border: none;
-}
-
-
-
-::ng-deep .mat-mdc-form-field-label {
-    color: #00796b;
-}
-
-/* Logra efecto de enfoque */
-.mat-focused .mat-mdc-text-field-wrapper {
-    box-shadow: 0 6px 12px rgba(0, 121, 107, 0.2);
-    background-color: #b2ebf2;
-}
-
-.mat-focused .mat-mdc-form-field-label {
-    color: #00796b;
 }
 
 .button-container {

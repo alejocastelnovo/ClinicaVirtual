@@ -44,6 +44,7 @@ export class AuthService {
             localStorage.setItem('rol', response.payload[0].rol.toLowerCase());
             localStorage.setItem('nombre', response.payload[0].nombre);
             localStorage.setItem('apellido', response.payload[0].apellido);
+            this.getCurrentUser();
           }
         })
       );
@@ -55,6 +56,8 @@ export class AuthService {
     localStorage.removeItem('rol');
     localStorage.removeItem('nombre');
     localStorage.removeItem('apellido');
+    localStorage.clear();
+    console.log('logout');
     this.router.navigate(['/login']);
   }
 

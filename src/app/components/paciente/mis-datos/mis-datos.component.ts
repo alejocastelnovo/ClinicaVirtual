@@ -32,6 +32,7 @@ export class MisDatosComponent implements OnInit {
 
   ngOnInit() {
     const usuario = this.authService.getCurrentUser();
+    console.log(usuario);
     if (usuario) {
       this.usuarioForm.patchValue({
         nombre: usuario.nombre,

@@ -82,35 +82,6 @@
     padding: 1.5rem 0 0 0;
 }
 
-/* Animación de entrada */
-
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(50px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@media (max-width: 768px) {
-    .main-content {
-        max-width: 95%;
-        font-size: 0.9rem;
-    }
-
-    .main-content h2 {
-        font-size: 1.6rem;
-    }
-
-    .actions button {
-        margin: 0.5rem;
-    }
-}
 
 .home {
     font-family: 'Roboto', sans-serif;
@@ -130,6 +101,7 @@
     text-align: center;
     color: white;
     padding: 0 20px;
+    padding-top: 120px;
 }
 
 .hero h1 {
@@ -194,48 +166,7 @@
     font-size: 1rem;
 }
 
-@keyframes fadeInDown {
-    from {
-        opacity: 0;
-        transform: translateY(-20px);
-    }
 
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@keyframes fadeInUp {
-    from {
-        opacity: 0;
-        transform: translateY(20px);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-@media (max-width: 768px) {
-    .hero h1 {
-        font-size: 2.5rem;
-    }
-
-    .hero .subtitle {
-        font-size: 1.2rem;
-    }
-
-    .features {
-        flex-direction: column;
-        align-items: center;
-    }
-
-    .feature {
-        margin-bottom: 30px;
-    }
-}
 
 .header {
     display: flex;
@@ -281,6 +212,53 @@
 }
 
 
+
+/* Efectos y animaciones, tambien esta la adaptacion a mobile */
+
+@keyframes fadeInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .hero h1 {
+        font-size: 2.5rem;
+    }
+
+    .hero .subtitle {
+        font-size: 1.2rem;
+    }
+
+    .features {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .feature {
+        margin-bottom: 30px;
+    }
+}
+
+
 @media (max-width: 768px) {
     .auth-buttons {
         flex-direction: column;
@@ -293,9 +271,7 @@
     }
 }
 
-.hero {
-    padding-top: 80px;
-}
+
 
 @media (max-width: 768px) {
     .header {
@@ -310,6 +286,32 @@
     .hero {
         padding-top: 120px;
     }
+}
 
 
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@media (max-width: 768px) {
+    .main-content {
+        max-width: 95%;
+        font-size: 0.9rem;
+    }
+
+    .main-content h2 {
+        font-size: 1.6rem;
+    }
+
+    .actions button {
+        margin: 0.5rem;
+    }
 }

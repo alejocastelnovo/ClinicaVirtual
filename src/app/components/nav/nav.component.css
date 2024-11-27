@@ -13,13 +13,14 @@
 }
 
 .logo {
-    display: flex;
+    display:flex;
     align-items: center;
     gap: 1rem;
 }
 
+
 .logo-img {
-    height: 40px;
+    height: 50px;
     width: auto;
 }
 
@@ -27,7 +28,7 @@
     text-decoration: none;
     color: #333;
     font-size: 1.5rem;
-    font-weight: bold;
+
 }
 
 .user-info {
