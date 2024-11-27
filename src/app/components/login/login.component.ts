@@ -42,7 +42,7 @@ export class LoginComponent {
               duration: 3000,
               panelClass: ['success-snackbar']
             });
-
+            
             this.router.navigate(['/dashboard']);
             this.dialogRef.close();
           } else {

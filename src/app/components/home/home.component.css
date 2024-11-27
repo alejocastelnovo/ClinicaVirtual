@@ -172,14 +172,12 @@
 
 .feature mat-card-title {
     font-size: 1.5rem;
-    margin-bottom: 15px;
 }
 
 .parteabajo {
     background-color: #f5f5f5;
     text-align: center;
     padding: 50px 20px;
-    margin-bottom: 50px;
     font-style: italic;
     color: #00796b
 }

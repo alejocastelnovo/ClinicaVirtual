@@ -1,4 +1,4 @@
-import { Component, ViewChild, TemplateRef } from '@angular/core';
+import { Component, ViewChild, TemplateRef  } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -13,20 +13,21 @@ import { RegisterComponent } from '../registro/registro.component';
 })
 export class HomeComponent {
   loginForm: FormGroup;
-
-  @ViewChild('loginDialog') loginDialog!: TemplateRef<any>;
+  isLoggedIn: boolean;
 
   constructor(
     private authService: AuthService,
     private router: Router,
     private dialog: MatDialog,
-    private fb: FormBuilder
+    private fb: FormBuilder,
   ) {
+    this.isLoggedIn = this.authService.isLoggedIn();
     this.loginForm = this.fb.group({
       username: ['', Validators.required],
       password: ['', Validators.required]
     });
   }
+
 
   abrirLoginDialog() {
     const dialogRef = this.dialog.open(LoginComponent);
@@ -62,6 +63,7 @@ export class HomeComponent {
       if (usuario) {
         localStorage.setItem('userName', `${usuario.nombre} ${usuario.apellido}`);
         localStorage.setItem('userType', 'Paciente');
+        this.isLoggedIn = true;
 
         this.dialog.closeAll();
         this.router.navigate(['/dashboard']);

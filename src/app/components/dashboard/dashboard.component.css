@@ -1,22 +1,29 @@
 .dashboard-container {
     padding: 20px;
-    background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
-    min-height: calc(100vh - 70px);
+    background-image: linear-gradient(rgb(222, 228, 227), rgba(152, 194, 190, 0)),url('/assets/images/fondodash.jpg');
+    background-size: cover;
+    background-position: center;
+    background-image: transparent;
+    min-height: calc(100vh - 80px);
 }
-
 .welcome-card {
     max-width: 800px;
     margin: 0 auto 30px;
     padding: 20px;
     text-align: center;
     background-color: #ffffff;
-    border-radius: 15px;
+    border-radius: 25px;
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
 }
 
 .welcome-card h1 {
     color: #00796b;
     font-size: 2em;
+    margin-bottom: 10px;
+}
+.welcome-card h2 {
+    color: #43a196;
+    font-size: 1em;
     margin-bottom: 10px;
 }
 

@@ -3,7 +3,7 @@
     <h1>Bienvenido a la Clinica Virtual</h1>
     <p class="subtitle">Tu consultorio privado de medicina</p>
 
-    <div class="botoneslogin">
+    <div class="botoneslogin" *ngIf="!isLoggedIn">
       <button mat-raised-button (click)="abrirLoginDialog()">Inicia Sesion</button>
       <button mat-raised-button (click)="abrirRegisterDialog()">Registrate</button>
     </div>
@@ -46,3 +46,5 @@
 
   </section>
 </div>
+
+<app-footer></app-footer>
