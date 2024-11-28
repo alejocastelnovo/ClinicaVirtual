@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+import { AuthGuard } from './guards/auth.guard';
+import { RoleGuard } from './guards/role.guard';
 
 import { LoginComponent } from './components/login/login.component';
 import { RegisterComponent } from './components/registro/registro.component';
@@ -22,6 +24,10 @@ import { CrearUsuarioComponent } from './components/administrador/crear-usuario/
 /* Componentes de Operador  */
 import { DashboardOperadorComponent } from './components/operador/dashboard-operador/dashboard-operador.component';
 import { ListaMedicosComponent } from './components/operador/lista-medicos/lista-medicos.component';
+import { CrearPacienteComponent } from './components/operador/crear-paciente/crear-paciente.component';
+import { AsignarTurnoComponent } from './components/operador/asignar-turno/asignar-turno.component';
+import { EditarAgendaComponent } from './components/operador/editar-agenda/editar-agenda.component';
+import { VerTurnosComponent } from './components/operador/ver-turnos/ver-turnos.component';
 
 
 const routes: Routes = [
@@ -36,8 +42,20 @@ const routes: Routes = [
   { path: 'administrador/crear-usuario', component: CrearUsuarioComponent },
   { path: 'medico/gestion-agenda', component: GestionAgendaComponent },
   { path: 'medico/turnos-programados', component: TurnosProgramadosComponent },
-  { path: 'operador/dashboard-operador', component: DashboardOperadorComponent },
-  { path: 'operador/lista-medicos', component: ListaMedicosComponent },
+  {
+    path: 'operador',
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['operador'] },
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'dashboard', component: DashboardOperadorComponent },
+      { path: 'crear-paciente', component: CrearPacienteComponent },
+      { path: 'lista-medicos', component: ListaMedicosComponent },
+      { path: 'editar-agenda/:id', component: EditarAgendaComponent },
+      { path: 'ver-turnos/:id', component: VerTurnosComponent },
+      { path: 'asignar-turno', component: AsignarTurnoComponent }
+    ]
+  },
 ];
 
 @NgModule({

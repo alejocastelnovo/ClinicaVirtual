@@ -14,6 +14,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule } from '@angular/material/dialog';
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatIconModule } from '@angular/material/icon'; 
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -55,6 +56,10 @@ import { NavComponent } from './components/nav/nav.component';
 import { DialogExitoComponent } from './components/dialog-exito/dialog-exito.component';
 import { DashboardOperadorComponent } from './components/operador/dashboard-operador/dashboard-operador.component';
 import { ListaMedicosComponent } from './components/operador/lista-medicos/lista-medicos.component';
+import { CrearPacienteComponent } from './components/operador/crear-paciente/crear-paciente.component';
+import { AsignarTurnoComponent } from './components/operador/asignar-turno/asignar-turno.component';
+import { EditarAgendaComponent } from './components/operador/editar-agenda/editar-agenda.component';
+import { VerTurnosComponent } from './components/operador/ver-turnos/ver-turnos.component';
 
 
 /* Servicios */
@@ -83,12 +88,17 @@ import { EspecialidadService } from './services/especialidad.service';
     DialogExitoComponent,
     DashboardOperadorComponent,
     ListaMedicosComponent,
+    CrearPacienteComponent,
+    AsignarTurnoComponent,
+    EditarAgendaComponent,
+    VerTurnosComponent,
 
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     MatDialogModule,
+    MatProgressBarModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
     BrowserAnimationsModule, 

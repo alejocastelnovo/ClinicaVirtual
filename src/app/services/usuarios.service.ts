@@ -1,5 +1,5 @@
-import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 
 @Injectable({
@@ -12,32 +12,30 @@ export class UsuariosService {
     constructor(private http: HttpClient) {
     }
 
-    obtenerUsuario(id: any, token: string): Observable<any> {
-        const headers = new HttpHeaders({
+    private getHeaders(): HttpHeaders {
+        const token = localStorage.getItem('jwt');
+        return new HttpHeaders({
             'Content-Type': 'application/json',
-            'authorization': token
+            'Authorization': token || ''
         });
-
-        return this.http.get(`${this.apiUrl}/obtenerUsuario/${id}`, { headers });
     }
 
-    actualizarUsuario(id: any, body: any, token: string): Observable<any> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'authorization': token
+    obtenerUsuario(id: number): Observable<any> {
+        return this.http.get(`${this.apiUrl}/obtenerUsuario/${id}`, {
+            headers: this.getHeaders()
         });
-
-        return this.http.put(`${this.apiUrl}/actualizarUsuario/${id}`, body, { headers });
     }
 
-    obtenerUsuarios(token: string): Observable<any> {
-        const headers = new HttpHeaders({
-            'Content-Type': 'application/json',
-            'authorization': token
+    actualizarUsuario(id: number, data: any): Observable<any> {
+        return this.http.put(`${this.apiUrl}/actualizarUsuario/${id}`, data, {
+            headers: this.getHeaders()
         });
-
-        return this.http.get(`${this.apiUrl}/obtenerUsuarios`, { headers });
     }
 
+    obtenerUsuarios(token: string | null): Observable<any> {
+        return this.http.get(`${this.apiUrl}/obtenerUsuarios`, {
+            headers: this.getHeaders()
+        });
+    }
 
 }

@@ -1,26 +1,29 @@
 <div class="dashboard-container">
-    <mat-card>
-        <mat-card-title>Panel de Operador</mat-card-title>
-        <mat-card-content>
-            <div class="menu-grid">
-                <mat-card class="menu-item" (click)="router.navigate([''])">
-                    <mat-icon>event</mat-icon>
-                    <h3>Gestionar Turnos</h3>
-                    <p>Administrar turnos de pacientes</p>
-                </mat-card>
+  <mat-card class="welcome-card">
+    <mat-card-content>
+      <h1>Bienvenido/a {{usuario?.nombre}} {{usuario?.apellido}}</h1>
+      <h2>Panel de Operador</h2>
+      <p>Selecciona una opción para comenzar</p>
+    </mat-card-content>
+  </mat-card>
 
-                <mat-card class="menu-item" (click)="router.navigate([''])">
-                    <mat-icon>people</mat-icon>
-                    <h3>Gestionar Pacientes</h3>
-                    <p>Administrar datos de pacientes</p>
-                </mat-card>
-
-                <mat-card class="menu-item" (click)="router.navigate([''])">
-                    <mat-icon>assessment</mat-icon>
-                    <h3>Reportes</h3>
-                    <p>Ver estadísticas y reportes</p>
-                </mat-card>
-            </div>
-        </mat-card-content>
+  <div class="options-grid">
+    <mat-card class="option-card" (click)="navegarA('/operador/crear-paciente')">
+      <mat-icon>person_add</mat-icon>
+      <h3>Crear Paciente</h3>
+      <p>Registrar nuevo paciente</p>
     </mat-card>
+
+    <mat-card class="option-card" (click)="navegarA('/operador/lista-medicos')">
+      <mat-icon>list</mat-icon>
+      <h3>Lista de Médicos</h3>
+      <p>Ver y gestionar agendas</p>
+    </mat-card>
+
+    <mat-card class="option-card" (click)="navegarA('/operador/asignar-turno')">
+      <mat-icon>event_available</mat-icon>
+      <h3>Asignar Turno</h3>
+      <p>Gestionar turnos de pacientes</p>
+    </mat-card>
+  </div>
 </div>

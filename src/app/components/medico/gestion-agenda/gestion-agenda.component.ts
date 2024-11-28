@@ -19,6 +19,12 @@ interface RangoHorario {
   hora_salida: string;
 }
 
+interface ResponseData {
+  codigo: number;
+  mensaje: string;
+  payload: any;
+}
+
 @Component({
   selector: 'app-gestion-agenda',
   templateUrl: './gestion-agenda.component.html',
@@ -279,6 +285,28 @@ export class GestionAgendaComponent implements OnInit {
       duration: 3000,
       panelClass: ['error-snackbar']
     });
+  }
+
+  actualizarAgenda() {
+    if (this.agendaForm.valid && this.agendaActual) {
+      this.agendaService.modificarAgenda(this.agendaActual.id, {
+        hora_entrada: this.agendaForm.value.hora_entrada,
+        hora_salida: this.agendaForm.value.hora_salida
+      }).subscribe({
+        next: (response: ResponseData) => {
+          if (response.codigo === 200) {
+            this.mostrarMensaje('Agenda actualizada correctamente');
+            this.cargarAgenda();
+          } else {
+            this.mostrarError(response.mensaje);
+          }
+        },
+        error: (error: any) => {
+          console.error('Error:', error);
+          this.mostrarError('Error al actualizar la agenda');
+        }
+      });
+    }
   }
 }
 

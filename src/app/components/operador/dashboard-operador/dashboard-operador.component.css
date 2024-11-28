@@ -1,65 +1,45 @@
 .dashboard-container {
   padding: 20px;
-  background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
-  min-height: calc(100vh - 64px);
-}
-
-mat-card {
   max-width: 1200px;
   margin: 0 auto;
-  padding: 30px;
-  background-color: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
 }
 
-mat-card-title {
-  font-size: 28px;
-  color: #00796b;
+.welcome-card {
   margin-bottom: 30px;
   text-align: center;
+  padding: 20px;
 }
 
-.menu-grid {
+.options-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 20px;
-  padding: 20px 0;
+  padding: 20px;
 }
 
-.menu-item {
+.option-card {
   padding: 20px;
   text-align: center;
   cursor: pointer;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  transition: transform 0.2s;
 }
 
-.menu-item:hover {
+.option-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
 
-.menu-item mat-icon {
+.option-card mat-icon {
   font-size: 48px;
   height: 48px;
   width: 48px;
-  color: #00796b;
   margin-bottom: 15px;
 }
 
-.menu-item h3 {
-  color: #00796b;
+.option-card h3 {
   margin: 10px 0;
-  font-size: 20px;
+  font-size: 1.5em;
 }
 
-.menu-item p {
+.option-card p {
   color: #666;
-  margin: 0;
-}
-
-@media (max-width: 768px) {
-  .menu-grid {
-    grid-template-columns: 1fr;
-  }
 }
