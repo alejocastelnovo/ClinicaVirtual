@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
@@ -10,93 +10,132 @@ import { EspecialidadService } from '../../../services/especialidad.service';
   styleUrls: ['./mis-datos.component.css']
 })
 export class MisDatosComponent implements OnInit {
-
-  id = localStorage.getItem('id');
-  datos: any;
   usuarioForm: FormGroup;
-  loading = false;
-coberturas: any;
-
+  editing: boolean = false;
+  datos: any;
+  coberturas: any[] = [];
+  private snackBar = inject(MatSnackBar);
+  loading: boolean | undefined;
   constructor(
-    private authService: AuthService,
     private fb: FormBuilder,
+    private authService: AuthService,
     private router: Router,
-    private snackBar: MatSnackBar
+    private especialidadService: EspecialidadService
   ) {
     this.usuarioForm = this.fb.group({
-      nombre: [{ value: '', disabled: true }],
-      apellido: [{ value: '', disabled: true }],
-      dni: [{ value: '', disabled: true }],
-      email: ['', [Validators.required, Validators.email]],
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{7}$')]],
-      password: ['', [Validators.minLength(3)]],
-      fecha_nacimiento: [{ value: '', disabled: true }]
+      nombre: [{value: '', disabled: true}],
+      apellido: [{value: '', disabled: true}],
+      dni: [{value: '', disabled: true}],
+      fecha_nacimiento: [{value: '', disabled: true}],
+      email: [''],
+      telefono: [''],
+      password: [''],
+      cobertura: ['']
     });
   }
 
   ngOnInit() {
+    this.obtenerUsuario();
+    this.cargarCoberturas();
+  }
+
+  obtenerUsuario() {
     const usuario = this.authService.getCurrentUser();
     if (usuario) {
-      this.usuarioForm.patchValue({
-        nombre: usuario.nombre,
-        apellido: usuario.apellido,
-        dni: usuario.dni,
-        email: usuario.email,
-        telefono: usuario.telefono || '',
-        fecha_nacimiento: usuario.fecha_nacimiento
+      this.authService.obtenerUsuario(usuario.id).subscribe({
+        next: (response) => {
+          if (response.codigo === 200 && response.payload.length > 0) {
+            this.datos = response.payload[0];
+            this.usuarioForm.patchValue({
+              nombre: this.datos.nombre,
+              apellido: this.datos.apellido,
+              dni: this.datos.dni,
+              fecha_nacimiento: this.datos.fecha_nacimiento,
+              email: this.datos.email,
+              telefono: this.datos.telefono || '',
+              cobertura: this.datos.id_cobertura
+            });
+          }
+        },
+        error: (error) => {
+          this.openSnackBar('Error al cargar los datos del usuario');
+          this.router.navigate(['/login']);
+        }
       });
     } else {
       this.router.navigate(['/login']);
     }
   }
 
-  guardarCambios() {
+  cargarCoberturas() {
+    this.especialidadService.obtenerCoberturas().subscribe({
+      next: (response) => {
+        if (response.codigo === 200) {
+          this.coberturas = response.payload;
+        }
+      },
+      error: (error) => this.openSnackBar('Error al cargar las coberturas')
+    });
+  }
+
+  editar() {
+    this.editing = true;
+    this.usuarioForm.get('email')?.enable();
+    this.usuarioForm.get('telefono')?.enable();
+    this.usuarioForm.get('password')?.enable();
+    this.usuarioForm.get('cobertura')?.enable();
+  }
+
+  cancelar() {
+    this.editing = false;
+    this.usuarioForm.get('email')?.disable();
+    this.usuarioForm.get('telefono')?.disable();
+    this.usuarioForm.get('password')?.disable();
+    this.usuarioForm.get('cobertura')?.disable();
+    this.obtenerUsuario();
+  }
+
+  guardar() {
     if (this.usuarioForm.valid) {
-      this.loading = true;
-      const usuario = this.authService.getCurrentUser();
       const cambios = {
-        id: usuario.id,
-        dni: usuario.dni,
-        apellido: usuario.apellido,
-        nombre: usuario.nombre,
-        fecha_nacimiento: usuario.fecha_nacimiento,
-        rol: usuario.rol,
+        id: this.datos.id,
+        dni: this.datos.dni,
+        apellido: this.datos.apellido,
+        nombre: this.datos.nombre,
+        fecha_nacimiento: this.datos.fecha_nacimiento,
+        rol: this.datos.rol,
         email: this.usuarioForm.get('email')?.value,
         telefono: this.usuarioForm.get('telefono')?.value,
-        password: this.usuarioForm.get('password')?.value || usuario.password
+        password: this.usuarioForm.get('password')?.value || this.datos.password,
+        id_cobertura: this.usuarioForm.get('cobertura')?.value
       };
 
       this.authService.actualizarUsuario(cambios).subscribe({
         next: (response) => {
           if (response.codigo === 200) {
-            const usuarioActualizado = { ...usuario, ...cambios };
+            const usuarioActualizado = { 
+              ...this.datos,
+              email: cambios.email,
+              telefono: cambios.telefono,
+              id_cobertura: cambios.id_cobertura
+            };
             localStorage.setItem('usuario', JSON.stringify(usuarioActualizado));
-            this.mostrarMensaje('Datos actualizados correctamente');
-            this.router.navigate(['/dashboard']);
+            this.openSnackBar('Cambios guardados con éxito');
+            this.obtenerUsuario();
           }
         },
         error: (error) => {
-          console.error('Error:', error);
-          this.mostrarError('Error al actualizar los datos');
-        },
-        complete: () => {
-          this.loading = false;
+          this.openSnackBar('Error al actualizar los datos');
         }
       });
     }
   }
 
-  private mostrarMensaje(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', {
+  openSnackBar(message: string) {
+    this.snackBar.open(message, 'Cerrar', {
       duration: 3000
     });
   }
-
-  private mostrarError(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000,
-      panelClass: ['error-snackbar']
-    });
-  }
 }
+
 
