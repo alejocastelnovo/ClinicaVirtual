@@ -1,29 +1,17 @@
 .clinic-footer {
-  background-color: #15928c;
-  color: white;
-  padding: 1rem 2rem;
+  background: linear-gradient(to right, #ffffff, #abd1cd, #ffffff);
+  color: rgb(0, 0, 0);
+  padding: 20px;
   font-family: 'Roboto', sans-serif;
-  transition: transform 0.3s ease-in-out;
-  transform: translateY(0);
-  position: fixed;
-  bottom: -100px;
-  left: 0;
+  position: relative;
   width: 100%;
-  z-index: 100;
-  transition: bottom 0.3s ease;
-  margin-top: 100px;
-}
-
-.clinic-footer.visible {
-  bottom: 0;
+  z-index: 1;
+  height: 70px;
 }
 
 .footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  display: flex; 
+  align-items: center; 
 }
 
 .footer-column {
@@ -32,22 +20,13 @@
   text-align: center;
 }
 
-
-
 .social-icons {
   display: flex;
   gap: 20px;
 }
 
 .social-icons a {
-  color: white;
-  text-decoration: none;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.social-icons a:hover {
+  color: rgb(0, 0, 0);
   text-decoration: underline;
 }
 
@@ -60,4 +39,3 @@ p {
     flex-direction: row;
   }
 }
-

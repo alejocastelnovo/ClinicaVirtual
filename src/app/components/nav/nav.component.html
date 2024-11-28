@@ -4,23 +4,12 @@
         <a routerLink="/" class="logo-text">Clinica virtual</a>
     </div>
 
-    <div class="auth-buttons" *ngIf="!authService.isLoggedIn()">
-        <button mat-button routerLink="/login">
-            <mat-icon>login</mat-icon>
-            Iniciar sesión
-        </button>
-        <button mat-button routerLink="/registro">
-            <mat-icon>person_add</mat-icon>
-            Registrarse
-        </button>
-    </div>
-
     <div class="user-info" *ngIf="authService.isLoggedIn()">
         <div class="user-image-container">
             <img [src]="userImagePath" alt="Icono de usuario" class="user-icon">
 
         </div>
-        <span class="user-name">{{ userName }}</span>
+        <span class="user-name" >{{ userName }}</span>
         <button mat-button (click)="navigateToHome()">
             <mat-icon>home</mat-icon>
             Inicio

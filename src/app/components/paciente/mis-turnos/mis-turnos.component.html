@@ -3,9 +3,8 @@
     <mat-card-title>Mis Turnos</mat-card-title>
     
     <mat-card-content>
-      <div *ngIf="loading" class="loading-spinner">
-        <mat-spinner diameter="40"></mat-spinner>
-      </div>
+
+      <!-- Si no hay turnos que muestre el boton para pedir uno -->
 
       <div *ngIf="!loading && turnos.length === 0" class="no-turnos">
         <p>No tenés turnos programados</p>

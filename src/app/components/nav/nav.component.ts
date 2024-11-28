@@ -10,7 +10,6 @@ import { AuthService } from '../../services/auth.service';
 export class NavComponent implements OnInit {
     userName: string | null = null;
     userType: string | null = null;
-    userTypeShort: string | null = null;
     userImagePath: string = 'assets/images/usuario.png';
 
     constructor(
@@ -19,26 +18,20 @@ export class NavComponent implements OnInit {
     ) { }
 
     ngOnInit() {
-        const usuarioLogueado = this.authService.getCurrentUser();
-        if (usuarioLogueado) {
-            this.userName = `${usuarioLogueado.nombre} ${usuarioLogueado.apellido}`;
-            this.userType = usuarioLogueado.rol;
-            this.userTypeShort = this.getUserTypeShort(usuarioLogueado.rol);
-        }
-    }
-
-    getUserTypeShort(userType: string | null): string {
-        switch (userType) {
-            case 'administrador': return 'A';
-            case 'operador': return 'O';
-            case 'medico': return 'M';
-            case 'paciente': return 'P';
-            default: return '?';
-        }
+        this.authService.getUserObservable().subscribe(usuarioLogueado => {
+            if (usuarioLogueado) {
+                this.userName = `${usuarioLogueado.nombre} ${usuarioLogueado.apellido}`;
+                this.userType = usuarioLogueado.rol;
+            } else {
+                this.userName = null;
+                this.userType = null;
+            }
+        });
     }
 
     logout() {
         this.authService.logout();
+        this.authService.isLoggedIn();
         this.router.navigate(['/home']);
     }
 
