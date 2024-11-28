@@ -50,3 +50,15 @@ input[readonly] {
     cursor: not-allowed;
 }
 
+.mat-form-field-disabled input {
+  color: rgba(0, 0, 0, 0.87) !important;
+}
+
+.mat-hint {
+  color: #2196F3;
+}
+
+button {
+  margin: 0 8px;
+}
+

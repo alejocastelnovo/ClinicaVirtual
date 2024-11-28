@@ -7,6 +7,7 @@ import { EspecialidadService } from '../../../services/especialidad.service';
 import { AgendaService } from '../../../services/agenda.service';
 import { AuthService } from '../../../services/auth.service';
 import { finalize } from 'rxjs/operators';
+import { UsuarioService } from '../../../services/usuario.service';
 
 @Component({
   selector: 'app-nuevo-turno',
@@ -29,6 +30,7 @@ export class NuevoTurnoComponent implements OnInit {
   horariosDisponibles: string[] = [];
   loading = false;
   agendaSeleccionada: any = null;
+  usuario: any;
 
   constructor(
     private fb: FormBuilder,
@@ -37,8 +39,19 @@ export class NuevoTurnoComponent implements OnInit {
     private agendaService: AgendaService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private router: Router
-  ) {}
+    private router: Router,
+    private usuarioService: UsuarioService
+  ) {
+    this.usuario = this.authService.getCurrentUser();
+    this.turnoForm = this.fb.group({
+      cobertura: [{value: '', disabled: true}],
+      especialidad: ['', Validators.required],
+      profesional: ['', Validators.required],
+      fecha: ['', Validators.required],
+      hora: ['', Validators.required],
+      nota: ['', [Validators.required, Validators.minLength(10)]]
+    });
+  }
 
   ngOnInit() {
     if (!this.authService.isLoggedIn()) {
@@ -46,6 +59,7 @@ export class NuevoTurnoComponent implements OnInit {
       return;
     }
     this.cargarDatosIniciales();
+    this.cargarDatosUsuario();
   }
 
   cargarDatosIniciales() {
@@ -92,6 +106,22 @@ export class NuevoTurnoComponent implements OnInit {
           }
         }
       });
+  }
+
+  cargarDatosUsuario() {
+    this.authService.obtenerUsuario(this.usuario.id).subscribe({
+      next: (response) => {
+        if (response.codigo === 200 && response.payload.length > 0) {
+          const usuario = response.payload[0];
+          this.turnoForm.patchValue({
+            cobertura: usuario.nombre_cobertura
+          });
+        }
+      },
+      error: (error) => {
+        this.mostrarError('Error al cargar datos del usuario');
+      }
+    });
   }
 
   onEspecialidadChange() {

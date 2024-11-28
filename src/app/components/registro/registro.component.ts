@@ -1,16 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthService } from 'src/app/services/auth.service';
 import { Router } from '@angular/router';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { EspecialidadService } from 'src/app/services/especialidad.service';
 
 @Component({
   selector: 'app-register',
   templateUrl: './registro.component.html',
   styleUrls: ['./registro.component.css']
 })
-export class RegisterComponent {
+export class RegisterComponent implements OnInit {
   registerForm: FormGroup;
+  coberturas: any[] = [];
   loading = false;
   mensajeError: string | null = null;
 
@@ -18,7 +20,8 @@ export class RegisterComponent {
     private fb: FormBuilder, 
     private authService: AuthService, 
     private router: Router,
-    private snackBar: MatSnackBar
+    private snackBar: MatSnackBar,
+    private especialidadService: EspecialidadService
   ) {
     this.registerForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(2)]],
@@ -28,6 +31,24 @@ export class RegisterComponent {
       dni: ['', [Validators.required, Validators.pattern('^[0-9]{7,8}$')]],
       fechaNacimiento: ['', Validators.required],
       telefono: ['', [Validators.required]],
+      cobertura: ['', Validators.required]
+    });
+  }
+
+  ngOnInit() {
+    this.cargarCoberturas();
+  }
+
+  cargarCoberturas() {
+    this.especialidadService.obtenerCoberturas().subscribe({
+      next: (response) => {
+        if (response.codigo === 200) {
+          this.coberturas = response.payload;
+        }
+      },
+      error: (error) => {
+        this.snackBar.open('Error al cargar las coberturas', 'Cerrar', { duration: 3000 });
+      }
     });
   }
 
@@ -43,6 +64,7 @@ export class RegisterComponent {
         email: this.registerForm.value.email,
         rol: 'paciente',
         telefono: this.registerForm.value.telefono,
+        id_cobertura: this.registerForm.get('cobertura')?.value
       };
 
       this.authService.crearUsuario(userData).subscribe({

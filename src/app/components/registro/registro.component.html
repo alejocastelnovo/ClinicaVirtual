@@ -41,6 +41,15 @@
                     <input matInput formControlName="fechaNacimiento" type="date" required>
                 </mat-form-field>
 
+                <mat-form-field appearance="fill" class="full-width">
+                    <mat-label>Obra Social</mat-label>
+                    <mat-select formControlName="cobertura" required>
+                        <mat-option *ngFor="let cobertura of coberturas" [value]="cobertura.id">
+                            {{cobertura.nombre}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+
                 <div class="button-container">
                     <button mat-raised-button color="primary" type="submit" [disabled]="!registerForm.valid">
                         Registrarse
