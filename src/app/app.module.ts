@@ -67,6 +67,8 @@ import { AuthService } from './services/auth.service';
 import { TurnoService } from './services/turno.service';
 import { AgendaService } from './services/agenda.service';
 import { EspecialidadService } from './services/especialidad.service';
+import { EditarUsuarioComponent } from './components/administrador/editar-usuario/editar-usuario.component';
+import { ListaUsuariosComponent } from './components/administrador/lista-usuarios/lista-usuarios.component';
 
 
 @NgModule({
@@ -92,6 +94,8 @@ import { EspecialidadService } from './services/especialidad.service';
     AsignarTurnoComponent,
     EditarAgendaComponent,
     VerTurnosComponent,
+    EditarUsuarioComponent,
+    ListaUsuariosComponent,
 
   ],
   imports: [

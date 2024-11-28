@@ -19,6 +19,8 @@ import { TurnosProgramadosComponent } from './components/medico/turnos-programad
 
 /* Componentes de Administrador */
 import { CrearUsuarioComponent } from './components/administrador/crear-usuario/crear-usuario.component';
+import { ListaUsuariosComponent } from './components/administrador/lista-usuarios/lista-usuarios.component';
+import { EditarUsuarioComponent } from './components/administrador/editar-usuario/editar-usuario.component';
 
 
 /* Componentes de Operador  */
@@ -40,8 +42,11 @@ const routes: Routes = [
   { path: 'paciente/mis-turnos', component: MisTurnosComponent },
   { path: 'paciente/mis-datos', component: MisDatosComponent }, 
   { path: 'administrador/crear-usuario', component: CrearUsuarioComponent },
+  { path: 'administrador/lista-usuarios', component: ListaUsuariosComponent },
+  { path: 'administrador/editar-usuario/:id', component: EditarUsuarioComponent },
   { path: 'medico/gestion-agenda', component: GestionAgendaComponent },
   { path: 'medico/turnos-programados', component: TurnosProgramadosComponent },
+  
   {
     path: 'operador',
     canActivate: [AuthGuard, RoleGuard],
