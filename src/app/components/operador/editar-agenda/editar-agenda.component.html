@@ -1,55 +1,33 @@
 <div class="editar-agenda-container">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Editar Agenda</mat-card-title>
-      <mat-card-subtitle *ngIf="medico">
-        Dr. {{medico.apellido}}, {{medico.nombre}}
-      </mat-card-subtitle>
+      <mat-card-title>Editar Agenda del Médico</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
-      <form [formGroup]="agendaForm" (ngSubmit)="onSubmit()">
-        <!-- Fecha -->
-        <mat-form-field appearance="fill" class="full-width">
-          <mat-label>Fecha</mat-label>
-          <input matInput [matDatepicker]="picker" formControlName="fecha">
-          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-          <mat-datepicker #picker></mat-datepicker>
-          <mat-error *ngIf="agendaForm.get('fecha')?.hasError('required')">
-            La fecha es requerida
-          </mat-error>
-        </mat-form-field>
-
-        <div class="horarios-container">
-          <!-- Hora de entrada -->
-          <mat-form-field appearance="fill">
-            <mat-label>Hora de entrada</mat-label>
-            <input matInput type="time" formControlName="hora_entrada">
-            <mat-error *ngIf="agendaForm.get('hora_entrada')?.hasError('required')">
+      <form [formGroup]="editarAgendaForm" (ngSubmit)="onSubmit()">
+        <div class="form-row">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Horario de Entrada</mat-label>
+            <input matInput type="time" formControlName="hora_entrada" required>
+            <mat-error *ngIf="editarAgendaForm.get('hora_entrada')?.hasError('required')">
               La hora de entrada es requerida
             </mat-error>
           </mat-form-field>
 
-          <!-- Hora de salida -->
-          <mat-form-field appearance="fill">
-            <mat-label>Hora de salida</mat-label>
-            <input matInput type="time" formControlName="hora_salida">
-            <mat-error *ngIf="agendaForm.get('hora_salida')?.hasError('required')">
+          <mat-form-field appearance="fill" class="full-width">
+            <mat-label>Horario de Salida</mat-label>
+            <input matInput type="time" formControlName="hora_salida" required>
+            <mat-error *ngIf="editarAgendaForm.get('hora_salida')?.hasError('required')">
               La hora de salida es requerida
             </mat-error>
           </mat-form-field>
         </div>
-
-        <div class="form-actions">
-          <button mat-button type="button" routerLink="/operador/lista-medicos">
-            Cancelar
-          </button>
-          <button mat-raised-button color="primary" type="submit" 
-                  [disabled]="!agendaForm.valid || loading">
-            <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
-            <span *ngIf="!loading">Guardar Cambios</span>
-          </button>
-        </div>
+        
+        <mat-card-actions>
+          <button mat-raised-button color="primary" type="submit" [disabled]="loading">Guardar Cambios</button>
+          <button mat-button type="button" (click)="router.navigate(['/operador/agenda-medico'])">Cancelar</button>
+        </mat-card-actions>
       </form>
     </mat-card-content>
   </mat-card>

@@ -46,18 +46,11 @@
 
     <!-- Operador -->
     <div *ngSwitchCase="'operador'" class="options-container">
-      <mat-card class="option-card" routerLink="/operador/dashboard">
+      <mat-card class="option-card" routerLink="/operador/agenda-medicos">
         <mat-icon>dashboard</mat-icon>
         <h3>Panel Principal</h3>
         <p>Acceso rápido a funciones</p>
       </mat-card>
-
-      <mat-card class="option-card" routerLink="/operador/lista-medicos">
-        <mat-icon>people</mat-icon>
-        <h3>Lista Médicos</h3>
-        <p>Gestionar profesionales</p>
-      </mat-card>
-    </div>
 
     <!-- Administrador -->
     <div *ngSwitchCase="'administrador'" class="options-container">

@@ -1,29 +1,24 @@
-<div class="dashboard-container">
-  <mat-card class="welcome-card">
-    <mat-card-content>
-      <h1>Bienvenido/a {{usuario?.nombre}} {{usuario?.apellido}}</h1>
-      <h2>Panel de Operador</h2>
-      <p>Selecciona una opción para comenzar</p>
-    </mat-card-content>
-  </mat-card>
+<mat-sidenav-container class="sidenav-container">
+  <mat-sidenav #drawer class="sidenav" fixedInViewport mode="side" opened>
+    <mat-toolbar>Panel de Operador</mat-toolbar>
+    <mat-nav-list>
+      <a mat-list-item *ngFor="let item of menuItems" [routerLink]="item.ruta" routerLinkActive="active">
+        <mat-icon matListItemIcon>{{item.icono}}</mat-icon>
+        <span>{{item.titulo}}</span>
+      </a>
+    </mat-nav-list>
+  </mat-sidenav>
 
-  <div class="options-grid">
-    <mat-card class="option-card" (click)="navegarA('/operador/crear-paciente')">
-      <mat-icon>person_add</mat-icon>
-      <h3>Crear Paciente</h3>
-      <p>Registrar nuevo paciente</p>
-    </mat-card>
+  <mat-sidenav-content>
+    <mat-toolbar color="primary">
+      <button mat-icon-button (click)="drawer.toggle()">
+        <mat-icon>menu</mat-icon>
+      </button>
+      <span>Sistema de Gestión Para Operadores</span>
+    </mat-toolbar>
 
-    <mat-card class="option-card" (click)="navegarA('/operador/lista-medicos')">
-      <mat-icon>list</mat-icon>
-      <h3>Lista de Médicos</h3>
-      <p>Ver y gestionar agendas</p>
-    </mat-card>
-
-    <mat-card class="option-card" (click)="navegarA('/operador/asignar-turno')">
-      <mat-icon>event_available</mat-icon>
-      <h3>Asignar Turno</h3>
-      <p>Gestionar turnos de pacientes</p>
-    </mat-card>
-  </div>
-</div>
+    <div class="content-container">
+      <router-outlet></router-outlet>
+    </div>
+  </mat-sidenav-content>
+</mat-sidenav-container>

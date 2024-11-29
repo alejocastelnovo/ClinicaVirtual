@@ -40,6 +40,10 @@ export class AgendaService {
     return this.http.get(`${this.apiUrl}/obtenerAgendasPorFecha/${fecha}`, { headers });
   }
 
+  obtenerAgendaPorMedicoYFecha(medicoId: number, fecha: string): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtenerAgendaPorMedicoYFecha`, { params: { id_medico: medicoId, fecha: fecha } });
+  }
+
   crearAgenda(agenda: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/crearAgenda`, agenda, {
       headers: this.getHeaders()

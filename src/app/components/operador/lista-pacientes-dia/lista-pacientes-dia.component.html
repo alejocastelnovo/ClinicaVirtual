@@ -1,0 +1,62 @@
+<div class="lista-pacientes-dia-container">
+    <mat-card>
+      <mat-card-header>
+        <mat-card-title>Lista de Pacientes del Día</mat-card-title>
+      </mat-card-header>
+  
+      <mat-card-content>
+        <form [formGroup]="filtroForm" class="filtro-form">
+          <mat-form-field appearance="fill">
+            <mat-label>Fecha</mat-label>
+            <input matInput [matDatepicker]="picker" formControlName="fecha">
+            <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+            <mat-datepicker #picker></mat-datepicker>
+          </mat-form-field>
+        </form>
+  
+        <div *ngIf="loading" class="loading-spinner">
+          <mat-spinner></mat-spinner>
+        </div>
+  
+        <table mat-table [dataSource]="pacientesDia" class="mat-elevation-z8" *ngIf="!loading && pacientesDia.length > 0">
+  
+          <!-- Nombre -->
+          <ng-container matColumnDef="nombre">
+            <th mat-header-cell *matHeaderCellDef> Nombre </th>
+            <td mat-cell *matCellDef="let paciente"> {{paciente.nombre}} </td>
+          </ng-container>
+  
+          <!-- Apellido -->
+          <ng-container matColumnDef="apellido">
+            <th mat-header-cell *matHeaderCellDef> Apellido </th>
+            <td mat-cell *matCellDef="let paciente"> {{paciente.apellido}} </td>
+          </ng-container>
+  
+          <!-- DNI -->
+          <ng-container matColumnDef="dni">
+            <th mat-header-cell *matHeaderCellDef> DNI </th>
+            <td mat-cell *matCellDef="let paciente"> {{paciente.dni}} </td>
+          </ng-container>
+  
+          <!-- Email -->
+          <ng-container matColumnDef="email">
+            <th mat-header-cell *matHeaderCellDef> Email </th>
+            <td mat-cell *matCellDef="let paciente"> {{paciente.email}} </td>
+          </ng-container>
+  
+          <!-- Teléfono -->
+          <ng-container matColumnDef="telefono">
+            <th mat-header-cell *matHeaderCellDef> Teléfono </th>
+            <td mat-cell *matCellDef="let paciente"> {{paciente.telefono}} </td>
+          </ng-container>
+  
+          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        </table>
+  
+        <div *ngIf="!loading && pacientesDia.length === 0" class="no-data">
+          No hay pacientes programados para esta fecha.
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>

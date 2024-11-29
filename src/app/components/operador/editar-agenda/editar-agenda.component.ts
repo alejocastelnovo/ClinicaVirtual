@@ -1,15 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { AgendaService } from '../../../services/agenda.service';
-import { AuthService } from '../../../services/auth.service';
-
-interface ResponseData {
-  codigo: number;
-  mensaje: string;
-  payload: any;
-}
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-editar-agenda',
@@ -17,90 +10,102 @@ interface ResponseData {
   styleUrls: ['./editar-agenda.component.css']
 })
 export class EditarAgendaComponent implements OnInit {
-  agendaForm: FormGroup;
-  medicoId: number;
+  editarAgendaForm: FormGroup;
   loading = false;
-  medico: any;
-onSubmit: any;
+  idMedico!: number;
+  fecha!: string;
+  agendaActual: any;
 
   constructor(
-    private fb: FormBuilder,
     private route: ActivatedRoute,
-    private router: Router,
     private agendaService: AgendaService,
-    private authService: AuthService,
-    private snackBar: MatSnackBar
+    private fb: FormBuilder,
+    private snackBar: MatSnackBar,
+    public router: Router
   ) {
-    this.medicoId = this.route.snapshot.params['id'];
-    this.agendaForm = this.fb.group({
-      fecha: ['', Validators.required],
+    this.editarAgendaForm = this.fb.group({
       hora_entrada: ['', Validators.required],
       hora_salida: ['', Validators.required]
     });
   }
 
-  ngOnInit() {
-    this.cargarDatosMedico();
-    this.cargarAgenda();
-  }
+  ngOnInit(): void {
+    this.idMedico = Number(this.route.snapshot.paramMap.get('id_medico'));
+    this.fecha = this.route.snapshot.paramMap.get('fecha') || '';
 
-  cargarDatosMedico() {
-    this.authService.obtenerUsuario(this.medicoId).subscribe({
-      next: (response) => {
-        if (response.codigo === 200) {
-          this.medico = response.payload[0];
-        }
-      },
-      error: (error) => this.mostrarError('Error al cargar datos del médico')
-    });
+    this.cargarAgenda();
   }
 
   cargarAgenda() {
     this.loading = true;
-    this.agendaService.obtenerAgenda(this.medicoId).subscribe({
-      next: (response) => {
+    this.agendaService.obtenerAgenda(this.idMedico).subscribe({
+      next: (response: any) => {
         if (response.codigo === 200 && response.payload.length > 0) {
-          const agenda = response.payload[0];
-          this.agendaForm.patchValue({
-            fecha: agenda.fecha,
-            hora_entrada: agenda.hora_entrada,
-            hora_salida: agenda.hora_salida
+          this.agendaActual = response.payload[0];
+          this.editarAgendaForm.patchValue({
+            hora_entrada: this.agendaActual.hora_entrada,
+            hora_salida: this.agendaActual.hora_salida
           });
+        } else {
+          this.mostrarError('No se encontró la agenda para este médico');
         }
       },
-      error: (error) => this.mostrarError('Error al cargar la agenda'),
+      error: (error: any) => {
+        console.error('Error al cargar la agenda:', error);
+        this.mostrarError('Error al cargar la agenda del médico');
+      },
       complete: () => this.loading = false
     });
   }
 
-  guardarAgenda() {
-    if (this.agendaForm.valid) {
-      const agendaData = {
-        hora_entrada: this.agendaForm.value.hora_entrada,
-        hora_salida: this.agendaForm.value.hora_salida
-      };
+  onSubmit() {
+    if (this.editarAgendaForm.valid) {
+      const agendaData = this.editarAgendaForm.value;
 
-      this.agendaService.modificarAgenda(this.medicoId, agendaData).subscribe({
-        next: (response: ResponseData) => {
+      this.loading = true;
+      this.agendaService.modificarAgenda(this.agendaActual.id, agendaData).subscribe({
+        next: (response: any) => {
+          this.loading = false;
           if (response.codigo === 200) {
-            this.mostrarExito('Agenda actualizada correctamente');
-            this.router.navigate(['/operador/lista-medicos']);
+            this.mostrarExito('Agenda actualizada exitosamente');
+            this.router.navigate(['/operador/agenda-medico']);
+          } else {
+            this.mostrarError(response.mensaje || 'Error al actualizar la agenda');
           }
         },
-        error: (error: any) => this.mostrarError('Error al actualizar la agenda'),
-        complete: () => this.loading = false
+        error: (error: any) => {
+          console.error('Error al actualizar la agenda:', error);
+          this.mostrarError('Error al actualizar la agenda');
+          this.loading = false;
+        }
       });
+    } else {
+      this.mostrarError('Por favor, complete todos los campos requeridos');
     }
   }
 
-  private mostrarExito(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', { duration: 3000 });
-  }
-
-  private mostrarError(mensaje: string) {
+  mostrarError(mensaje: string) {
     this.snackBar.open(mensaje, 'Cerrar', {
       duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
       panelClass: ['error-snackbar']
     });
+  }
+
+  mostrarExito(mensaje: string) {
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 2000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top',
+      panelClass: ['success-snackbar']
+    });
+  }
+
+  formatearFecha(fecha: Date): string {
+    const year = fecha.getFullYear();
+    const month = (fecha.getMonth() + 1).toString().padStart(2, '0');
+    const day = fecha.getDate().toString().padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 }

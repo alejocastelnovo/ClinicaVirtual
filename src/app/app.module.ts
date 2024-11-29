@@ -58,7 +58,7 @@ import { DashboardOperadorComponent } from './components/operador/dashboard-oper
 import { ListaMedicosComponent } from './components/operador/lista-medicos/lista-medicos.component';
 import { CrearPacienteComponent } from './components/operador/crear-paciente/crear-paciente.component';
 import { AsignarTurnoComponent } from './components/operador/asignar-turno/asignar-turno.component';
-import { EditarAgendaComponent } from './components/operador/editar-agenda/editar-agenda.component';
+import { AgendaMedicoComponent } from './components/operador/agenda-medico/agenda-medico.component';
 import { VerTurnosComponent } from './components/operador/ver-turnos/ver-turnos.component';
 
 
@@ -69,6 +69,8 @@ import { AgendaService } from './services/agenda.service';
 import { EspecialidadService } from './services/especialidad.service';
 import { EditarUsuarioComponent } from './components/administrador/editar-usuario/editar-usuario.component';
 import { ListaUsuariosComponent } from './components/administrador/lista-usuarios/lista-usuarios.component';
+import { EditarAgendaComponent } from './components/operador/editar-agenda/editar-agenda.component';
+import { ListaPacientesDiaComponent } from './components/operador/lista-pacientes-dia/lista-pacientes-dia.component';
 
 
 @NgModule({
@@ -92,10 +94,12 @@ import { ListaUsuariosComponent } from './components/administrador/lista-usuario
     ListaMedicosComponent,
     CrearPacienteComponent,
     AsignarTurnoComponent,
-    EditarAgendaComponent,
+    AgendaMedicoComponent,
     VerTurnosComponent,
     EditarUsuarioComponent,
     ListaUsuariosComponent,
+    EditarAgendaComponent,
+    ListaPacientesDiaComponent,
 
   ],
   imports: [

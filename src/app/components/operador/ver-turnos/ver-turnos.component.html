@@ -1,76 +1,37 @@
 <div class="ver-turnos-container">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Turnos del Día</mat-card-title>
-      <mat-card-subtitle *ngIf="medico">
-        Dr. {{medico.apellido}}, {{medico.nombre}} - {{fecha | date}}
-      </mat-card-subtitle>
+      <mat-card-title>Turnos Confirmados</mat-card-title>
+      <mat-card-subtitle>Fecha: {{ fecha }}</mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
-      <div class="tabla-container">
-        <table mat-table [dataSource]="turnos" class="mat-elevation-z8">
-          <!-- Columna Hora -->
-          <ng-container matColumnDef="hora">
-            <th mat-header-cell *matHeaderCellDef>Hora</th>
-            <td mat-cell *matCellDef="let turno">{{turno.hora}}</td>
-          </ng-container>
+      <table mat-table [dataSource]="turnos" class="mat-elevation-z8" *ngIf="turnos.length > 0">
 
-          <!-- Columna Paciente -->
-          <ng-container matColumnDef="paciente">
-            <th mat-header-cell *matHeaderCellDef>Paciente</th>
-            <td mat-cell *matCellDef="let turno">{{turno.nombre_paciente}}</td>
-          </ng-container>
+        <!-- Paciente -->
+        <ng-container matColumnDef="paciente">
+          <th mat-header-cell *matHeaderCellDef> Paciente </th>
+          <td mat-cell *matCellDef="let turno"> {{ turno.paciente.nombre }} {{ turno.paciente.apellido }} </td>
+        </ng-container>
 
-          <!-- Columna Edad -->
-          <ng-container matColumnDef="edad">
-            <th mat-header-cell *matHeaderCellDef>Edad</th>
-            <td mat-cell *matCellDef="let turno">
-              {{calcularEdad(turno.fecha_nacimiento)}} años
-            </td>
-          </ng-container>
+        <!-- Hora -->
+        <ng-container matColumnDef="hora">
+          <th mat-header-cell *matHeaderCellDef> Hora </th>
+          <td mat-cell *matCellDef="let turno"> {{ turno.hora }} </td>
+        </ng-container>
 
-          <!-- Columna Cobertura -->
-          <ng-container matColumnDef="cobertura">
-            <th mat-header-cell *matHeaderCellDef>Cobertura</th>
-            <td mat-cell *matCellDef="let turno">{{turno.cobertura}}</td>
-          </ng-container>
+        <!-- Nota -->
+        <ng-container matColumnDef="nota">
+          <th mat-header-cell *matHeaderCellDef> Nota </th>
+          <td mat-cell *matCellDef="let turno"> {{ turno.nota }} </td>
+        </ng-container>
 
-          <!-- Columna Nota -->
-          <ng-container matColumnDef="nota">
-            <th mat-header-cell *matHeaderCellDef>Nota</th>
-            <td mat-cell *matCellDef="let turno">{{turno.nota}}</td>
-          </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+      </table>
 
-          <!-- Columna Acciones -->
-          <ng-container matColumnDef="acciones">
-            <th mat-header-cell *matHeaderCellDef>Acciones</th>
-            <td mat-cell *matCellDef="let turno">
-              <button mat-icon-button color="warn" 
-                      (click)="cancelarTurno(turno.id_turno)"
-                      matTooltip="Cancelar turno">
-                <mat-icon>cancel</mat-icon>
-              </button>
-            </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        </table>
-
-        <div *ngIf="loading" class="loading-spinner">
-          <mat-spinner diameter="40"></mat-spinner>
-        </div>
-
-        <div *ngIf="!loading && turnos.length === 0" class="no-data">
-          No hay turnos programados para esta fecha
-        </div>
-      </div>
-
-      <div class="actions-container">
-        <button mat-button routerLink="/operador/lista-medicos">
-          Volver a la lista
-        </button>
+      <div *ngIf="turnos.length === 0" class="no-data">
+        No hay turnos confirmados para esta fecha.
       </div>
     </mat-card-content>
   </mat-card>

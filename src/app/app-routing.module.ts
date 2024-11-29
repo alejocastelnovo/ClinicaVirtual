@@ -28,8 +28,9 @@ import { DashboardOperadorComponent } from './components/operador/dashboard-oper
 import { ListaMedicosComponent } from './components/operador/lista-medicos/lista-medicos.component';
 import { CrearPacienteComponent } from './components/operador/crear-paciente/crear-paciente.component';
 import { AsignarTurnoComponent } from './components/operador/asignar-turno/asignar-turno.component';
-import { EditarAgendaComponent } from './components/operador/editar-agenda/editar-agenda.component';
+import { AgendaMedicoComponent } from './components/operador/agenda-medico/agenda-medico.component';
 import { VerTurnosComponent } from './components/operador/ver-turnos/ver-turnos.component';
+import { EditarAgendaComponent } from './components/operador/editar-agenda/editar-agenda.component';
 
 
 const routes: Routes = [
@@ -49,16 +50,22 @@ const routes: Routes = [
   
   {
     path: 'operador',
+    component: DashboardOperadorComponent,
     canActivate: [AuthGuard, RoleGuard],
     data: { roles: ['operador'] },
     children: [
-      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
-      { path: 'dashboard', component: DashboardOperadorComponent },
+      { path: '', redirectTo: 'agenda-medicos', pathMatch: 'full' },
+      { path: 'agenda-medicos', component: AgendaMedicoComponent },
       { path: 'crear-paciente', component: CrearPacienteComponent },
       { path: 'lista-medicos', component: ListaMedicosComponent },
-      { path: 'editar-agenda/:id', component: EditarAgendaComponent },
-      { path: 'ver-turnos/:id', component: VerTurnosComponent },
-      { path: 'asignar-turno', component: AsignarTurnoComponent }
+      { path: 'asignar-turno', component: AsignarTurnoComponent },
+      { 
+        path: 'agenda', 
+        children: [
+          { path: 'editar/:id_medico/:fecha', component: EditarAgendaComponent },
+          { path: 'turnos/:id_medico/:fecha', component: VerTurnosComponent }
+        ]
+      }
     ]
   },
   {

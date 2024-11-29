@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 
@@ -7,8 +7,34 @@ import { AuthService } from '../../../services/auth.service';
     templateUrl: './dashboard-operador.component.html',
     styleUrls: ['./dashboard-operador.component.css']
 })
-export class DashboardOperadorComponent implements OnInit {
+export class DashboardOperadorComponent {
     usuario: any;
+    menuItems = [
+        { 
+            titulo: 'Agenda Médicos', 
+            icono: 'calendar_today', 
+            ruta: '/operador/agenda-medicos',
+            descripcion: 'Gestionar agendas médicas'
+        },
+        { 
+            titulo: 'Crear Paciente', 
+            icono: 'person_add', 
+            ruta: '/operador/crear-paciente',
+            descripcion: 'Registrar nuevo paciente'
+        },
+        { 
+            titulo: 'Lista de Médicos', 
+            icono: 'people', 
+            ruta: '/operador/lista-medicos',
+            descripcion: 'Ver y gestionar médicos'
+        },
+        { 
+            titulo: 'Asignar Turno', 
+            icono: 'event_available', 
+            ruta: '/operador/asignar-turno',
+            descripcion: 'Gestionar turnos'
+        }
+    ];
 
     constructor(
         private router: Router,
@@ -17,17 +43,8 @@ export class DashboardOperadorComponent implements OnInit {
         this.usuario = this.authService.getCurrentUser();
     }
 
-    ngOnInit() {
-        if (!this.authService.isLoggedIn() || this.authService.getCurrentUser()?.rol !== 'operador') {
-            this.router.navigate(['/login']);
-        }
-    }
-
-    navegarA(ruta: string) {
-        if (ruta === '/operador/dashboard-operador') {
-            this.router.navigate(['/operador/dashboard']);
-        } else {
-            this.router.navigate([ruta]);
-        }
+    logout() {
+        this.authService.logout();
+        this.router.navigate(['/login']);
     }
 }
