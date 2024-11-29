@@ -34,7 +34,8 @@ export class EspecialidadService {
       }
 
     obtenerEspecialidadesMedico(idMedico: number): Observable<any> {
-        return this.http.get(`${this.apiUrl}/obtenerEspecialidadesMedico/${idMedico}`, { headers: this.getHeaders() });
+        const headers = this.getHeaders();
+        return this.http.get(`${this.apiUrl}/obtenerEspecialidadesMedico/${idMedico}`, { headers });
     }
 
     obtenerMedicoPorEspecialidad(idEspecialidad: number): Observable<any> {

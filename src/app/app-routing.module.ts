@@ -41,9 +41,9 @@ const routes: Routes = [
   { path: 'paciente/nuevo-turno', component: NuevoTurnoComponent },
   { path: 'paciente/mis-turnos', component: MisTurnosComponent },
   { path: 'paciente/mis-datos', component: MisDatosComponent }, 
-  { path: 'administrador/crear-usuario', component: CrearUsuarioComponent },
+  /* { path: 'administrador/crear-usuario', component: CrearUsuarioComponent },
   { path: 'administrador/lista-usuarios', component: ListaUsuariosComponent },
-  { path: 'administrador/editar-usuario/:id', component: EditarUsuarioComponent },
+  { path: 'administrador/editar-usuario/:id', component: EditarUsuarioComponent }, */
   { path: 'medico/gestion-agenda', component: GestionAgendaComponent },
   { path: 'medico/turnos-programados', component: TurnosProgramadosComponent },
   
@@ -61,6 +61,18 @@ const routes: Routes = [
       { path: 'asignar-turno', component: AsignarTurnoComponent }
     ]
   },
+  {
+    path: 'administrador',
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['administrador'] },
+    children: [
+      { path: '', redirectTo: 'dashboard', pathMatch: 'full' },
+      { path: 'crear-usuario', component: CrearUsuarioComponent },
+      { path: 'lista-usuarios', component: ListaUsuariosComponent },
+      { path: 'gestion-usuarios', component: ListaUsuariosComponent },
+      { path: 'editar-usuario/:id', component: EditarUsuarioComponent }
+    ]
+  }
 ];
 
 @NgModule({

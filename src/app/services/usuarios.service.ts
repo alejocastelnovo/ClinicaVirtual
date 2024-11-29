@@ -38,4 +38,10 @@ export class UsuariosService {
         });
     }
 
+    crearUsuario(userData: any): Observable<any> {
+        return this.http.post(`${this.apiUrl}/crearUsuario`, userData, {
+            headers: this.getHeaders()
+        });
+    }
+
 }

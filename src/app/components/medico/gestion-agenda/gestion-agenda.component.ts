@@ -4,6 +4,7 @@ import { AgendaService } from '../../../services/agenda.service';
 import { AuthService } from '../../../services/auth.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
+import { EspecialidadService } from '../../../services/especialidad.service';
 
 interface Agenda {
   id: number;
@@ -44,7 +45,8 @@ export class GestionAgendaComponent implements OnInit {
     private agendaService: AgendaService,
     private authService: AuthService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private especialidadService: EspecialidadService
   ) {
     this.agendaForm = this.fb.group({
       hora_entrada: ['', Validators.required],
@@ -53,21 +55,17 @@ export class GestionAgendaComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.cargarAgenda();
     this.cargarEspecialidadMedico();
+    this.cargarAgenda();
   }
 
   private cargarEspecialidadMedico() {
     const usuario = this.authService.getCurrentUser();
     if (usuario && usuario.id) {
-      this.authService.obtenerEspecialidadMedico(usuario.id).subscribe({
+      this.especialidadService.obtenerEspecialidadesMedico(usuario.id).subscribe({
         next: (response) => {
           if (response.codigo === 200 && response.payload.length > 0) {
-            const usuarioActualizado = {
-              ...usuario,
-              id_especialidad: response.payload[0].id_especialidad
-            };
-            localStorage.setItem('user', JSON.stringify(usuarioActualizado));
+            localStorage.setItem('especialidadMedico', JSON.stringify(response.payload[0]));
           } else {
             this.mostrarError('No se encontraron especialidades asignadas al médico');
           }
@@ -151,16 +149,18 @@ export class GestionAgendaComponent implements OnInit {
   agregarRangoHorario() {
     if (this.agendaForm.valid && this.fechaSeleccionada.value) {
       const usuario = this.authService.getCurrentUser();
+      const especialidadString = localStorage.getItem('especialidadMedico');
       
-      if (!usuario || !usuario.id) {
-        this.mostrarError('Error: Información de usuario incompleta');
-        this.router.navigate(['/login']);
+      if (!usuario || !usuario.id || !especialidadString) {
+        this.mostrarError('Error: Información de usuario o especialidad incompleta');
         return;
       }
 
+      const especialidad = JSON.parse(especialidadString);
+      
       const agenda = {
         id_medico: usuario.id,
-        id_especialidad: 1,
+        id_especialidad: especialidad.id_especialidad,
         fecha: this.formatearFecha(this.fechaSeleccionada.value),
         hora_entrada: this.agendaForm.value.hora_entrada,
         hora_salida: this.agendaForm.value.hora_salida
@@ -178,12 +178,10 @@ export class GestionAgendaComponent implements OnInit {
           }
         },
         error: (error) => {
-          console.error('Error completo:', error);
+          console.error('Error:', error);
           this.mostrarError('Error al guardar la agenda');
         },
-        complete: () => {
-          this.loading = false;
-        }
+        complete: () => this.loading = false
       });
     } else {
       this.mostrarError('Por favor, complete todos los campos requeridos');
@@ -225,12 +223,18 @@ export class GestionAgendaComponent implements OnInit {
   guardarAgenda() {
     if (this.agendaForm.valid) {
       const usuario = this.authService.getCurrentUser();
+      if (!usuario || !usuario.especialidades) {
+        this.mostrarError('Error: Información de usuario incompleta');
+        return;
+      }
+
+      const especialidadPrincipal = usuario.especialidades[0];
+      
       const agenda = {
         ...this.agendaForm.value,
         id_medico: usuario.id,
-        id_especialidad: usuario.id_especialidad,
-/*         fecha: this.formatearFecha(this.agendaForm.value.fecha),
- */        hora_entrada: this.agendaForm.value.hora_entrada,
+        id_especialidad: especialidadPrincipal.id_especialidad,
+        hora_entrada: this.agendaForm.value.hora_entrada,
         hora_salida: this.agendaForm.value.hora_salida
       };
 
@@ -252,9 +256,7 @@ export class GestionAgendaComponent implements OnInit {
           console.error('Error:', error);
           this.mostrarError('Error al guardar la agenda');
         },
-        complete: () => {
-          this.loading = false;
-        }
+        complete: () => this.loading = false
       });
     }
   }

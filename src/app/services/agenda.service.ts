@@ -18,11 +18,14 @@ export class AgendaService {
     });
   }
 
-  obtenerAgenda(idMedico: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/obtenerAgenda/${idMedico}`, {
-      headers: this.getHeaders()
-    });
-  }
+  obtenerAgenda(medicoId: number): Observable<any> {
+  const headers = new HttpHeaders({
+    'Cache-Control': 'no-cache',
+    'Pragma': 'no-cache'
+  });
+  
+  return this.http.get(`${this.apiUrl}/obtenerAgenda/${medicoId}`, { headers });
+}
 
   crearAgenda(agenda: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/crearAgenda`, agenda, {
