@@ -44,4 +44,11 @@ export class OperadorService {
       headers: this.getHeaders()
     });
   }
+
+  obtenerUsuario(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtenerUsuario/${id}`, {
+        headers: this.getHeaders()
+    });
+}
+  
 }
