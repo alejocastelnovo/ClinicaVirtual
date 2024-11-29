@@ -1,58 +1,20 @@
 .lista-medicos-container {
   padding: 20px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-
-.filtro-fecha {
-  margin-bottom: 20px;
-}
-
-.tabla-container {
-  position: relative;
-  min-height: 200px;
-}
-
-table {
-  width: 100%;
 }
 
 .loading-spinner {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
 }
 
 .no-data {
   text-align: center;
-  padding: 20px;
-  color: #666;
+  margin-top: 20px;
+  color: gray;
 }
 
-.mat-column-acciones {
-  width: 120px;
-  text-align: center;
-}
-
-button[mat-icon-button] {
-  margin: 0 4px;
-}
-
-.mat-mdc-row:hover {
-  background-color: #f5f5f5;
-}
-
-.container {
-  padding: 20px;
-}
-
-.actions-container {
-  display: flex;
-  gap: 16px;
-  margin-bottom: 20px;
-}
-
-.mat-elevation-z8 {
+table {
+  width: 100%;
   margin-top: 20px;
 } 

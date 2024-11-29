@@ -28,6 +28,14 @@ export class OperadorService {
       { headers: this.getHeaders() });
   } */
 
+      obtenerAgendasDisponibles(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/obtenerAgendasDisponibles`, { headers: this.getHeaders() });
+      }
+    
+      obtenerAgenda(id_medico: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtenerAgenda/${id_medico}`, { headers: this.getHeaders() });
+  }
+
   obtenerMedicos(): Observable<any> {
     return this.http.get(`${this.apiUrl}/obtenerUsuarios`, {
       headers: this.getHeaders()
@@ -68,6 +76,11 @@ export class OperadorService {
     let params = new HttpParams().set('fecha', fecha);
     return this.http.get(`${this.apiUrl}/obtenerPacientesDia`, { params });
   }
+
+  obtenerTurnosPaciente(id: number): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtenerTurnoPaciente/${id}`, { headers: this.getHeaders() });
+  }
+
 
   obtenerUsuario(id: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/obtenerUsuario/${id}`, {

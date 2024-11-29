@@ -50,7 +50,6 @@
 
 .sidenav {
   width: 250px;
-  
 }
 
 .sidenav .mat-toolbar {
@@ -63,7 +62,6 @@
 
 .content-container {
   padding: 20px;
-  
 }
 
 .user-info {
@@ -89,4 +87,21 @@ mat-toolbar {
 
 .mat-nav-list a mat-icon {
   margin-right: 8px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.no-data {
+  text-align: center;
+  margin-top: 20px;
+  color: gray;
 }

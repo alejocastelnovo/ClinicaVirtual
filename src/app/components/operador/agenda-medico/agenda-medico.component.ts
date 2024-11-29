@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { OperadorService } from '../../../services/operador.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { AgendaService } from 'src/app/services/agenda.service';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
@@ -18,12 +17,12 @@ export class AgendaMedicoComponent implements OnInit {
   fechaSeleccionada: string = this.formatearFecha(new Date());
   medicosAgenda: any[] = [];
   displayedColumns: string[] = ['nombre', 'especialidad', 'horario', 'acciones'];
+  fechasDisponibles: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private operadorService: OperadorService,
     private snackBar: MatSnackBar,
-    private agendaService: AgendaService,
     private router: Router
   ) {
     this.filtroForm = this.fb.group({
@@ -32,11 +31,33 @@ export class AgendaMedicoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cargarMedicosAgenda(this.fechaSeleccionada);
-
+    this.cargarFechasDisponibles();
+    
     this.filtroForm.get('fecha')?.valueChanges.subscribe(fecha => {
       this.fechaSeleccionada = this.formatearFecha(fecha);
       this.cargarMedicosAgenda(this.fechaSeleccionada);
+    });
+  }
+
+  cargarFechasDisponibles() {
+    this.loading = true;
+    this.operadorService.obtenerAgendasDisponibles().subscribe({
+      next: (response: any) => {
+        if (response.codigo === 200) {
+          this.fechasDisponibles = response.payload;
+        } else {
+          this.mostrarError(response.mensaje || 'Error al cargar las fechas disponibles');
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar fechas disponibles:', error);
+        this.mostrarError('Error al cargar las fechas disponibles');
+      },
+      complete: () => {
+        this.loading = false;
+        // Cargar la agenda para la fecha inicial
+        this.cargarMedicosAgenda(this.fechaSeleccionada);
+      }
     });
   }
 
@@ -48,7 +69,7 @@ export class AgendaMedicoComponent implements OnInit {
           const medicos: any[] = response.payload;
           // Para cada médico, obtener su agenda para la fecha seleccionada
           const agendasObservables = medicos.map(medico => 
-            this.agendaService.obtenerAgenda(medico.id).pipe(
+            this.operadorService.obtenerAgenda(medico.id).pipe(
               map((agendaResponse: any) => {
                 if (agendaResponse.codigo === 200) {
                   // Filtrar agendas por la fecha seleccionada
@@ -69,7 +90,8 @@ export class AgendaMedicoComponent implements OnInit {
 
           forkJoin(agendasObservables).subscribe({
             next: (medicosConAgendas: any[]) => {
-              this.medicosAgenda = medicosConAgendas;
+              // Filtrar médicos que tienen agendas para la fecha seleccionada
+              this.medicosAgenda = medicosConAgendas.filter(medico => medico.agendas.length > 0);
             },
             error: (error) => {
               console.error('Error al cargar agendas de médicos:', error);
@@ -83,19 +105,19 @@ export class AgendaMedicoComponent implements OnInit {
         }
       },
       error: (error) => {
-        console.error('Error al obtener médicos:', error);
-        this.mostrarError('Error al obtener los médicos');
+        console.error('Error al cargar médicos:', error);
+        this.mostrarError('Error al cargar los médicos');
         this.loading = false;
       }
     });
   }
 
   editarAgenda(medicoId: number) {
-    this.router.navigate(['/operador/editar-agenda', medicoId, this.fechaSeleccionada]);
+    this.router.navigate(['/operador/agenda/editar', medicoId, this.fechaSeleccionada]);
   }
 
   verTurnos(medicoId: number) {
-    this.router.navigate(['/operador/ver-turnos', medicoId, this.fechaSeleccionada]);
+    this.router.navigate(['/operador/agenda/turnos', medicoId, this.fechaSeleccionada]);
   }
 
   mostrarError(mensaje: string) {

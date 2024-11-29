@@ -37,3 +37,29 @@ mat-spinner {
 mat-card-subtitle {
   margin-top: 8px;
 }
+
+.agenda-medico-container {
+  padding: 20px;
+}
+
+.filtro-form {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px;
+}
+
+.loading-spinner {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.no-data {
+  text-align: center;
+  margin-top: 20px;
+  color: gray;
+}
+
+table {
+  width: 100%;
+}
