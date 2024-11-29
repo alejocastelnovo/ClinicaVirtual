@@ -47,17 +47,15 @@ export class MisTurnosComponent implements OnInit {
       next: (response) => {
         if (response.codigo === 200) {
           this.turnos = response.payload.map((turno: any) => ({
-            ...turno,
+            id: turno.id_turno,
+            fecha: turno.fecha,
+            hora: turno.hora,
+            especialista: `${turno.nombre_medico} ${turno.apellido_medico}`,
+            especialidad: turno.especialidad,
+            estado: turno.estado,
+            nota: turno.nota || 'Sin notas',
             expandido: false
           }));
-          // Ordenar por fecha y hora
-          this.turnos.sort((a, b) => {
-            const fechaA = new Date(`${a.fecha} ${a.hora}`);
-            const fechaB = new Date(`${b.fecha} ${b.hora}`);
-            return fechaA.getTime() - fechaB.getTime();
-          });
-        } else {
-          this.mostrarError('Error al cargar los turnos');
         }
       },
       error: (error) => {
@@ -70,20 +68,33 @@ export class MisTurnosComponent implements OnInit {
     });
   }
 
-  toggleExpandirTurno(turno: Turno) {
-    turno.expandido = !turno.expandido;
+  formatearFecha(fecha: string): string {
+    const opciones: Intl.DateTimeFormatOptions = {
+      weekday: 'long',
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    };
+    return new Date(fecha).toLocaleDateString('es-AR', opciones);
+  }
+
+  private mostrarError(mensaje: string) {
+    this.snackBar.open(mensaje, 'Cerrar', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
   }
 
   cancelarTurno(turnoId: number) {
     if (confirm('¿Está seguro que desea cancelar este turno?')) {
       this.loading = true;
       this.turnoService.eliminarTurno(turnoId).subscribe({
-        next: (response) => {
-          if (response.codigo === 200) {
+        next: (response: any) => {
+          if (response.payload.affectedRows > 0) {
             this.mostrarMensaje('Turno cancelado exitosamente');
             this.cargarTurnos();
           } else {
-            this.mostrarError('Error al cancelar el turno');
+            this.mostrarError('No se pudo cancelar el turno');
           }
         },
         error: (error) => {
@@ -97,25 +108,11 @@ export class MisTurnosComponent implements OnInit {
     }
   }
 
-  formatearFecha(fecha: string): string {
-    return new Date(fecha).toLocaleDateString('es-AR', {
-      weekday: 'long',
-      year: 'numeric',
-      month: 'long',
-      day: 'numeric'
-    });
-  }
-
-  private mostrarError(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000,
-      panelClass: ['error-snackbar']
-    });
-  }
-
   private mostrarMensaje(mensaje: string) {
     this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000
+      duration: 3000,
+      horizontalPosition: 'center',
+      verticalPosition: 'top'
     });
   }
 }

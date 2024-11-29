@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { map, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +21,20 @@ export class TurnoService {
   obtenerTurnosPaciente(idPaciente: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/obtenerTurnoPaciente/${idPaciente}`, {
       headers: this.getHeaders()
-    });
+    }).pipe(
+      map((response: any) => {
+        if (response.codigo === 200 && response.payload) {
+          // Ordenar los turnos por fecha y hora
+          const turnos = response.payload.sort((a: any, b: any) => {
+            const fechaA = new Date(`${a.fecha} ${a.hora}`);
+            const fechaB = new Date(`${b.fecha} ${b.hora}`);
+            return fechaA.getTime() - fechaB.getTime();
+          });
+          return { ...response, payload: turnos };
+        }
+        return response;
+      })
+    );
   }
 
   obtenerTurnosMedico(idMedico: number, fecha: string): Observable<any> {
@@ -53,6 +66,16 @@ export class TurnoService {
   eliminarTurno(id: number): Observable<any> {
     return this.http.delete(`${this.apiUrl}/eliminarTurnoPaciente/${id}`, {
       headers: this.getHeaders()
-    });
+    }).pipe(
+      map(response => {
+        // El backend devuelve el resultado directo de MySQL
+        // Necesitamos transformarlo a nuestro formato estándar
+        return {
+          codigo: 200,
+          mensaje: 'Turno eliminado correctamente',
+          payload: response
+        };
+      })
+    );
   }
 }

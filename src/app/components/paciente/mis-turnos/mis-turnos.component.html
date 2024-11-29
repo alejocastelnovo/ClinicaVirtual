@@ -3,8 +3,9 @@
     <mat-card-title>Mis Turnos</mat-card-title>
     
     <mat-card-content>
-
-      <!-- Si no hay turnos que muestre el boton para pedir uno -->
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner diameter="40"></mat-spinner>
+      </div>
 
       <div *ngIf="!loading && turnos.length === 0" class="no-turnos">
         <p>No tenés turnos programados</p>
@@ -17,17 +18,14 @@
         <mat-expansion-panel *ngFor="let turno of turnos">
           <mat-expansion-panel-header>
             <mat-panel-title>
-              {{formatearFecha(turno.fecha)}} - {{turno.hora}}
+              {{formatearFecha(turno.fecha)}} a las {{turno.hora}} horas
             </mat-panel-title>
-            <mat-panel-description>
-              {{turno.especialidad}}
-            </mat-panel-description>
           </mat-expansion-panel-header>
 
           <div class="turno-detalles">
-            <p><strong>Profesional:</strong> {{turno.especialista}}</p>
-            <p><strong>Estado:</strong> {{turno.estado}}</p>
-            <p><strong>Nota:</strong> {{turno.nota}}</p>
+            <p><strong>Especialista:</strong> {{turno.especialista}}</p>
+            <p><strong>Especialidad:</strong> {{turno.especialidad}}</p>
+            
           </div>
 
           <mat-action-row>
