@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { OperadorService } from '../../../services/operador.service';
 import { EspecialidadService } from '../../../services/especialidad.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-crear-paciente',
@@ -12,25 +12,25 @@ import { EspecialidadService } from '../../../services/especialidad.service';
 })
 export class CrearPacienteComponent implements OnInit {
   pacienteForm: FormGroup;
-  coberturas: any[] = [];
   loading = false;
+  coberturas: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private operadorService: OperadorService,
     private especialidadService: EspecialidadService,
-    private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private snackBar: MatSnackBar
   ) {
     this.pacienteForm = this.fb.group({
+      nombre: ['', Validators.required],
+      apellido: ['', Validators.required],
       dni: ['', [Validators.required, Validators.pattern('^[0-9]{8}$')]],
-      nombre: ['', [Validators.required, Validators.minLength(2)]],
-      apellido: ['', [Validators.required, Validators.minLength(2)]],
       email: ['', [Validators.required, Validators.email]],
-      telefono: ['', [Validators.required, Validators.pattern('^[0-9]{10}$')]],
+      telefono: ['', Validators.required],
       fecha_nacimiento: ['', Validators.required],
       id_cobertura: ['', Validators.required],
-      password: ['123456', Validators.required] // Contraseña por defecto
+      password: ['', Validators.required]
     });
   }
 
@@ -41,14 +41,17 @@ export class CrearPacienteComponent implements OnInit {
   cargarCoberturas() {
     this.loading = true;
     this.especialidadService.obtenerCoberturas().subscribe({
-      next: (response) => {
+      next: (response: any) => {
         if (response.codigo === 200) {
           this.coberturas = response.payload;
         } else {
-          this.mostrarError('Error al cargar las coberturas');
+          this.mostrarError('Error al cargar coberturas');
         }
       },
-      error: (error) => this.mostrarError('Error al cargar las coberturas'),
+      error: (error) => {
+        console.error('Error:', error);
+        this.mostrarError('Error al cargar coberturas');
+      },
       complete: () => this.loading = false
     });
   }
@@ -64,26 +67,26 @@ export class CrearPacienteComponent implements OnInit {
       this.operadorService.crearPaciente(pacienteData).subscribe({
         next: (response) => {
           if (response.codigo === 200) {
-            this.mostrarMensaje('Paciente creado exitosamente');
+            this.snackBar.open('Paciente creado exitosamente', 'Cerrar', { duration: 3000 });
             this.router.navigate(['/operador/dashboard']);
           } else {
-            this.mostrarError(response.mensaje || 'Error al crear el paciente');
+            this.mostrarError(response.mensaje || 'Error al crear paciente');
           }
         },
-        error: (error) => this.mostrarError('Error al crear el paciente'),
-        complete: () => this.loading = false
+        error: (error) => {
+          console.error('Error:', error);
+          this.mostrarError('Error al crear paciente');
+          this.loading = false;
+        }
       });
     }
   }
 
-  private mostrarMensaje(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', { duration: 3000 });
+  onCancel() {
+    this.router.navigate(['/operador/dashboard']);
   }
 
   private mostrarError(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 3000,
-      panelClass: ['error-snackbar']
-    });
+    this.snackBar.open(mensaje, 'Cerrar', { duration: 3000 });
   }
 }

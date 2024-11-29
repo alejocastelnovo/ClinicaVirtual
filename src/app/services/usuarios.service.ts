@@ -38,6 +38,13 @@ export class UsuariosService {
         });
     }
 
+    obtenerMedicos(): Observable<any> {
+        return this.http.get(`${this.apiUrl}/obtenerUsuarios`, {
+            headers: this.getHeaders(),
+            params: { rol: 'medico' }
+        });
+    }
+
     crearUsuario(userData: any): Observable<any> {
         return this.http.post(`${this.apiUrl}/crearUsuario`, userData, {
             headers: this.getHeaders()

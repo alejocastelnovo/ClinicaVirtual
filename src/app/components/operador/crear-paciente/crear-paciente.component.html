@@ -1,24 +1,13 @@
-<div class="crear-paciente-container">
+<div class="container">
   <mat-card>
     <mat-card-header>
       <mat-card-title>Crear Nuevo Paciente</mat-card-title>
     </mat-card-header>
 
-    <mat-card-content>
-      <form [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="pacienteForm" (ngSubmit)="onSubmit()">
+      <mat-card-content>
         <div class="form-row">
-          <mat-form-field appearance="fill">
-            <mat-label>DNI</mat-label>
-            <input matInput formControlName="dni" type="text">
-            <mat-error *ngIf="pacienteForm.get('dni')?.hasError('required')">
-              El DNI es requerido
-            </mat-error>
-            <mat-error *ngIf="pacienteForm.get('dni')?.hasError('pattern')">
-              El DNI debe tener 8 dígitos
-            </mat-error>
-          </mat-form-field>
-
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Nombre</mat-label>
             <input matInput formControlName="nombre">
             <mat-error *ngIf="pacienteForm.get('nombre')?.hasError('required')">
@@ -26,7 +15,7 @@
             </mat-error>
           </mat-form-field>
 
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Apellido</mat-label>
             <input matInput formControlName="apellido">
             <mat-error *ngIf="pacienteForm.get('apellido')?.hasError('required')">
@@ -36,28 +25,39 @@
         </div>
 
         <div class="form-row">
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
+            <mat-label>DNI</mat-label>
+            <input matInput formControlName="dni">
+            <mat-error *ngIf="pacienteForm.get('dni')?.hasError('required')">
+              El DNI es requerido
+            </mat-error>
+            <mat-error *ngIf="pacienteForm.get('dni')?.hasError('pattern')">
+              El DNI debe tener 8 dígitos
+            </mat-error>
+          </mat-form-field>
+
+          <mat-form-field appearance="outline">
             <mat-label>Email</mat-label>
             <input matInput formControlName="email" type="email">
             <mat-error *ngIf="pacienteForm.get('email')?.hasError('required')">
               El email es requerido
             </mat-error>
             <mat-error *ngIf="pacienteForm.get('email')?.hasError('email')">
-              Ingrese un email válido
+              Email inválido
             </mat-error>
           </mat-form-field>
+        </div>
 
-          <mat-form-field appearance="fill">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
             <mat-label>Teléfono</mat-label>
             <input matInput formControlName="telefono">
             <mat-error *ngIf="pacienteForm.get('telefono')?.hasError('required')">
               El teléfono es requerido
             </mat-error>
           </mat-form-field>
-        </div>
 
-        <div class="form-row">
-          <mat-form-field appearance="fill">
+          <mat-form-field appearance="outline">
             <mat-label>Fecha de Nacimiento</mat-label>
             <input matInput [matDatepicker]="picker" formControlName="fecha_nacimiento">
             <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
@@ -66,8 +66,10 @@
               La fecha de nacimiento es requerida
             </mat-error>
           </mat-form-field>
+        </div>
 
-          <mat-form-field appearance="fill">
+        <div class="form-row">
+          <mat-form-field appearance="outline">
             <mat-label>Cobertura Médica</mat-label>
             <mat-select formControlName="id_cobertura">
               <mat-option *ngFor="let cobertura of coberturas" [value]="cobertura.id">
@@ -78,16 +80,27 @@
               La cobertura es requerida
             </mat-error>
           </mat-form-field>
-        </div>
 
-        <div class="form-actions">
-          <button mat-button type="button" routerLink="/operador/dashboard">Cancelar</button>
-          <button mat-raised-button color="primary" type="submit" [disabled]="!pacienteForm.valid || loading">
-            <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
-            <span *ngIf="!loading">Crear Paciente</span>
-          </button>
+          <mat-form-field appearance="outline">
+            <mat-label>Contraseña</mat-label>
+            <input matInput type="password" formControlName="password">
+            <mat-error *ngIf="pacienteForm.get('password')?.hasError('required')">
+              La contraseña es requerida
+            </mat-error>
+          </mat-form-field>
         </div>
-      </form>
-    </mat-card-content>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button type="button" (click)="onCancel()">
+          Cancelar
+        </button>
+        <button mat-raised-button color="primary" type="submit" [disabled]="!pacienteForm.valid || loading">
+          Crear Paciente
+        </button>
+      </mat-card-actions>
+    </form>
+
+    <mat-progress-bar *ngIf="loading" mode="indeterminate"></mat-progress-bar>
   </mat-card>
 </div>

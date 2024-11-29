@@ -6,6 +6,7 @@ import { EspecialidadService } from '../../../services/especialidad.service';
 import { TurnoService } from '../../../services/turno.service';
 import { AgendaService } from '../../../services/agenda.service';
 import { AuthService } from '../../../services/auth.service';
+import { OperadorService } from '../../../services/operador.service';
 
 @Component({
   selector: 'app-asignar-turno',
@@ -13,10 +14,7 @@ import { AuthService } from '../../../services/auth.service';
   styleUrls: ['./asignar-turno.component.css']
 })
 export class AsignarTurnoComponent implements OnInit {
-onCancelar() {
-throw new Error('Method not implemented.');
-}
-  turnoForm: FormGroup;
+  turnoForm!: FormGroup;
   especialidades: any[] = [];
   medicos: any[] = [];
   pacientes: any[] = [];
@@ -25,39 +23,42 @@ throw new Error('Method not implemented.');
   minutosDisponibles: string[] = ['00', '30'];
   loading = false;
   agendaSeleccionada: any;
-  turnos: any[] = [];
+  minDate = new Date();
+  fechasDisponibles: Date[] = [];
+  agendasDisponibles: any[] = [];
+  agendasFiltradas: any[] = [];
 
   constructor(
     private fb: FormBuilder,
     private especialidadService: EspecialidadService,
     private turnoService: TurnoService,
     private agendaService: AgendaService,
-    private authService: AuthService,
+    private operadorService: OperadorService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
-    this.turnoForm = this.fb.group({
-      paciente: ['', Validators.required],
-      cobertura: ['', Validators.required],
-      especialidad: ['', Validators.required],
-      profesional: ['', Validators.required],
-      fecha: ['', Validators.required],
-      hora: ['', Validators.required],
-      minutos: ['', Validators.required],
-      nota: ['', [Validators.required, Validators.minLength(10)]]
-    });
+    this.initForm();
+  }
 
-    // Habilitar/deshabilitar campos según selección
-    this.turnoForm.get('paciente')?.valueChanges.subscribe(value => {
-      if (value) {
-        this.turnoForm.get('cobertura')?.enable();
-      } else {
-        this.turnoForm.get('cobertura')?.disable();
+  ngOnInit(): void {
+    this.cargarDatosIniciales();
+
+    // Suscripciones a cambios en el formulario
+    this.turnoForm.get('paciente')?.valueChanges.subscribe(pacienteId => {
+      if (pacienteId) {
+        const paciente = this.pacientes.find(p => p.id_usuario === pacienteId);
+        if (paciente?.id_cobertura) {
+          this.turnoForm.patchValue({
+            cobertura: paciente.id_cobertura
+          }, { emitEvent: false });
+        }
       }
     });
 
     this.turnoForm.get('especialidad')?.valueChanges.subscribe(value => {
       if (value) {
+        this.medicos = [];
+        this.turnoForm.get('profesional')?.reset();
         this.cargarMedicosPorEspecialidad(value);
       }
     });
@@ -68,76 +69,104 @@ throw new Error('Method not implemented.');
       }
     });
 
-    this.turnoForm.get('fecha')?.valueChanges.subscribe(value => {
-      if (value) {
+    this.turnoForm.get('fecha')?.valueChanges.subscribe(fecha => {
+      if (fecha) {
+        this.filtrarAgendasPorFecha(fecha);
+      }
+    });
+
+    this.turnoForm.get('agenda')?.valueChanges.subscribe(agendaId => {
+      if (agendaId) {
+        this.agendaSeleccionada = this.agendasDisponibles.find(a => a.id === agendaId);
         this.generarHorariosDisponibles();
       }
     });
   }
 
-  ngOnInit() {
-    this.cargarDatosIniciales();
+  private initForm() {
+    this.turnoForm = this.fb.group({
+      paciente: ['', Validators.required],
+      cobertura: [{value: '', disabled: true}],
+      especialidad: ['', Validators.required],
+      profesional: ['', Validators.required],
+      fecha: ['', Validators.required],
+      hora: ['', Validators.required],
+      minutos: ['', Validators.required],
+      nota: ['', [Validators.required, Validators.minLength(10)]]
+    });
   }
 
   cargarDatosIniciales() {
-    this.loading = true;
-    
+    // Cargar pacientes
+    this.operadorService.obtenerPacientes().subscribe({
+      next: (response: any) => {
+        if (response.codigo === 200) {
+          this.pacientes = response.payload.filter((u: any) => u.rol === 'paciente');
+          console.log('Pacientes cargados:', this.pacientes);
+        }
+      },
+      error: () => this.mostrarError('Error al cargar pacientes')
+    });
+
     // Cargar especialidades
     this.especialidadService.obtenerEspecialidades().subscribe({
       next: (response: any) => {
         if (response.codigo === 200) {
           this.especialidades = response.payload;
+          console.log('Especialidades cargadas:', this.especialidades);
         }
       },
-      error: (error) => this.mostrarError('Error al cargar especialidades')
-    });
-
-    // Cargar pacientes
-    this.authService.obtenerUsuario(0).subscribe({
-      next: (response: any) => {
-        if (response.codigo === 200) {
-          this.pacientes = response.payload.filter((user: any) => user.rol === 'paciente');
-        }
-      },
-      error: (error) => this.mostrarError('Error al cargar pacientes')
-    });
-
-    // Cargar coberturas
-    this.especialidadService.obtenerCoberturas().subscribe({
-      next: (response: any) => {
-        if (response.codigo === 200) {
-          this.coberturas = response.payload;
-        }
-      },
-      error: (error) => this.mostrarError('Error al cargar coberturas')
+      error: () => this.mostrarError('Error al cargar especialidades')
     });
   }
 
-  cargarMedicosPorEspecialidad(especialidadId: number) {
-    this.loading = true;
-    this.especialidadService.obtenerMedicoPorEspecialidad(especialidadId).subscribe({
-      next: (response: any) => {
-        if (response.codigo === 200) {
-          this.medicos = response.payload;
-        }
-      },
-      error: (error) => this.mostrarError('Error al cargar médicos'),
-      complete: () => this.loading = false
-    });
-  }
+  dateFilter = (d: Date | null): boolean => {
+    if (!d) return false;
+    return this.fechasDisponibles.some(fecha => 
+      fecha.getDate() === d.getDate() &&
+      fecha.getMonth() === d.getMonth() &&
+      fecha.getFullYear() === d.getFullYear()
+    );
+  };
 
   cargarAgendaMedico(medicoId: number) {
+    if (!medicoId) return;
+    
     this.loading = true;
     this.agendaService.obtenerAgenda(medicoId).subscribe({
       next: (response: any) => {
-        if (response.codigo === 200 && response.payload.length > 0) {
-          this.agendaSeleccionada = response.payload[0];
-          this.generarHorariosDisponibles();
+        if (response.codigo === 200) {
+          if (response.payload && response.payload.length > 0) {
+            this.agendasDisponibles = response.payload;
+            this.fechasDisponibles = [...new Set(
+              this.agendasDisponibles.map(agenda => new Date(agenda.fecha))
+            )];
+          } else {
+            this.agendasDisponibles = [];
+            this.fechasDisponibles = [];
+            this.mostrarError('No hay agendas disponibles para este médico');
+          }
         }
       },
       error: (error) => this.mostrarError('Error al cargar agenda'),
       complete: () => this.loading = false
     });
+  }
+
+  filtrarAgendasPorFecha(fecha: Date) {
+    const fechaFormateada = this.formatearFecha(fecha);
+    this.agendasFiltradas = this.agendasDisponibles.filter(
+      agenda => agenda.fecha === fechaFormateada
+    );
+    
+    if (this.agendasFiltradas.length > 0) {
+      this.agendaSeleccionada = this.agendasFiltradas[0];
+      this.generarHorariosDisponibles();
+    }
+  }
+
+  onCancel() {
+    this.router.navigate(['/operador/dashboard']);
   }
 
   generarHorariosDisponibles() {
@@ -154,10 +183,12 @@ throw new Error('Method not implemented.');
 
   onSubmit() {
     if (this.turnoForm.valid) {
+      const pacienteSeleccionado = this.pacientes.find(p => p.id === this.turnoForm.value.paciente);
+      
       const turnoData = {
         id_agenda: this.agendaSeleccionada.id,
         id_paciente: this.turnoForm.value.paciente,
-        id_cobertura: this.turnoForm.value.cobertura,
+        id_cobertura: pacienteSeleccionado?.id_cobertura,
         fecha: this.formatearFecha(this.turnoForm.value.fecha),
         hora: `${this.turnoForm.value.hora}:${this.turnoForm.value.minutos}`,
         nota: this.turnoForm.value.nota
@@ -192,6 +223,21 @@ throw new Error('Method not implemented.');
       duration: 2000,
       horizontalPosition: 'center',
       verticalPosition: 'top'
+    });
+  }
+
+  cargarMedicosPorEspecialidad(especialidadId: number) {
+    this.loading = true;
+    this.especialidadService.obtenerMedicoPorEspecialidad(especialidadId).subscribe({
+      next: (response: any) => {
+        if (response.codigo === 200) {
+          this.medicos = response.payload;
+        } else {
+          this.mostrarError('No hay médicos disponibles para esta especialidad');
+        }
+      },
+      error: () => this.mostrarError('Error al cargar médicos'),
+      complete: () => this.loading = false
     });
   }
 }

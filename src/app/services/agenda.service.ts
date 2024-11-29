@@ -30,6 +30,16 @@ export class AgendaService {
     return this.http.get(`${this.apiUrl}/obtenerAgenda/${medicoId}`, { headers });
   }
 
+  obtenerAgendasPorFecha(fecha: string): Observable<any> {
+    const token = localStorage.getItem('jwt');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': token || ''
+    });
+    
+    return this.http.get(`${this.apiUrl}/obtenerAgendasPorFecha/${fecha}`, { headers });
+  }
+
   crearAgenda(agenda: any): Observable<any> {
     return this.http.post(`${this.apiUrl}/crearAgenda`, agenda, {
       headers: this.getHeaders()

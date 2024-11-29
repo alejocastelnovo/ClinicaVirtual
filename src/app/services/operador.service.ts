@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, forkJoin, map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -37,5 +37,11 @@ export class OperadorService {
     return this.http.post(`${this.apiUrl}/obtenerTurnosMedico`, 
       { id_medico: idMedico, fecha: fecha },
       { headers: this.getHeaders() });
+  }
+
+  obtenerPacientes(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/obtenerUsuarios`, {
+      headers: this.getHeaders()
+    });
   }
 }
