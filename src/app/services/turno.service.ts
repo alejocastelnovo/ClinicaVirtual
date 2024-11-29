@@ -32,7 +32,20 @@ export class TurnoService {
   }
 
   asignarTurno(turno: any): Observable<any> {
-    return this.http.post(`${this.apiUrl}/asignarTurnoPaciente`, turno, {
+    // Validar que todos los campos requeridos estén presentes
+    if (!turno.id_agenda || !turno.id_paciente || !turno.id_cobertura || !turno.fecha || !turno.hora) {
+      throw new Error('Faltan campos requeridos para crear el turno');
+    }
+    
+    // Asegurarse de que los IDs sean números
+    const turnoValidado = {
+      ...turno,
+      id_agenda: Number(turno.id_agenda),
+      id_paciente: Number(turno.id_paciente),
+      id_cobertura: Number(turno.id_cobertura)
+    };
+
+    return this.http.post(`${this.apiUrl}/asignarTurnoPaciente`, turnoValidado, {
       headers: this.getHeaders()
     });
   }

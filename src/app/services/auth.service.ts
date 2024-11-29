@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
-import { tap } from 'rxjs/operators';
+import { tap, catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
 interface LoginResponse {
@@ -27,7 +27,9 @@ export class AuthService {
     const token = localStorage.getItem('jwt');
     return new HttpHeaders({
       'Content-Type': 'application/json',
-      'Authorization': token || ''
+      'Authorization': `${token}`,
+      'Cache-Control': 'no-cache',
+      'Pragma': 'no-cache'
     });
   }
 
@@ -97,7 +99,14 @@ export class AuthService {
   }
 
   obtenerUsuario(id: number): Observable<any> {
-    return this.http.get(`${this.apiUrl}/obtenerUsuario/${id}`, 
-      { headers: this.getHeaders() });
+    return this.http.get(`${this.apiUrl}/obtenerUsuario/${id}`, {
+      headers: this.getHeaders()
+    }).pipe(
+      tap(response => console.log('Respuesta usuario:', response)),
+      catchError(error => {
+        console.error('Error al obtener usuario:', error);
+        throw error;
+      })
+    );
   }
 }

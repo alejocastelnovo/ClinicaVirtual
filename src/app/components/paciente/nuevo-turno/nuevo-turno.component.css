@@ -1,25 +1,27 @@
 .nuevo-turno-container {
-    position: relative;
-}
-
-mat-card {
-    max-width: 800px;
     padding: 20px;
+    max-width: 800px;
     margin: 0 auto;
-    margin-bottom: 70px;
-    margin-top: 20px;
 }
 
-mat-form-field {
+.full-width {
     width: 100%;
-    margin-bottom: 16px;
+    margin-bottom: 1rem;
 }
 
 .button-container {
     display: flex;
     justify-content: flex-end;
     gap: 16px;
-    margin-top: 20px;
+    margin-top: 24px;
+}
+
+mat-card {
+    padding: 24px;
+}
+
+mat-card-title {
+    margin-bottom: 24px;
 }
 
 textarea {
@@ -37,4 +39,18 @@ textarea {
     justify-content: center;
     align-items: center;
     z-index: 1000;
+}
+
+input[type="time"] {
+    width: 100%;
+    padding: 8px;
+}
+
+mat-error {
+    font-size: 12px;
+    margin-top: 4px;
+}
+
+.mat-form-field {
+    margin-bottom: 1.5rem;
 }
