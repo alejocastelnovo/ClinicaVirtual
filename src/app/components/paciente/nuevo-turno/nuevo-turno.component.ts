@@ -113,13 +113,13 @@ export class NuevoTurnoComponent implements OnInit {
   dateFilter = (date: Date | null): boolean => {
     if (!date) return false;
     
-    // No permitir fines de semana
-    const day = date.getDay();
-    if (day === 0 || day === 6) return false;
+    // Convertir la fecha a string en formato YYYY-MM-DD para comparar
+    const dateStr = this.formatearFecha(date);
     
     // Verificar si la fecha está en las fechas disponibles
-    const fechaStr = date.toDateString();
-    return this.fechasDisponibles.some((f: Date) => f.toDateString() === fechaStr);
+    return this.fechasDisponibles.some(disponible => 
+      this.formatearFecha(disponible) === dateStr
+    );
   };
 
   verificarTurnosExistentes(fecha: Date) {
@@ -179,28 +179,41 @@ export class NuevoTurnoComponent implements OnInit {
   }
 
   cargarAgendaMedico(medicoId: number) {
+    if (!medicoId) {
+      this.mostrarError('ID de médico no válido');
+      return;
+    }
+
     this.loading = true;
+    console.log('Cargando agenda para médico ID:', medicoId);
+    
     this.agendaService.obtenerAgenda(medicoId).subscribe({
       next: (response: any) => {
-        if (response.codigo === 200 && response.payload.length > 0) {
-          this.agendasDisponibles = response.payload;
-          // Convertir las fechas de string a objetos Date
-          this.fechasDisponibles = [...new Set(
-            this.agendasDisponibles.map(agenda => new Date(agenda.fecha))
-          )];
-          
-          // Si hay una fecha seleccionada, filtrar las agendas
-          const fechaSeleccionada = this.turnoForm.get('fecha')?.value;
-          if (fechaSeleccionada) {
-            this.filtrarAgendasPorFecha(fechaSeleccionada);
+        console.log('Respuesta agenda:', response);
+        if (response.codigo === 200) {
+          if (response.payload && response.payload.length > 0) {
+            this.agendasDisponibles = response.payload;
+            // Convertir las fechas de string a objetos Date
+            this.fechasDisponibles = [...new Set(
+              this.agendasDisponibles.map(agenda => new Date(agenda.fecha))
+            )];
+            
+            // Si hay una fecha seleccionada, filtrar las agendas
+            const fechaSeleccionada = this.turnoForm.get('fecha')?.value;
+            if (fechaSeleccionada) {
+              this.filtrarAgendasPorFecha(fechaSeleccionada);
+            }
+          } else {
+            this.agendasDisponibles = [];
+            this.fechasDisponibles = [];
+            this.mostrarError('No hay agendas disponibles para este médico');
           }
         } else {
-          this.agendasDisponibles = [];
-          this.fechasDisponibles = [];
-          this.mostrarError('No hay agendas disponibles para este médico');
+          this.mostrarError(response.mensaje || 'Error al obtener las agendas');
         }
       },
-      error: () => {
+      error: (error) => {
+        console.error('Error al cargar agenda:', error);
         this.mostrarError('Error al cargar agenda del médico');
         this.loading = false;
       },
