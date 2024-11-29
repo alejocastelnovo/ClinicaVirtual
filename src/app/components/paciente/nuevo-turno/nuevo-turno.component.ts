@@ -61,21 +61,13 @@ export class NuevoTurnoComponent implements OnInit {
             const usuario = Array.isArray(response.payload) ? 
                            response.payload[0] : response.payload;
             
-            // Buscamos la cobertura correspondiente
-            this.especialidadService.obtenerCoberturas().subscribe({
-              next: (coberturaResponse: any) => {
-                if (coberturaResponse.codigo === 200) {
-                  const cobertura = coberturaResponse.payload.find(
-                    (c: any) => c.id === usuario.id_cobertura
-                  );
-                  if (cobertura) {
-                    this.turnoForm.patchValue({
-                      cobertura: cobertura.nombre
-                    });
-                  }
-                }
-              }
-            });
+            if (usuario.id_cobertura) {
+              this.turnoForm.patchValue({
+                cobertura: usuario.id_cobertura
+              });
+            } else {
+              this.mostrarError('El usuario no tiene una cobertura asignada');
+            }
           }
         },
         error: (error) => {
@@ -192,16 +184,26 @@ export class NuevoTurnoComponent implements OnInit {
       next: (response: any) => {
         if (response.codigo === 200 && response.payload.length > 0) {
           this.agendasDisponibles = response.payload;
+          // Convertir las fechas de string a objetos Date
           this.fechasDisponibles = [...new Set(
             this.agendasDisponibles.map(agenda => new Date(agenda.fecha))
           )];
+          
+          // Si hay una fecha seleccionada, filtrar las agendas
+          const fechaSeleccionada = this.turnoForm.get('fecha')?.value;
+          if (fechaSeleccionada) {
+            this.filtrarAgendasPorFecha(fechaSeleccionada);
+          }
         } else {
           this.agendasDisponibles = [];
           this.fechasDisponibles = [];
           this.mostrarError('No hay agendas disponibles para este médico');
         }
       },
-      error: () => this.mostrarError('Error al cargar agenda del médico'),
+      error: () => {
+        this.mostrarError('Error al cargar agenda del médico');
+        this.loading = false;
+      },
       complete: () => this.loading = false
     });
   }
@@ -210,10 +212,14 @@ export class NuevoTurnoComponent implements OnInit {
     if (this.agendaSeleccionada) {
       const horaInicio = parseInt(this.agendaSeleccionada.hora_entrada.split(':')[0], 10);
       const horaFin = parseInt(this.agendaSeleccionada.hora_salida.split(':')[0], 10);
+      const minutosDisponibles = ['00', '30']; // Intervalos de 30 minutos
 
       this.horariosDisponibles = [];
       for (let hora = horaInicio; hora < horaFin; hora++) {
-        this.horariosDisponibles.push(`${hora.toString().padStart(2, '0')}`);
+        const horaStr = hora.toString().padStart(2, '0');
+        minutosDisponibles.forEach(minutos => {
+          this.horariosDisponibles.push(`${horaStr}:${minutos}`);
+        });
       }
     }
   }
@@ -228,39 +234,58 @@ export class NuevoTurnoComponent implements OnInit {
 
   onSubmit() {
     if (this.turnoForm.valid) {
-      const userStr = localStorage.getItem('user');
-      const user = userStr ? JSON.parse(userStr) : null;
+      const usuario = this.authService.getCurrentUser();
+      const agendaId = this.turnoForm.get('agenda')?.value;
+      const agendaSeleccionada = this.agendasDisponibles.find(agenda => agenda.id === agendaId);
 
-      if (!user?.id) {
-        this.mostrarError('Error: No se pudo obtener la información del usuario');
+      if (!usuario || !agendaSeleccionada) {
+        this.mostrarError('Error: Datos incompletos');
+        return;
+      }
+
+      // Obtener la cobertura del formulario o del usuario
+      const idCobertura = this.turnoForm.get('cobertura')?.value || usuario.id_cobertura;
+      
+      if (!idCobertura) {
+        this.mostrarError('Error: No se ha podido determinar la cobertura del paciente');
         return;
       }
 
       const turnoData = {
-        id_agenda: this.turnoForm.get('agenda')?.value,
-        id_paciente: user.id,
-        id_cobertura: user.id_cobertura,
-        fecha: this.formatearFecha(this.turnoForm.value.fecha),
-        hora: this.turnoForm.value.hora,
-        nota: this.turnoForm.value.nota
+        id_agenda: agendaId,
+        id_paciente: usuario.id,
+        id_cobertura: idCobertura,
+        fecha: this.formatearFecha(this.turnoForm.get('fecha')?.value),
+        hora: `${this.turnoForm.get('hora')?.value}:00`,
+        nota: this.turnoForm.get('nota')?.value || ''
       };
 
+      // Verificar que todos los campos requeridos estén presentes
+      if (!turnoData.id_agenda || !turnoData.id_paciente || !turnoData.fecha || !turnoData.hora) {
+        this.mostrarError('Por favor, complete todos los campos requeridos');
+        return;
+      }
+
       this.loading = true;
+      
       this.turnoService.asignarTurno(turnoData).subscribe({
         next: (response: any) => {
+          this.loading = false;
           if (response.codigo === 200) {
-            this.snackBar.open('Turno asignado correctamente', 'Cerrar', {
-              duration: 3000
-            });
+            this.snackBar.open('Turno asignado correctamente', 'Cerrar', { duration: 3000 });
             this.router.navigate(['/paciente/mis-turnos']);
+          } else {
+            this.mostrarError(response.mensaje || 'Error al asignar el turno');
           }
         },
         error: (error) => {
-          this.mostrarError('Error al asignar el turno');
+          this.loading = false;
           console.error('Error detallado:', error);
-        },
-        complete: () => this.loading = false
+          this.mostrarError('Error al asignar el turno');
+        }
       });
+    } else {
+      this.mostrarError('Por favor, complete todos los campos requeridos');
     }
   }
 
@@ -277,7 +302,7 @@ export class NuevoTurnoComponent implements OnInit {
 
     // Filtrar las horas que ya tienen dos turnos asignados
     const horasOcupadas = this.turnos.reduce((acc: { [key: string]: number }, turno: any) => {
-      const hora = turno.hora.split(':')[0];
+      const hora = turno.hora; // Ahora usamos la hora completa como clave
       acc[hora] = (acc[hora] || 0) + 1;
       return acc;
     }, {});
@@ -295,16 +320,21 @@ export class NuevoTurnoComponent implements OnInit {
   }
 
   cargarCoberturas() {
-    this.especialidadService.obtenerCobertura().subscribe({
+    this.especialidadService.obtenerCoberturas().subscribe({
       next: (response: any) => {
         if (response.codigo === 200) {
           this.coberturas = response.payload;
-          // Establecer la cobertura del usuario actual
+          // Obtener el usuario actual y su cobertura
           const user = this.authService.getCurrentUser();
           if (user?.id_cobertura) {
-            this.turnoForm.patchValue({
-              cobertura: user.id_cobertura
-            });
+            const coberturaUsuario = this.coberturas.find(
+              cobertura => cobertura.id === user.id_cobertura
+            );
+            if (coberturaUsuario) {
+              this.turnoForm.patchValue({
+                cobertura: coberturaUsuario.id
+              });
+            }
           }
         }
       },
@@ -314,15 +344,16 @@ export class NuevoTurnoComponent implements OnInit {
     });
   }
 
-  filtrarAgendasPorFecha(fecha: Date) {
-    const fechaStr = this.formatearFecha(fecha);
-    this.agendasFiltradas = this.agendasDisponibles.filter(
-      agenda => agenda.fecha === fechaStr
-    );
-    
-    if (this.agendasFiltradas.length === 0) {
-      this.turnoForm.get('agenda')?.reset();
-      this.mostrarError('No hay agendas disponibles para la fecha seleccionada');
-    }
+  
+filtrarAgendasPorFecha(fecha: Date) {
+  const fechaStr = this.formatearFecha(fecha);
+  this.agendasFiltradas = this.agendasDisponibles.filter(agenda => 
+    this.formatearFecha(new Date(agenda.fecha)) === fechaStr
+  );
+
+  if (this.agendasFiltradas.length === 0) {
+    this.turnoForm.get('agenda')?.reset();
+    this.mostrarError('No hay agendas disponibles para la fecha seleccionada');
   }
+}
 }
