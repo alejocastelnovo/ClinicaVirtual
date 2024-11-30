@@ -4,6 +4,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { EspecialidadService } from '../../../services/especialidad.service';
+
 @Component({
   selector: 'app-mis-datos',
   templateUrl: './mis-datos.component.html',
@@ -78,22 +79,6 @@ export class MisDatosComponent implements OnInit {
     });
   }
 
-  editar() {
-    this.editing = true;
-    this.usuarioForm.get('email')?.enable();
-    this.usuarioForm.get('telefono')?.enable();
-    this.usuarioForm.get('password')?.enable();
-    this.usuarioForm.get('cobertura')?.enable();
-  }
-
-  cancelar() {
-    this.editing = false;
-    this.usuarioForm.get('email')?.disable();
-    this.usuarioForm.get('telefono')?.disable();
-    this.usuarioForm.get('password')?.disable();
-    this.usuarioForm.get('cobertura')?.disable();
-    this.obtenerUsuario();
-  }
 
   guardar() {
     if (this.usuarioForm.valid) {

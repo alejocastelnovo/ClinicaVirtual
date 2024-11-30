@@ -35,7 +35,7 @@ export class RoleGuard implements CanActivate {
     }
 
     this.snackBar.open(
-      'No tienes permisos para acceder a esta sección', 
+      'No tenes permisos para acceder a esta sección', 
       'Cerrar', 
       { duration: 3000 }
     );

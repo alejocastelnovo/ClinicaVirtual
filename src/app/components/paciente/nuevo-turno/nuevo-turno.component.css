@@ -1,56 +1,101 @@
-.nuevo-turno-container {
+.botones {
+    display: flex;
+    align-items: center;
+    justify-content: space-evenly;
+}
+
+.form-container {
+    background-color: #fff; 
     padding: 20px;
-    max-width: 800px;
-    margin: 0 auto;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 700px; 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 60px;
+}
+
+.form-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex: 1;
+    padding: 20px;
+    box-sizing: border-box;
 }
 
 .full-width {
     width: 100%;
-    margin-bottom: 1rem;
+}
+
+.nuevo-turno-container {
+    padding: 20px;
+    background: linear-gradient(135deg, #e0f7fa, #b2ebf2); 
+    min-height: calc(100vh - 64px);
+}
+
+
+mat-card {
+    max-width: 800px;
+    padding: 20px;
+    margin: 0 auto;
+    margin-bottom: 70px;
+    margin-top: 20px;
+}
+
+mat-card-title {
+    color: #00796b;
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+mat-form-field {
+    width: 100%;
+    margin-bottom: 16px;
 }
 
 .button-container {
     display: flex;
     justify-content: flex-end;
     gap: 16px;
-    margin-top: 24px;
+    margin-top: 20px;
 }
 
-mat-card {
-    padding: 24px;
-}
 
-mat-card-title {
-    margin-bottom: 24px;
-}
-
-textarea {
-    min-height: 100px;
+button {
+    min-width: 150px;
 }
 
 .loading-overlay {
     position: fixed;
     top: 0;
     left: 0;
-    right: 0;
-    bottom: 0;
-    background-color: rgba(255, 255, 255, 0.7);
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.7);
     display: flex;
     justify-content: center;
     align-items: center;
     z-index: 1000;
 }
 
-input[type="time"] {
-    width: 100%;
-    padding: 8px;
+input[readonly] {
+    color: rgba(0, 0, 0, 0.87);
+    background-color: rgba(0, 0, 0, 0.04);
+    cursor: not-allowed;
 }
 
-mat-error {
-    font-size: 12px;
-    margin-top: 4px;
+.mat-form-field-disabled input {
+    color: rgba(0, 0, 0, 0.87) !important;
 }
 
-.mat-form-field {
-    margin-bottom: 1.5rem;
+.mat-hint {
+    color: #2196F3;
+}
+
+button {
+    margin: 0 8px;
 }

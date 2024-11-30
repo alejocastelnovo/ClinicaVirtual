@@ -18,8 +18,7 @@ export class DashboardComponent implements OnInit {
     if (usuarioString) {
       this.usuario = usuarioString;
       this.userType = this.usuario.rol?.toLowerCase();
-      console.log('Usuario logueado:', this.usuario);
-      console.log('Tipo de usuario:', this.userType);
+      console.log('Usuario logueado:', this.usuario, this.userType);
     } else {
       console.log('No hay usuario logueado');
     }
