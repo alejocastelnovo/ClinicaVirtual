@@ -1,14 +1,14 @@
-.editar-agenda-container {
+.agregar-agenda-container {
     padding: 20px;
-}
-
-mat-form-field {
+  }
+  
+  mat-form-field {
     width: 100%;
     margin-bottom: 20px;
-}
-
-.loading-spinner {
+  }
+  
+  .loading-spinner {
     display: flex;
     justify-content: center;
     margin-top: 20px;
-}
+  }

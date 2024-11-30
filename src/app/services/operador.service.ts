@@ -23,15 +23,7 @@ export class OperadorService {
       { headers: this.getHeaders() });
   }
 
-  /* obtenerMedicosPorFecha(fecha: string): Observable<any> {
-    return this.http.get(`${this.apiUrl}/obtenerTurnosMedico/${fecha}`, 
-      { headers: this.getHeaders() });
-  } */
-
-      obtenerAgendasDisponibles(): Observable<any> {
-        return this.http.get(`${this.apiUrl}/obtenerAgendasDisponibles`, { headers: this.getHeaders() });
-      }
-    
+ 
       obtenerAgenda(id_medico: number): Observable<any> {
     return this.http.get(`${this.apiUrl}/obtenerAgenda/${id_medico}`, { headers: this.getHeaders() });
   }

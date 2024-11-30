@@ -31,6 +31,7 @@ import { AsignarTurnoComponent } from './components/operador/asignar-turno/asign
 import { AgendaMedicoComponent } from './components/operador/agenda-medico/agenda-medico.component';
 import { VerTurnosComponent } from './components/operador/ver-turnos/ver-turnos.component';
 import { EditarAgendaComponent } from './components/operador/editar-agenda/editar-agenda.component';
+import { AgregarAgendaComponent } from './components/operador/agregar-agenda/agregar-agenda.component';
 
 
 const routes: Routes = [
@@ -79,6 +80,18 @@ const routes: Routes = [
       { path: 'gestion-usuarios', component: ListaUsuariosComponent },
       { path: 'editar-usuario/:id', component: EditarUsuarioComponent }
     ]
+  },
+  {
+    path: 'operador/agenda/agregar/:id_medico/:fecha',
+    component: AgregarAgendaComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['operador'] }
+  },
+  {
+    path: 'operador/agenda/editar/:id_medico/:fecha',
+    component: EditarAgendaComponent,
+    canActivate: [AuthGuard, RoleGuard],
+    data: { roles: ['operador'] }
   }
 ];
 

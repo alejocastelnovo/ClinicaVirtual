@@ -5,6 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { Router } from '@angular/router';
 import { forkJoin } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { AgendaService } from '../../../services/agenda.service';
 
 @Component({
   selector: 'app-agenda-medico',
@@ -17,13 +18,13 @@ export class AgendaMedicoComponent implements OnInit {
   fechaSeleccionada: string = this.formatearFecha(new Date());
   medicosAgenda: any[] = [];
   displayedColumns: string[] = ['nombre', 'especialidad', 'horario', 'acciones'];
-  fechasDisponibles: string[] = [];
 
   constructor(
     private fb: FormBuilder,
     private operadorService: OperadorService,
     private snackBar: MatSnackBar,
-    private router: Router
+    private router: Router,
+    private agendaService: AgendaService
   ) {
     this.filtroForm = this.fb.group({
       fecha: [new Date()]
@@ -31,84 +32,29 @@ export class AgendaMedicoComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.cargarFechasDisponibles();
-    
+    this.cargarMedicosAgenda(this.fechaSeleccionada);
+
     this.filtroForm.get('fecha')?.valueChanges.subscribe(fecha => {
       this.fechaSeleccionada = this.formatearFecha(fecha);
       this.cargarMedicosAgenda(this.fechaSeleccionada);
     });
   }
 
-  cargarFechasDisponibles() {
-    this.loading = true;
-    this.operadorService.obtenerAgendasDisponibles().subscribe({
-      next: (response: any) => {
-        if (response.codigo === 200) {
-          this.fechasDisponibles = response.payload;
-        } else {
-          this.mostrarError(response.mensaje || 'Error al cargar las fechas disponibles');
-        }
-      },
-      error: (error) => {
-        console.error('Error al cargar fechas disponibles:', error);
-        this.mostrarError('Error al cargar las fechas disponibles');
-      },
-      complete: () => {
-        this.loading = false;
-        // Cargar la agenda para la fecha inicial
-        this.cargarMedicosAgenda(this.fechaSeleccionada);
-      }
-    });
-  }
-
   cargarMedicosAgenda(fecha: string) {
     this.loading = true;
-    this.operadorService.obtenerMedicos().subscribe({
+    this.agendaService.obtenerMedicosConTurnos(fecha).subscribe({
       next: (response: any) => {
         if (response.codigo === 200) {
-          const medicos: any[] = response.payload;
-          // Para cada médico, obtener su agenda para la fecha seleccionada
-          const agendasObservables = medicos.map(medico => 
-            this.operadorService.obtenerAgenda(medico.id).pipe(
-              map((agendaResponse: any) => {
-                if (agendaResponse.codigo === 200) {
-                  // Filtrar agendas por la fecha seleccionada
-                  const agendasFiltradas = agendaResponse.payload.filter((agenda: any) => this.formatearFecha(new Date(agenda.fecha)) === fecha);
-                  return {
-                    ...medico,
-                    agendas: agendasFiltradas
-                  };
-                } else {
-                  return {
-                    ...medico,
-                    agendas: []
-                  };
-                }
-              })
-            )
-          );
-
-          forkJoin(agendasObservables).subscribe({
-            next: (medicosConAgendas: any[]) => {
-              // Filtrar médicos que tienen agendas para la fecha seleccionada
-              this.medicosAgenda = medicosConAgendas.filter(medico => medico.agendas.length > 0);
-            },
-            error: (error) => {
-              console.error('Error al cargar agendas de médicos:', error);
-              this.mostrarError('Error al cargar las agendas de los médicos');
-            },
-            complete: () => this.loading = false
-          });
+          this.medicosAgenda = response.payload;
         } else {
-          this.mostrarError(response.mensaje || 'Error al cargar los médicos');
-          this.loading = false;
+          this.mostrarError(response.mensaje || 'Error al cargar las agendas de los médicos');
         }
       },
       error: (error) => {
-        console.error('Error al cargar médicos:', error);
-        this.mostrarError('Error al cargar los médicos');
-        this.loading = false;
-      }
+        console.error('Error al cargar agendas de médicos:', error);
+        this.mostrarError('Error al cargar las agendas de los médicos');
+      },
+      complete: () => this.loading = false
     });
   }
 
@@ -120,6 +66,10 @@ export class AgendaMedicoComponent implements OnInit {
     this.router.navigate(['/operador/agenda/turnos', medicoId, this.fechaSeleccionada]);
   }
 
+  agregarAgenda(medicoId: number) {
+    this.router.navigate(['/operador/agenda/agregar', medicoId, this.fechaSeleccionada]);
+  }
+
   mostrarError(mensaje: string) {
     this.snackBar.open(mensaje, 'Cerrar', {
       duration: 3000,
@@ -127,6 +77,13 @@ export class AgendaMedicoComponent implements OnInit {
       verticalPosition: 'top',
       panelClass: ['error-snackbar']
     });
+  }
+  
+  formatearHorarios(agendas: any[]): string {
+    if (!agendas || agendas.length === 0) {
+      return 'Sin horarios disponibles';
+    }
+    return agendas.map(agenda => `${agenda.hora_entrada} - ${agenda.hora_salida}`).join(', ');
   }
 
   formatearFecha(fecha: Date): string {

@@ -56,6 +56,19 @@ export class AgendaService {
     });
   }
 
+  actualizarAgenda(
+    idMedico: number, 
+    fecha: string, 
+    horarios: string[]
+  ): Observable<any> {
+    const body = { fecha, horarios };
+    return this.http.put(
+      `${this.apiUrl}/editarAgenda/${idMedico}`,
+      body,
+      { headers: this.getHeaders() }
+    );
+  }
+
   obtenerMedicosConTurnos(fecha: string): Observable<any> {
     return this.http.get(`${this.apiUrl}/medicos-turnos/${fecha}`, {
       headers: this.getHeaders()

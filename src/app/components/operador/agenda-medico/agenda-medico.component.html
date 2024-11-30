@@ -1,18 +1,16 @@
 <div class="agenda-medico-container">
   <mat-card>
     <mat-card-header>
-      <mat-card-title>Gestión de Agenda de Médicos</mat-card-title>
+      <mat-card-title>Gestión de Agendas de Médicos</mat-card-title>
     </mat-card-header>
 
     <mat-card-content>
-      <form [formGroup]="filtroForm" class="filtro-form">
+      <form [formGroup]="filtroForm">
         <mat-form-field appearance="fill">
-          <mat-label>Fecha</mat-label>
-          <mat-select formControlName="fecha">
-            <mat-option *ngFor="let fecha of fechasDisponibles" [value]="fecha">
-              {{ fecha }}
-            </mat-option>
-          </mat-select>
+          <mat-label>Seleccionar Fecha</mat-label>
+          <input matInput [matDatepicker]="picker" formControlName="fecha">
+          <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+          <mat-datepicker #picker></mat-datepicker>
         </mat-form-field>
       </form>
 
@@ -21,10 +19,9 @@
       </div>
 
       <table mat-table [dataSource]="medicosAgenda" class="mat-elevation-z8" *ngIf="!loading && medicosAgenda.length > 0">
-
         <!-- Nombre del Médico -->
         <ng-container matColumnDef="nombre">
-          <th mat-header-cell *matHeaderCellDef> Nombre del Médico </th>
+          <th mat-header-cell *matHeaderCellDef> Nombre </th>
           <td mat-cell *matCellDef="let elemento"> {{elemento.nombre}} {{elemento.apellido}} </td>
         </ng-container>
 
@@ -37,10 +34,8 @@
         <!-- Horario -->
         <ng-container matColumnDef="horario">
           <th mat-header-cell *matHeaderCellDef> Horario </th>
-          <td mat-cell *matCellDef="let elemento"> 
-            <span *ngFor="let agenda of elemento.agendas">
-              {{ agenda.hora_entrada }} - {{ agenda.hora_salida }}
-            </span>
+          <td mat-cell *matCellDef="let elemento">
+            {{formatearHorarios(elemento.agendas)}}
           </td>
         </ng-container>
 
@@ -54,6 +49,9 @@
             <button mat-icon-button color="accent" (click)="verTurnos(elemento.id)">
               <mat-icon>visibility</mat-icon>
             </button>
+            <button mat-icon-button color="warn" (click)="agregarAgenda(elemento.id)">
+              <mat-icon>add</mat-icon>
+            </button>
           </td>
         </ng-container>
 
@@ -62,7 +60,7 @@
       </table>
 
       <div *ngIf="!loading && medicosAgenda.length === 0" class="no-data">
-        No hay médicos con agendas para la fecha seleccionada.
+        No hay agendas disponibles para la fecha seleccionada.
       </div>
     </mat-card-content>
   </mat-card>

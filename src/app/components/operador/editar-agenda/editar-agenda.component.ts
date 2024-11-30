@@ -1,8 +1,14 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AgendaService } from '../../../services/agenda.service';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AgendaService } from '../../../services/agenda.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { HttpErrorResponse } from '@angular/common/http';
+
+interface AgendaForm {
+  fecha: string;
+  horarios: string;
+}
 
 @Component({
   selector: 'app-editar-agenda',
@@ -10,102 +16,111 @@ import { MatSnackBar } from '@angular/material/snack-bar';
   styleUrls: ['./editar-agenda.component.css']
 })
 export class EditarAgendaComponent implements OnInit {
-  editarAgendaForm: FormGroup;
-  loading = false;
+  agendaForm: FormGroup;
   idMedico!: number;
   fecha!: string;
-  agendaActual: any;
+  loading = false;
 
   constructor(
     private route: ActivatedRoute,
-    private agendaService: AgendaService,
     private fb: FormBuilder,
+    private agendaService: AgendaService,
     private snackBar: MatSnackBar,
-    public router: Router
+    private router: Router
   ) {
-    this.editarAgendaForm = this.fb.group({
-      hora_entrada: ['', Validators.required],
-      hora_salida: ['', Validators.required]
+    this.agendaForm = this.fb.group({
+      fecha: ['', Validators.required],
+      horarios: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.idMedico = Number(this.route.snapshot.paramMap.get('id_medico'));
     this.fecha = this.route.snapshot.paramMap.get('fecha') || '';
-
     this.cargarAgenda();
   }
 
-  cargarAgenda() {
+  cargarAgenda(): void {
     this.loading = true;
     this.agendaService.obtenerAgenda(this.idMedico).subscribe({
-      next: (response: any) => {
-        if (response.codigo === 200 && response.payload.length > 0) {
-          this.agendaActual = response.payload[0];
-          this.editarAgendaForm.patchValue({
-            hora_entrada: this.agendaActual.hora_entrada,
-            hora_salida: this.agendaActual.hora_salida
-          });
+      next: (response) => {
+        if (response.codigo === 200) {
+          const agenda = response.payload.find((a: any) => a.fecha === this.fecha);
+          if (agenda) {
+            this.agendaForm.patchValue({
+              fecha: agenda.fecha,
+              horarios: `${agenda.hora_entrada}-${agenda.hora_salida}`
+            });
+          } else {
+            this.mostrarError('No se encontró la agenda para la fecha seleccionada');
+          }
         } else {
-          this.mostrarError('No se encontró la agenda para este médico');
+          this.mostrarError(response.mensaje || 'Error al cargar la agenda');
         }
       },
-      error: (error: any) => {
+      error: (error: HttpErrorResponse) => {
         console.error('Error al cargar la agenda:', error);
-        this.mostrarError('Error al cargar la agenda del médico');
+        this.mostrarError('Error al cargar la agenda');
       },
       complete: () => this.loading = false
     });
   }
 
-  onSubmit() {
-    if (this.editarAgendaForm.valid) {
-      const agendaData = this.editarAgendaForm.value;
-
-      this.loading = true;
-      this.agendaService.modificarAgenda(this.agendaActual.id, agendaData).subscribe({
-        next: (response: any) => {
-          this.loading = false;
-          if (response.codigo === 200) {
-            this.mostrarExito('Agenda actualizada exitosamente');
-            this.router.navigate(['/operador/agenda-medico']);
-          } else {
-            this.mostrarError(response.mensaje || 'Error al actualizar la agenda');
-          }
-        },
-        error: (error: any) => {
-          console.error('Error al actualizar la agenda:', error);
-          this.mostrarError('Error al actualizar la agenda');
-          this.loading = false;
-        }
-      });
-    } else {
-      this.mostrarError('Por favor, complete todos los campos requeridos');
+  actualizarAgenda(): void {
+    if (this.agendaForm.invalid) {
+      return;
     }
+
+    this.loading = true;
+    const datos: AgendaForm = this.agendaForm.value;
+    const horariosArray: string[] = datos.horarios.split('-').map(horario => horario.trim());
+
+    if (horariosArray.length !== 2) {
+      this.mostrarError('El formato de horarios debe ser "hora_inicio-hora_fin"');
+      this.loading = false;
+      return;
+    }
+
+    const [hora_entrada, hora_salida] = horariosArray;
+
+    const agendaActualizada = {
+      fecha: datos.fecha,
+      hora_entrada,
+      hora_salida
+    };
+
+    this.agendaService.actualizarAgenda(
+      this.idMedico,
+      datos.fecha,
+      horariosArray
+    ).subscribe({
+      next: (response) => {
+        if (response.codigo === 200) {
+          this.snackBar.open('Agenda actualizada exitosamente', 'Cerrar', {
+            duration: 3000,
+            horizontalPosition: 'center',
+            verticalPosition: 'top',
+            panelClass: ['success-snackbar']
+          });
+          this.router.navigate(['/operador/agenda-medico']);
+        } else {
+          this.mostrarError(response.mensaje || 'Error al actualizar la agenda');
+        }
+      },
+      error: (error: HttpErrorResponse) => {
+        console.error('Error al actualizar la agenda:', error);
+        this.mostrarError('Error al actualizar la agenda');
+      },
+      complete: () => this.loading = false
+    });
   }
 
-  mostrarError(mensaje: string) {
+  mostrarError(mensaje: string): void {
     this.snackBar.open(mensaje, 'Cerrar', {
       duration: 3000,
       horizontalPosition: 'center',
       verticalPosition: 'top',
       panelClass: ['error-snackbar']
     });
-  }
-
-  mostrarExito(mensaje: string) {
-    this.snackBar.open(mensaje, 'Cerrar', {
-      duration: 2000,
-      horizontalPosition: 'center',
-      verticalPosition: 'top',
-      panelClass: ['success-snackbar']
-    });
-  }
-
-  formatearFecha(fecha: Date): string {
-    const year = fecha.getFullYear();
-    const month = (fecha.getMonth() + 1).toString().padStart(2, '0');
-    const day = fecha.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 }

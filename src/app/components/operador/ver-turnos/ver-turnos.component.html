@@ -6,31 +6,38 @@
     </mat-card-header>
 
     <mat-card-content>
-      <table mat-table [dataSource]="turnos" class="mat-elevation-z8" *ngIf="turnos.length > 0">
+      <div *ngIf="loading" class="loading-spinner">
+        <mat-spinner></mat-spinner>
+      </div>
 
+      <table mat-table [dataSource]="turnos" class="mat-elevation-z8" *ngIf="!loading && turnos.length > 0">
         <!-- Paciente -->
         <ng-container matColumnDef="paciente">
           <th mat-header-cell *matHeaderCellDef> Paciente </th>
-          <td mat-cell *matCellDef="let turno"> {{ turno.paciente.nombre }} {{ turno.paciente.apellido }} </td>
+          <td mat-cell *matCellDef="let turno"> 
+            {{turno.paciente.nombre}} {{turno.paciente.apellido}}
+          </td>
         </ng-container>
 
         <!-- Hora -->
         <ng-container matColumnDef="hora">
-          <th mat-header-cell *matHeaderCellDef> Hora </th>
-          <td mat-cell *matCellDef="let turno"> {{ turno.hora }} </td>
+          <th mat-header-cell *matHeaderCellDef> Horario </th>
+          <td mat-cell *matCellDef="let turno"> 
+            {{turno.hora_inicio}} - {{turno.hora_fin}}
+          </td>
         </ng-container>
 
         <!-- Nota -->
         <ng-container matColumnDef="nota">
           <th mat-header-cell *matHeaderCellDef> Nota </th>
-          <td mat-cell *matCellDef="let turno"> {{ turno.nota }} </td>
+          <td mat-cell *matCellDef="let turno"> {{turno.nota}} </td>
         </ng-container>
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
       </table>
 
-      <div *ngIf="turnos.length === 0" class="no-data">
+      <div *ngIf="!loading && turnos.length === 0" class="no-data">
         No hay turnos confirmados para esta fecha.
       </div>
     </mat-card-content>

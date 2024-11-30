@@ -71,6 +71,7 @@ import { EditarUsuarioComponent } from './components/administrador/editar-usuari
 import { ListaUsuariosComponent } from './components/administrador/lista-usuarios/lista-usuarios.component';
 import { EditarAgendaComponent } from './components/operador/editar-agenda/editar-agenda.component';
 import { ListaPacientesDiaComponent } from './components/operador/lista-pacientes-dia/lista-pacientes-dia.component';
+import { AgregarAgendaComponent } from './components/operador/agregar-agenda/agregar-agenda.component';
 
 
 @NgModule({
@@ -100,6 +101,7 @@ import { ListaPacientesDiaComponent } from './components/operador/lista-paciente
     ListaUsuariosComponent,
     EditarAgendaComponent,
     ListaPacientesDiaComponent,
+    AgregarAgendaComponent,
 
   ],
   imports: [
