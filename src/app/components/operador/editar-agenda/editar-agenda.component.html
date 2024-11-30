@@ -24,6 +24,15 @@
           </mat-error>
         </mat-form-field>
 
+        <mat-form-field>
+          <mat-label>Especialidad</mat-label>
+          <mat-select formControlName="id_especialidad" required>
+            <mat-option *ngFor="let especialidad of especialidades" [value]="especialidad.id">
+              {{ especialidad.nombre }}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+
         <button mat-raised-button color="primary" type="submit" [disabled]="agendaForm.invalid || loading">
           Actualizar Agenda
         </button>

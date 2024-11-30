@@ -2,12 +2,14 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AgendaService } from '../../../services/agenda.service';
+import { EspecialidadService } from '../../../services/especialidad.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { HttpErrorResponse } from '@angular/common/http';
 
 interface AgendaForm {
   fecha: string;
   horarios: string;
+  id_especialidad: number;
 }
 
 @Component({
@@ -20,23 +22,27 @@ export class EditarAgendaComponent implements OnInit {
   idMedico!: number;
   fecha!: string;
   loading = false;
+  especialidades: any[] = [];
 
   constructor(
     private route: ActivatedRoute,
     private fb: FormBuilder,
     private agendaService: AgendaService,
+    private especialidadService: EspecialidadService,
     private snackBar: MatSnackBar,
     private router: Router
   ) {
     this.agendaForm = this.fb.group({
       fecha: ['', Validators.required],
-      horarios: ['', Validators.required]
+      horarios: ['', Validators.required],
+      id_especialidad: ['', Validators.required]
     });
   }
 
   ngOnInit(): void {
     this.idMedico = Number(this.route.snapshot.paramMap.get('id_medico'));
     this.fecha = this.route.snapshot.paramMap.get('fecha') || '';
+    this.cargarEspecialidades();
     this.cargarAgenda();
   }
 
@@ -49,7 +55,8 @@ export class EditarAgendaComponent implements OnInit {
           if (agenda) {
             this.agendaForm.patchValue({
               fecha: agenda.fecha,
-              horarios: `${agenda.hora_entrada}-${agenda.hora_salida}`
+              horarios: `${agenda.hora_entrada}-${agenda.hora_salida}`,
+              id_especialidad: agenda.id_especialidad
             });
           } else {
             this.mostrarError('No se encontró la agenda para la fecha seleccionada');
@@ -84,6 +91,8 @@ export class EditarAgendaComponent implements OnInit {
     const [hora_entrada, hora_salida] = horariosArray;
 
     const agendaActualizada = {
+      id_medico: this.idMedico,
+      id_especialidad: datos.id_especialidad,
       fecha: datos.fecha,
       hora_entrada,
       hora_salida
@@ -91,8 +100,10 @@ export class EditarAgendaComponent implements OnInit {
 
     this.agendaService.actualizarAgenda(
       this.idMedico,
+      datos.id_especialidad,
       datos.fecha,
-      horariosArray
+      hora_entrada,
+      hora_salida
     ).subscribe({
       next: (response) => {
         if (response.codigo === 200) {
@@ -121,6 +132,24 @@ export class EditarAgendaComponent implements OnInit {
       horizontalPosition: 'center',
       verticalPosition: 'top',
       panelClass: ['error-snackbar']
+    });
+  }
+
+  cargarEspecialidades(): void {
+    this.loading = true;
+    this.especialidadService.obtenerEspecialidades().subscribe({
+      next: (response) => {
+        if (response.codigo === 200) {
+          this.especialidades = response.payload;
+        } else {
+          this.mostrarError('Error al cargar las especialidades');
+        }
+      },
+      error: (error) => {
+        console.error('Error al cargar especialidades:', error);
+        this.mostrarError('Error al cargar las especialidades');
+      },
+      complete: () => this.loading = false
     });
   }
 }

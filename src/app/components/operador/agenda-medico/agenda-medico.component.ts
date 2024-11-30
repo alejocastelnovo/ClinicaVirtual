@@ -42,19 +42,49 @@ export class AgendaMedicoComponent implements OnInit {
 
   cargarMedicosAgenda(fecha: string) {
     this.loading = true;
-    this.agendaService.obtenerMedicosConTurnos(fecha).subscribe({
+    this.operadorService.obtenerMedicos().subscribe({
       next: (response: any) => {
         if (response.codigo === 200) {
-          this.medicosAgenda = response.payload;
+          const medicos: any[] = response.payload;
+          const agendasObservables = medicos.map(medico =>
+            this.agendaService.obtenerAgenda(medico.id).pipe(
+              map((agendaResponse: any) => {
+                if (agendaResponse.codigo === 200) {
+                  const agendasFiltradas = agendaResponse.payload.filter((agenda: any) => this.formatearFecha(new Date(agenda.fecha)) === fecha);
+                  return {
+                    ...medico,
+                    agendas: agendasFiltradas
+                  };
+                } else {
+                  return {
+                    ...medico,
+                    agendas: []
+                  };
+                }
+              })
+            )
+          );
+
+          forkJoin(agendasObservables).subscribe({
+            next: (medicosConAgendas: any[]) => {
+              this.medicosAgenda = medicosConAgendas.filter(medico => medico.agendas.length > 0);
+            },
+            error: (error) => {
+              console.error('Error al cargar agendas de médicos:', error);
+              this.mostrarError('Error al cargar las agendas de los médicos');
+            },
+            complete: () => this.loading = false
+          });
         } else {
-          this.mostrarError(response.mensaje || 'Error al cargar las agendas de los médicos');
+          this.mostrarError(response.mensaje || 'Error al cargar los médicos');
+          this.loading = false;
         }
       },
       error: (error) => {
-        console.error('Error al cargar agendas de médicos:', error);
-        this.mostrarError('Error al cargar las agendas de los médicos');
-      },
-      complete: () => this.loading = false
+        console.error('Error al cargar médicos:', error);
+        this.mostrarError('Error al cargar los médicos');
+        this.loading = false;
+      }
     });
   }
 

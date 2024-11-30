@@ -57,13 +57,21 @@ export class AgendaService {
   }
 
   actualizarAgenda(
-    idMedico: number, 
-    fecha: string, 
-    horarios: string[]
+    idMedico: number,
+    idEspecialidad: number,
+    fecha: string,
+    horaEntrada: string,
+    horaSalida: string
   ): Observable<any> {
-    const body = { fecha, horarios };
+    const body = { 
+      id_medico: idMedico, 
+      id_especialidad: idEspecialidad,
+      fecha,
+      hora_entrada: horaEntrada, 
+      hora_salida: horaSalida 
+    };
     return this.http.put(
-      `${this.apiUrl}/editarAgenda/${idMedico}`,
+      `${this.apiUrl}/modificarAgenda/${idMedico}`,
       body,
       { headers: this.getHeaders() }
     );
