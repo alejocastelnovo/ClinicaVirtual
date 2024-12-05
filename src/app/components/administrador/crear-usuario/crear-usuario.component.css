@@ -1,134 +1,78 @@
-.crear-usuario-container {
+/* Contenedor principal para centrar */
+.nuevo-turno-container {
+  padding: 20px;
+  background: linear-gradient(135deg, #e0f7fa, #b2ebf2); /* Fondo existente */
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(100vh - 120px);
-  background: linear-gradient(135deg, #e0f7fa, #b2ebf2);
-  padding: 20px;
+  min-height: calc(100vh - 64px);
   box-sizing: border-box;
 }
 
-mat-card {
+/* Contenedor del formulario */
+.form-container {
+  background-color: #fff; 
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   width: 100%;
-  max-width: 450px;
-  padding: 40px;
-  background-color: #ffffff;
-  border-radius: 15px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-}
-
-mat-card-title {
-  font-size: 28px;
-  color: #00796b;
-  margin-bottom: 30px;
-  text-align: center;
-}
-
-mat-form-field {
-  width: 100%;
-  margin-bottom: 25px;
-}
-
-.mat-mdc-text-field-wrapper {
-  background-color: #e0f7fa;
-  border-radius: 8px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  transition: all 0.3s ease;
-}
-
-.mat-mdc-form-field-flex {
-  padding: 0;
-}
-
-.mat-mdc-form-field-infix {
-  padding: 12px 15px;
-  border: none;
-}
-
-::ng-deep .mat-mdc-text-field-wrapper .mdc-notched-outline__leading,
-::ng-deep .mat-mdc-text-field-wrapper .mdc-notched-outline__notch,
-::ng-deep .mat-mdc-text-field-wrapper .mdc-notched-outline__trailing {
-  border-color: transparent !important;
-}
-
-::ng-deep .mat-mdc-form-field-label {
-  color: #00796b;
-}
-
-.mat-focused .mat-mdc-text-field-wrapper {
-  box-shadow: 0 6px 12px rgba(0, 121, 107, 0.2);
-  background-color: #b2ebf2;
-}
-
-.mat-focused .mat-mdc-form-field-label {
-  color: #00796b;
-}
-
-.button-container {
+  max-width: 700px; /* Ajustado para mantener uniformidad */
   display: flex;
-  justify-content: space-between;
-  gap: 15px;
-  margin-top: 30px;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px; /* Espaciado más uniforme */
+  margin: 0; /* Eliminar márgenes extra */
 }
 
-button {
-  flex: 1;
-  padding: 12px;
-  font-size: 16px;
-  border: none;
-  border-radius: 8px;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
-
-button[color="primary"] {
-  background-color: #00796b;
-  color: white;
-}
-
-button[color="primary"]:hover {
-  background-color: #004d40;
-}
-
-button[color="accent"] {
-  background-color: #ff4081;
-  color: white;
-}
-
-button[color="accent"]:hover {
-  background-color: #f50057;
-}
-
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
+/* Estilo de los campos de formulario */
 mat-form-field {
-  animation: fadeInUp 0.5s ease forwards;
-  opacity: 0;
+  width: 100%;
+  margin-bottom: 16px;
 }
 
-mat-form-field:nth-child(1) { animation-delay: 0.1s; }
-mat-form-field:nth-child(2) { animation-delay: 0.2s; }
-mat-form-field:nth-child(3) { animation-delay: 0.3s; }
-mat-form-field:nth-child(4) { animation-delay: 0.4s; }
-mat-form-field:nth-child(5) { animation-delay: 0.5s; }
-
-.button-container {
-  animation: fadeInUp 0.5s ease forwards;
-  animation-delay: 0.6s;
-  opacity: 0;
+/* Títulos del formulario */
+mat-card-title, h2 {
+  color: #00796b; /* Consistencia de color */
+  text-align: center;
+  margin-bottom: 20px;
 }
 
+/* Contenedor de botones */
+.button-container, .botones {
+  display: flex;
+  justify-content: space-evenly; /* Distribución uniforme */
+  gap: 16px;
+  margin-top: 20px;
+}
+
+/* Botones */
+button {
+  min-width: 150px;
+  margin: 0 8px;
+}
+
+/* Campos de entrada deshabilitados */
+input[readonly], .mat-form-field-disabled input {
+  color: rgba(0, 0, 0, 0.87) !important;
+  background-color: rgba(0, 0, 0, 0.04);
+  cursor: not-allowed;
+}
+
+/* Hint de ayuda */
+.mat-hint {
+  color: #2196F3; /* Azul para los hints */
+}
+
+/* Carga superpuesta */
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
