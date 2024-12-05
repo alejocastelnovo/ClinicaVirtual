@@ -51,28 +51,24 @@
         <h3>Panel Principal</h3>
         <p>Acceso rápido a funciones</p>
       </mat-card>
+    </div>
 
     <!-- Administrador -->
+    <div *ngSwitchCase="'administrador'" class="options-container">
 
-<div *ngSwitchCase="'administrador'" class="options-container">
-  <mat-card class="option-card" routerLink="/administrador/lista-usuarios">
-    <mat-icon>group</mat-icon>
-    <h3>Gestión de Usuarios</h3>
-    <p>Administrar usuarios del sistema</p>
-  </mat-card>
+      <mat-card class="option-card" routerLink="/administrador/lista-usuarios">
+        <mat-icon>group</mat-icon>
+        <h3>Gestión de Usuarios</h3>
+        <p>Administrar usuarios del sistema</p>
+      </mat-card>
 
-  <mat-card class="option-card" routerLink="/administrador/crear-usuario">
-    <mat-icon>person_add</mat-icon>
-    <h3>Crear Usuario</h3>
-    <p>Agregar un nuevo usuario al sistema</p>
-  </mat-card>
+      <mat-card class="option-card" routerLink="/administrador/crear-usuario">
+        <mat-icon>person_add</mat-icon>
+        <h3>Crear Usuario</h3>
+        <p>Agregar un nuevo usuario al sistema</p>
+      </mat-card>
+    </div>
 
-  <mat-card class="option-card" routerLink="/administrador/editar-usuario">
-    <mat-icon>person_edit</mat-icon>
-    <h3>Editar Usuario</h3>
-    <p>Editar un usuario</p>
-  </mat-card>
-</div>
     
 
     <!-- Default -->
@@ -84,4 +80,4 @@
       </mat-card>
     </div>
   </div>
-</div>
+
