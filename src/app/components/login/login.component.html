@@ -1,4 +1,3 @@
-
 <div class="login-container">
     <mat-card>
         <mat-card-header>
@@ -33,10 +32,9 @@
                     </button>
                 </div>
             </form>
+            <div class="loading-overlay" *ngIf="loading">
+                <mat-spinner></mat-spinner>
+            </div>
         </mat-card-content>
     </mat-card>
-
-    <div class="loading-overlay" *ngIf="loading">
-        <mat-spinner></mat-spinner>
-    </div>
 </div>

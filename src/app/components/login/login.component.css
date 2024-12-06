@@ -85,7 +85,6 @@ mat-card-content {
 }
 
 
-/* Animación de entrada */
 @keyframes fadeInUp {
     from {
         opacity: 0;
