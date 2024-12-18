@@ -107,6 +107,7 @@ export class MisDatosComponent implements OnInit {
             localStorage.setItem('usuario', JSON.stringify(usuarioActualizado));
             this.openSnackBar('Cambios guardados con éxito');
             this.obtenerUsuario();
+            this.router.navigate(['/dashboard']);
           }
         },
         error: (error) => {

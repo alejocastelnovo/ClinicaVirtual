@@ -47,7 +47,7 @@ export class NuevoTurnoComponent implements OnInit {
       profesional: ['', Validators.required],
       fecha: ['', Validators.required],
       agenda: ['', Validators.required],
-      hora: ['', [Validators.required, Validators.pattern('^(09|1[0-7]):[0-5][0-9]$')]],
+      hora: [''],
       nota: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
@@ -59,7 +59,7 @@ export class NuevoTurnoComponent implements OnInit {
         next: (response: any) => {
           if (response.codigo === 200 && response.payload) {
             const usuario = Array.isArray(response.payload) ? 
-                           response.payload[0] : response.payload;
+                          response.payload[0] : response.payload;
             
             if (usuario.id_cobertura) {
               this.turnoForm.patchValue({
